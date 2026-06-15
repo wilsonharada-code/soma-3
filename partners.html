@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SomaVio | For Local Partners</title>
+  <meta name="description" content="Reach visitors when they're ready to explore. SomaVio puts your business in front of the right people at the right moment — contextual, not paid placement." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    :root {
+      --stone:       #2C2C2A;
+      --sage:        #6B7F6E;
+      --mist:        #F4F1EC;
+      --glacier:     #D6E4E1;
+      --amber:       #C8923A;
+      --slate:       #4A5568;
+      --white:       #FFFFFF;
+      --care-teal:   #0D9488;
+      --shadow-1: 0 1px 3px rgba(44,44,42,0.08);
+      --shadow-2: 0 4px 12px rgba(44,44,42,0.12);
+      --shadow-3: 0 8px 32px rgba(44,44,42,0.18);
+      --r-card: 8px;
+      --r-btn:  6px;
+      --r-pill: 100px;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--mist);
+      color: var(--stone);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    ul { list-style: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .label-caps {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+
+    /* ── Context Bar ── */
+    .context-bar {
+      position: sticky; top: 0; z-index: 100;
+      height: 36px; background: var(--mist);
+      border-bottom: 1px solid rgba(44,44,42,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; color: var(--slate);
+      letter-spacing: 0.04em;
+    }
+    .ctx-accent { color: var(--sage); font-weight: 600; }
+
+    /* ── Header ── */
+    .site-header {
+      position: sticky; top: 36px; z-index: 99;
+      height: 64px; background: var(--stone);
+      display: flex; align-items: center;
+    }
+    .header-inner {
+      display: flex; align-items: center; width: 100%;
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 20px;
+      color: var(--white); font-weight: 700; flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 32px; height: 32px; background: var(--amber);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { color: var(--white); }
+    .main-nav {
+      display: flex; align-items: center; gap: 4px;
+      margin-left: 36px; flex: 1;
+    }
+    .main-nav a {
+      padding: 6px 11px; font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.8); border-radius: var(--r-btn);
+      transition: color 0.2s, background 0.2s;
+    }
+    .main-nav a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+    .header-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+    .lang-selector-wrap { position: relative; }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px; border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: var(--r-pill); color: var(--white);
+      font-size: 13px; font-weight: 500; background: transparent;
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .lang-toggle:hover { border-color: rgba(255,255,255,0.4); }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-2); padding: 8px; min-width: 140px;
+      display: none; flex-direction: column; gap: 2px; z-index: 200;
+    }
+    .lang-dropdown.open { display: flex; }
+    .lang-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; color: var(--slate);
+      background: none; cursor: pointer; text-align: left; width: 100%;
+      transition: background 0.15s;
+    }
+    .lang-option:hover { background: var(--mist); }
+    .lang-option.active { font-weight: 600; color: var(--stone); background: var(--glacier); }
+    .lang-flag { font-size: 16px; }
+
+    /* ── Hero — Stone sólido, alinhado à esquerda ── */
+    .b2b-hero {
+      background: var(--stone);
+      padding: 80px 0 72px;
+      text-align: left;
+    }
+    .b2b-hero-label {
+      color: var(--glacier); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px;
+    }
+    .b2b-hero-title {
+      font-family: var(--font-display); font-size: 40px;
+      color: var(--white); font-weight: 400; line-height: 1.15;
+      max-width: 680px; margin-bottom: 16px;
+    }
+    .b2b-hero-sub {
+      font-size: 16px; color: var(--glacier);
+      max-width: 560px; line-height: 1.6; margin-bottom: 32px;
+    }
+    .b2b-hero-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--sage); color: var(--white);
+      padding: 14px 28px; border-radius: var(--r-btn);
+      font-size: 15px; font-weight: 600; transition: background 0.2s;
+    }
+    .b2b-hero-cta:hover { background: #5a6f60; }
+
+    .b2b-hero-contexts {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-top: 32px;
+    }
+    .context-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--r-pill); padding: 7px 14px;
+      font-size: 12px; font-weight: 500; color: var(--glacier);
+    }
+    .context-pill svg { width: 13px; height: 13px; color: var(--sage); }
+
+    /* ── Shared section styles ── */
+    .section { padding: 64px 0; }
+    .section-mist { background: var(--mist); }
+    .section-white { background: var(--white); }
+    .section-glacier { background: var(--glacier); }
+
+    .section-head { margin-bottom: 40px; }
+    .section-title {
+      font-family: var(--font-display); font-size: 32px;
+      color: var(--stone); font-weight: 400; margin-bottom: 12px;
+    }
+    .section-sub { font-size: 16px; color: var(--slate); max-width: 560px; line-height: 1.6; }
+
+    /* ── The problem ── */
+    .problem-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; align-items: center; }
+    .problem-text { font-size: 15px; color: var(--slate); line-height: 1.7; }
+    .problem-text p { margin-bottom: 16px; }
+    .problem-text p:last-child { margin-bottom: 0; }
+    .problem-stat {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-2); padding: 32px; text-align: center;
+    }
+    .problem-stat-number {
+      font-family: var(--font-display); font-size: 56px;
+      color: var(--stone); font-weight: 700; line-height: 1; margin-bottom: 10px;
+    }
+    .problem-stat-label { font-size: 16px; color: var(--stone); font-weight: 600; margin-bottom: 6px; }
+    .problem-stat-sub { font-size: 12px; color: var(--slate); line-height: 1.4; }
+    .problem-stat-source { font-size: 10px; color: rgba(74,85,104,0.6); margin-top: 10px; }
+
+    /* ── Como funciona ── */
+    .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .how-col { display: flex; flex-direction: column; gap: 14px; }
+    .how-num {
+      font-family: var(--font-display); font-size: 48px;
+      color: var(--glacier); font-weight: 700; line-height: 1;
+    }
+    .how-icon { color: var(--sage); width: 32px; height: 32px; }
+    .how-title { font-size: 18px; font-weight: 600; color: var(--stone); }
+    .how-text { font-size: 14px; color: var(--slate); line-height: 1.6; }
+
+    /* ── Contextos de aparecimento ── */
+    .contexts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .context-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 18px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .context-card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .context-card-icon {
+      width: 36px; height: 36px; background: var(--glacier);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 10px;
+    }
+    .context-card-icon svg { color: var(--sage); width: 18px; height: 18px; }
+    .context-card-title { font-size: 13px; font-weight: 600; color: var(--stone); margin-bottom: 4px; }
+    .context-card-sub { font-size: 12px; color: var(--slate); line-height: 1.4; }
+
+    /* ── Benefícios ── */
+    .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .benefit-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 24px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .benefit-card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .benefit-icon {
+      width: 40px; height: 40px; background: var(--glacier);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .benefit-icon svg { color: var(--sage); width: 20px; height: 20px; }
+    .benefit-title { font-size: 15px; font-weight: 600; color: var(--stone); margin-bottom: 8px; }
+    .benefit-text { font-size: 13px; color: var(--slate); line-height: 1.6; }
+
+    /* ── Planos ── */
+    .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .plan-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 24px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: box-shadow 0.2s;
+    }
+    .plan-card:hover { box-shadow: var(--shadow-2); }
+    .plan-card.is-highlight {
+      border: 2px solid var(--sage); position: relative;
+    }
+    .plan-highlight-label {
+      position: absolute; top: -12px; left: 24px;
+      background: var(--sage); color: var(--white);
+      font-size: 11px; font-weight: 700; padding: 3px 12px;
+      border-radius: var(--r-pill); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .plan-name { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.06em; }
+    .plan-price {
+      font-family: var(--font-display); font-size: 32px;
+      color: var(--stone); font-weight: 700; line-height: 1;
+    }
+    .plan-price span { font-size: 14px; font-weight: 400; color: var(--slate); }
+    .plan-tagline { font-size: 12px; color: var(--slate); font-style: italic; }
+    .plan-features { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+    .plan-feature {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13px; color: var(--stone);
+    }
+    .plan-feature svg { color: var(--care-teal); flex-shrink: 0; width: 14px; height: 14px; margin-top: 2px; }
+    .plan-cta {
+      display: block; text-align: center; width: 100%;
+      border: 1.5px solid var(--sage); color: var(--sage);
+      padding: 11px; border-radius: var(--r-btn);
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      background: transparent; transition: all 0.2s; margin-top: auto;
+    }
+    .plan-cta:hover { background: var(--sage); color: var(--white); }
+    .plan-cta.primary { background: var(--sage); color: var(--white); }
+    .plan-cta.primary:hover { background: #5a6f60; }
+
+    /* Founding Partner */
+    .founding-card {
+      background: rgba(200,146,58,0.08);
+      border: 1.5px solid var(--amber);
+      border-radius: var(--r-card); padding: 24px;
+      margin-top: 16px;
+      display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
+    }
+    .founding-badge {
+      display: inline-block; background: var(--amber); color: var(--white);
+      font-size: 10px; font-weight: 700; padding: 3px 10px;
+      border-radius: var(--r-pill); text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 10px;
+    }
+    .founding-title { font-size: 18px; font-weight: 700; color: var(--stone); margin-bottom: 8px; }
+    .founding-desc { font-size: 14px; color: var(--slate); line-height: 1.5; }
+    .founding-slots { font-size: 12px; color: var(--amber); font-weight: 600; margin-top: 8px; }
+    .founding-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--amber); color: var(--white);
+      padding: 12px 24px; border-radius: var(--r-btn);
+      font-size: 14px; font-weight: 600; white-space: nowrap;
+      cursor: pointer; transition: opacity 0.2s; border: none;
+    }
+    .founding-cta:hover { opacity: 0.9; }
+
+    /* ── Depoimentos ── */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .testimonial-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 28px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .testimonial-quote {
+      font-size: 15px; color: var(--stone); line-height: 1.65; font-style: italic;
+    }
+    .testimonial-quote::before {
+      content: '"'; color: var(--sage); font-size: 32px;
+      line-height: 0; vertical-align: -10px; margin-right: 4px;
+    }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .testimonial-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--glacier); display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--sage);
+      flex-shrink: 0;
+    }
+    .testimonial-name { font-size: 14px; font-weight: 600; color: var(--stone); }
+    .testimonial-role { font-size: 12px; color: var(--slate); }
+
+    /* ── Disclaimer ── */
+    .disclaimer {
+      background: rgba(214,228,225,0.4); border: 1px solid var(--glacier);
+      border-radius: var(--r-card); padding: 14px 18px;
+      font-size: 12px; color: var(--slate); line-height: 1.5; margin-top: 24px;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .disclaimer svg { color: var(--sage); flex-shrink: 0; width: 15px; height: 15px; margin-top: 1px; }
+
+    /* ── CTA Final único ── */
+    .cta-final {
+      background: var(--sage); padding: 80px 0; text-align: center;
+    }
+    .cta-final-headline {
+      font-family: var(--font-display); font-size: 36px;
+      color: var(--white); font-weight: 400; margin-bottom: 12px;
+    }
+    .cta-final-sub { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 32px; }
+    .cta-final-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); color: var(--sage);
+      padding: 16px 40px; border-radius: var(--r-btn);
+      font-size: 16px; font-weight: 700;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-final-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
+
+    /* ── Footer B2B ── */
+    .footer-b2b { background: var(--stone); padding: 64px 0 32px; }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr 1.3fr 1fr; gap: 40px;
+      margin-bottom: 32px;
+    }
+    .footer-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 18px;
+      color: var(--white); font-weight: 700; margin-bottom: 12px;
+    }
+    .footer-tagline { font-size: 13px; color: var(--glacier); margin-bottom: 6px; }
+    .footer-copy { font-size: 11px; color: var(--slate); }
+    .footer-col-title { color: var(--glacier); margin-bottom: 14px; }
+    .footer-col a {
+      display: block; font-size: 13px; color: rgba(255,255,255,0.7);
+      margin-bottom: 9px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--white); }
+    .footer-message {
+      font-size: 11px; color: var(--slate); line-height: 1.6;
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 980px) {
+      .how-grid { grid-template-columns: 1fr; gap: 24px; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .contexts-grid { grid-template-columns: repeat(2, 1fr); }
+      .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+      .plans-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 720px) {
+      .container { padding: 0 16px; }
+      .header-inner { padding: 0 16px; }
+      .main-nav { display: none; }
+      .b2b-hero { padding: 56px 0 48px; }
+      .b2b-hero-title { font-size: 30px; }
+      .contexts-grid { grid-template-columns: repeat(2, 1fr); }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .founding-card { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .cta-final-headline { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- [1] CONTEXT BAR -->
+<div class="context-bar">
+  <span><span class="ctx-accent">For Partners · SomaVio</span></span>
+</div>
+
+<!-- [2] HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo" aria-label="SomaVio home">
+      <span class="logo-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </span>
+      SomaVio
+    </a>
+    <nav class="main-nav" aria-label="Site navigation">
+      <a href="index.html">Explore</a>
+      <a href="hotels.html">For Hotels</a>
+      <a href="partners.html" style="color:var(--white);">For Partners</a>
+      <a href="organizations.html">For Organizations</a>
+      <a href="safety.html">Safety</a><a href="local-rules.html">Local Rules</a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-selector-wrap">
+        <button class="lang-toggle" id="lang-toggle" aria-label="Language selector" aria-expanded="false">
+          EN
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button class="lang-option active" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
+          <button class="lang-option" data-lang="pt"><span class="lang-flag">🇧🇷</span> Português</button>
+          <button class="lang-option" data-lang="es"><span class="lang-flag">🇪🇸</span> Español</button>
+          <button class="lang-option" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
+          <button class="lang-option" data-lang="ja"><span class="lang-flag">🇯🇵</span> 日本語</button>
+          <button class="lang-option" data-lang="ko"><span class="lang-flag">🇰🇷</span> 한국어</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO — Stone sólido, alinhado à esquerda -->
+<section class="b2b-hero">
+  <div class="container">
+    <div class="b2b-hero-label">For Local Partners</div>
+    <h1 class="b2b-hero-title">Reach visitors when they're ready to explore.</h1>
+    <p class="b2b-hero-sub">SomaVio puts your café, guide service, spa or shop in front of the right people at the right moment — based on weather, time of day and what they just did. No algorithm. No bidding. Contextual.</p>
+    <a href="#schedule" class="b2b-hero-cta">Schedule a conversation →</a>
+
+    <div class="b2b-hero-contexts">
+      <span class="context-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a7 7 0 0 0 0-14z"/></svg>
+        Rainy day
+      </span>
+      <span class="context-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+        After hiking
+      </span>
+      <span class="context-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Morning
+      </span>
+      <span class="context-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Family-friendly
+      </span>
+      <span class="context-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
+        Near your location
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- O PROBLEMA -->
+<section class="section section-white">
+  <div class="container">
+    <div class="problem-grid">
+      <div>
+        <div class="section-head" style="margin-bottom:24px;">
+          <h2 class="section-title">The visitor is already here.</h2>
+          <p class="section-sub">They have budget, time and intent. The question is whether they find you — or someone else.</p>
+        </div>
+        <div class="problem-text">
+          <p>OTAs and review platforms show your business to people still planning their trip — often months in advance, often to the wrong audience, always at a cost.</p>
+          <p>SomaVio works differently. We reach visitors who are already in Canmore or Kananaskis, with intent to explore today. Your offer appears when conditions and context make it relevant — not because you paid the highest bid.</p>
+          <p>A rainy afternoon triggers your indoor climbing wall. A morning hike completion triggers your café or spa. That's contextual visibility — and it's what SomaVio is built for.</p>
+        </div>
+      </div>
+      <div class="problem-stat">
+        <div class="problem-stat-number">4.9M</div>
+        <div class="problem-stat-label">Visitors to Kananaskis annually</div>
+        <div class="problem-stat-sub">These visitors are already in your region — with money, time, and intention to experience it.</div>
+        <div class="problem-stat-source">Alberta Parks / CBC News, 2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUANDO VOCÊ APARECE -->
+<section class="section section-mist">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">When you appear</h2>
+      <p class="section-sub">Your business surfaces automatically when the moment is right — based on real conditions, not paid placement.</p>
+    </div>
+    <div class="contexts-grid">
+      <div class="context-card">
+        <div class="context-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a7 7 0 0 0 0-14z"/></svg>
+        </div>
+        <div class="context-card-title">Rainy day</div>
+        <div class="context-card-sub">Indoor activities, cafés, spas and climbing walls appear when weather turns</div>
+      </div>
+      <div class="context-card">
+        <div class="context-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+        </div>
+        <div class="context-card-title">After hiking</div>
+        <div class="context-card-sub">Recovery, food and wellness businesses triggered after trail activity</div>
+      </div>
+      <div class="context-card">
+        <div class="context-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="context-card-title">Morning</div>
+        <div class="context-card-sub">Cafés and breakfast spots surface early to visitors planning their day</div>
+      </div>
+      <div class="context-card">
+        <div class="context-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </div>
+        <div class="context-card-title">Evening</div>
+        <div class="context-card-sub">Dining, live music and evening experiences promoted after 5 PM</div>
+      </div>
+      <div class="context-card">
+        <div class="context-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="context-card-title">Family-friendly</div>
+        <div class="context-card-sub">Family-tagged businesses highlighted when visitors indicate travelling with children</div>
+      </div>
+      <div class="context-card">
+        <div class="context-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div class="context-card-title">First-time visitor</div>
+        <div class="context-card-sub">Guided experiences and orientation services appear for newcomers to the region</div>
+      </div>
+      <div class="context-card">
+        <div class="context-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <div class="context-card-title">Last day of trip</div>
+        <div class="context-card-sub">Retail, souvenirs and gifts surface when visitors are wrapping up their stay</div>
+      </div>
+      <div class="context-card">
+        <div class="context-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="context-card-title">Near your location</div>
+        <div class="context-card-sub">Proximity filtering surfaces your business when visitors are in your neighbourhood</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="section section-white">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">How it works</h2>
+      <p class="section-sub">Simple setup. No technical work on your end. Up and running in 48 hours.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-col">
+        <div class="how-num">01</div>
+        <svg class="how-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <h3 class="how-title">Set up your profile</h3>
+        <p class="how-text">We build your profile together — name, category, hours, offers and the contexts where you want to appear. Takes about 30 minutes. We handle the rest.</p>
+      </div>
+      <div class="how-col">
+        <div class="how-num">02</div>
+        <svg class="how-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        <h3 class="how-title">Appear in the right moments</h3>
+        <p class="how-text">SomaVio matches your business to visitors based on weather, time of day, activity context and proximity. Your offer surfaces when it's genuinely relevant.</p>
+      </div>
+      <div class="how-col">
+        <div class="how-num">03</div>
+        <svg class="how-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <h3 class="how-title">Track what's working</h3>
+        <p class="how-text">Partner Studio gives you visibility into profile views, offer clicks and which contexts are driving the most engagement — weekly, anonymized, no individual data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFÍCIOS -->
+<section class="section section-mist">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">What you get</h2>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3 class="benefit-title">Fixed monthly fee</h3>
+        <p class="benefit-text">No commission. No percentage of sales. A flat, predictable cost — CAD $79 to $249 depending on your plan.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <h3 class="benefit-title">Right place, right time</h3>
+        <p class="benefit-text">Your business appears based on real conditions — not who paid the most. Rainy afternoon? Your indoor venue surfaces. Post-hike? Your café or spa.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3 class="benefit-title">International visitors</h3>
+        <p class="benefit-text">SomaVio serves visitors in 6 languages automatically. Reach guests from Brazil, Japan, France and beyond without translation effort.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 class="benefit-title">Engagement insights</h3>
+        <p class="benefit-text">See how many visitors viewed your profile, which contexts triggered your offer, and what's working — via Partner Studio, every week.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <h3 class="benefit-title">Built alongside safety</h3>
+        <p class="benefit-text">SomaVio always shows official safety information alongside local recommendations. Visitors trust the platform — and that trust extends to your business.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3 class="benefit-title">No technical setup</h3>
+        <p class="benefit-text">We handle the onboarding. No website changes, no app integration, no tech team required. You provide the information, we do the rest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANOS -->
+<section class="section section-white">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Simple, transparent pricing</h2>
+      <p class="section-sub">Fixed monthly fee. No commissions. Cancel anytime.</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Local</div>
+        <div class="plan-price">CAD $79<span>/month</span></div>
+        <div class="plan-tagline">Profile + basic visibility</div>
+        <ul class="plan-features">
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Business profile</li>
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>1 active offer</li>
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Badge "Local Gem"</li>
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>6 languages</li>
+        </ul>
+        <button class="plan-cta" onclick="scrollToSchedule()">Get started</button>
+      </div>
+
+      <div class="plan-card is-highlight">
+        <div class="plan-highlight-label">Most popular</div>
+        <div class="plan-name">Grow</div>
+        <div class="plan-price">CAD $149<span>/month</span></div>
+        <div class="plan-tagline">Contextual visibility + data</div>
+        <ul class="plan-features">
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Everything in Local</li>
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Contextual Offer eligible</li>
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>3 active offers</li>
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Click & engagement data</li>
+        </ul>
+        <button class="plan-cta primary" onclick="scrollToSchedule()">Get started</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Spotlight</div>
+        <div class="plan-price">CAD $249<span>/month</span></div>
+        <div class="plan-tagline">Full visibility + editorial</div>
+        <ul class="plan-features">
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Everything in Grow</li>
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Featured Spot placement</li>
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>5 active offers</li>
+          <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Monthly report + editorial</li>
+        </ul>
+        <button class="plan-cta" onclick="scrollToSchedule()">Get started</button>
+      </div>
+    </div>
+
+    <!-- Founding Partner -->
+    <div class="founding-card">
+      <div>
+        <span class="founding-badge">Founding Partner</span>
+        <h3 class="founding-title">Join at no cost for 12 months</h3>
+        <p class="founding-desc">We're validating SomaVio with a small cohort of local businesses in Canmore. Founding Partners get full Spotlight access at no cost for 12 months, then migrate to their chosen plan at 30% permanent discount.</p>
+        <p class="founding-slots">⚡ 8 total slots across hotels and local partners — limited availability</p>
+      </div>
+      <button class="founding-cta" onclick="scrollToSchedule()">Apply now →</button>
+    </div>
+
+    <div class="disclaimer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>SomaVio is currently in pilot validation. Pricing and availability are subject to change. Founding Partner slots are limited and allocated on a first-conversation basis.</span>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="section section-mist">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">From local businesses in Canmore</h2>
+      <p class="section-sub">Early conversations with partners in the Bow Valley region.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">We get busy on sunny days when people are out hiking and slow on rainy days when visitors don't know what to do. SomaVio is literally built for our problem — surfacing us exactly when people are looking for an indoor option.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">J</div>
+          <div>
+            <div class="testimonial-name">James T.</div>
+            <div class="testimonial-role">Owner · Indoor climbing facility, Canmore</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">International visitors don't know our café exists. They find the big chains because they're on every platform. A contextual layer that reaches them after a morning hike — at the exact moment they want coffee — is something we've never had before.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">L</div>
+          <div>
+            <div class="testimonial-name">Lena W.</div>
+            <div class="testimonial-role">Co-owner · Local café, Canmore</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL ÚNICO -->
+<section class="cta-final" id="schedule">
+  <div class="container">
+    <h2 class="cta-final-headline">Ready to reach visitors when it matters?</h2>
+    <p class="cta-final-sub">A 30-minute conversation. No commitment required.</p>
+    <a href="mailto:hello@somavio.ca" class="cta-final-btn">Schedule a conversation →</a>
+  </div>
+</section>
+
+<!-- FOOTER B2B -->
+<footer class="footer-b2b">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <span class="logo-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </span>
+          SomaVio
+        </div>
+        <p class="footer-tagline">Local guidance for Alberta.</p>
+        <p class="footer-copy">© 2025 SomaVio</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Visitors</div>
+        <a href="index.html">Explore</a>
+        <a href="category.html">Categories</a>
+        <a href="trip.html">Plan Your Day</a>
+        <a href="safety.html">Safety</a><a href="local-rules.html">Local Rules</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Partners</div>
+        <a href="hotels.html">For Hotels</a>
+        <a href="partners.html">For Local Businesses</a>
+        <a href="organizations.html">For Organizations</a>
+        <a href="studio.html">Partner Studio</a>
+        <p class="footer-message">SomaVio complements existing systems. It does not replace PMS, OTA or emergency procedures.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">Legal</div>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function scrollToSchedule() {
+    document.getElementById('schedule')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const langToggle = document.getElementById('lang-toggle');
+    const langDropdown = document.getElementById('lang-dropdown');
+    langToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown.classList.toggle('open');
+      langToggle.setAttribute('aria-expanded', langDropdown.classList.contains('open'));
+    });
+    document.addEventListener('click', () => {
+      langDropdown?.classList.remove('open');
+      langToggle?.setAttribute('aria-expanded', 'false');
+    });
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      btn.addEventListener('click', function() {
+        localStorage.setItem('sv_lang', this.getAttribute('data-lang'));
+        document.querySelectorAll('.lang-option').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  });
+</script>
+
+
+<!-- DRAWER GLOBAL -->
+<style>
+.drawer-overlay{position:fixed;inset:0;z-index:500;background:rgba(44,44,42,0.55);opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:501;width:min(320px,85vw);background:#2C2C2A;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.drawer-logo{display:flex;align-items:center;gap:8px;font-family:Georgia,serif;font-size:18px;color:#fff;font-weight:700;}
+.drawer-logo-icon{width:28px;height:28px;background:#C8923A;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.drawer-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:rgba(255,255,255,0.7);}
+.drawer-nav{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.drawer-nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);padding:12px 20px 6px;}
+.drawer-nav a{display:flex;align-items:center;gap:12px;padding:12px 20px;font-size:15px;font-weight:500;color:rgba(255,255,255,0.82);transition:background 0.15s;text-decoration:none;}
+.drawer-nav a:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.drawer-nav a svg{width:17px;height:17px;color:#6B7F6E;flex-shrink:0;}
+.drawer-lang{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+.drawer-lang-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);margin-bottom:10px;}
+.drawer-lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.drawer-lang-btn{padding:9px 6px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;cursor:pointer;text-align:center;}
+.drawer-lang-btn.active{background:#6B7F6E;border-color:#6B7F6E;color:#fff;}
+.drawer-footer{margin-top:auto;padding:16px 20px;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;border-top:1px solid rgba(255,255,255,0.06);}
+</style>
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Navigation menu">
+  <div class="drawer-header">
+    <div class="drawer-logo"><div class="drawer-logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>SomaVio</div>
+    <button class="drawer-close" onclick="closeDrawer()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-nav">
+    <div class="drawer-nav-label">Navigate</div>
+    <a href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</a>
+    <a href="category.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>Explore Canmore</a>
+    <a href="trip.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Plan Your Day</a>
+    <a href="safety.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Safety</a>
+    <a href="hotel.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Guest Hub</a>
+    <a href="partners.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>For Partners</a>
+  </div>
+  <div class="drawer-lang">
+    <div class="drawer-lang-label">Language</div>
+    <div class="drawer-lang-grid">
+      <button class="drawer-lang-btn active" data-lang="en" onclick="setDrawerLang(this)">🇬🇧 EN</button>
+      <button class="drawer-lang-btn" data-lang="pt" onclick="setDrawerLang(this)">🇧🇷 PT</button>
+      <button class="drawer-lang-btn" data-lang="es" onclick="setDrawerLang(this)">🇪🇸 ES</button>
+      <button class="drawer-lang-btn" data-lang="fr" onclick="setDrawerLang(this)">🇫🇷 FR</button>
+      <button class="drawer-lang-btn" data-lang="ja" onclick="setDrawerLang(this)">🇯🇵 JA</button>
+      <button class="drawer-lang-btn" data-lang="ko" onclick="setDrawerLang(this)">🇰🇷 KO</button>
+    </div>
+  </div>
+  <div class="drawer-footer">SomaVio · Local guidance for Alberta<br>© 2025</div>
+</div>
+<script>
+function openDrawer(){document.getElementById("drawer").classList.add("open");document.getElementById("drawer-overlay").classList.add("open");document.body.style.overflow="hidden";}
+function closeDrawer(){document.getElementById("drawer").classList.remove("open");document.getElementById("drawer-overlay").classList.remove("open");document.body.style.overflow="";}
+function setDrawerLang(btn){document.querySelectorAll(".drawer-lang-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");localStorage.setItem("sv_lang",btn.getAttribute("data-lang"));closeDrawer();}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeDrawer();});
+</script>
+
+<script src="assets/js/somavio-live.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SomaVio | For Organizations</title>
+  <meta name="description" content="A complementary visitor layer for Alberta's tourism ecosystem. Supporting safety, local discovery and regional data — built to work alongside existing systems." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    :root {
+      --stone:       #2C2C2A;
+      --sage:        #6B7F6E;
+      --mist:        #F4F1EC;
+      --glacier:     #D6E4E1;
+      --amber:       #C8923A;
+      --slate:       #4A5568;
+      --white:       #FFFFFF;
+      --care-teal:   #0D9488;
+      --shadow-1: 0 1px 3px rgba(44,44,42,0.08);
+      --shadow-2: 0 4px 12px rgba(44,44,42,0.12);
+      --shadow-3: 0 8px 32px rgba(44,44,42,0.18);
+      --r-card: 8px;
+      --r-btn:  6px;
+      --r-pill: 100px;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--mist);
+      color: var(--stone);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    ul { list-style: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .label-caps {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+
+    /* ── Context Bar ── */
+    .context-bar {
+      position: sticky; top: 0; z-index: 100;
+      height: 36px; background: var(--mist);
+      border-bottom: 1px solid rgba(44,44,42,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; color: var(--slate);
+      letter-spacing: 0.04em;
+    }
+    .ctx-accent { color: var(--sage); font-weight: 600; }
+
+    /* ── Header ── */
+    .site-header {
+      position: sticky; top: 36px; z-index: 99;
+      height: 64px; background: var(--stone);
+      display: flex; align-items: center;
+    }
+    .header-inner {
+      display: flex; align-items: center; width: 100%;
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 20px;
+      color: var(--white); font-weight: 700; flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 32px; height: 32px; background: var(--amber);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { color: var(--white); }
+    .main-nav {
+      display: flex; align-items: center; gap: 4px;
+      margin-left: 36px; flex: 1;
+    }
+    .main-nav a {
+      padding: 6px 11px; font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.8); border-radius: var(--r-btn);
+      transition: color 0.2s, background 0.2s;
+    }
+    .main-nav a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+    .header-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+    .lang-selector-wrap { position: relative; }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px; border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: var(--r-pill); color: var(--white);
+      font-size: 13px; font-weight: 500; background: transparent;
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .lang-toggle:hover { border-color: rgba(255,255,255,0.4); }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-2); padding: 8px; min-width: 140px;
+      display: none; flex-direction: column; gap: 2px; z-index: 200;
+    }
+    .lang-dropdown.open { display: flex; }
+    .lang-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; color: var(--slate);
+      background: none; cursor: pointer; text-align: left; width: 100%;
+      transition: background 0.15s;
+    }
+    .lang-option:hover { background: var(--mist); }
+    .lang-option.active { font-weight: 600; color: var(--stone); background: var(--glacier); }
+    .lang-flag { font-size: 16px; }
+
+    /* ── Hero — Stone sólido, alinhado à esquerda ── */
+    .b2b-hero {
+      background: var(--stone);
+      padding: 80px 0 72px;
+      text-align: left;
+    }
+    .b2b-hero-label {
+      color: var(--glacier); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px;
+    }
+    .b2b-hero-title {
+      font-family: var(--font-display); font-size: 40px;
+      color: var(--white); font-weight: 400; line-height: 1.15;
+      max-width: 720px; margin-bottom: 16px;
+    }
+    .b2b-hero-sub {
+      font-size: 16px; color: var(--glacier);
+      max-width: 600px; line-height: 1.7; margin-bottom: 32px;
+    }
+    /* Sem CTA primário na página institucional */
+    .b2b-hero-contact {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1.5px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.85);
+      padding: 12px 24px; border-radius: var(--r-btn);
+      font-size: 14px; font-weight: 500; transition: all 0.2s;
+    }
+    .b2b-hero-contact:hover { border-color: rgba(255,255,255,0.6); color: var(--white); }
+
+    /* ── Shared section styles ── */
+    .section { padding: 64px 0; }
+    .section-mist { background: var(--mist); }
+    .section-white { background: var(--white); }
+    .section-stone { background: var(--stone); }
+
+    .section-head { margin-bottom: 40px; }
+    .section-title {
+      font-family: var(--font-display); font-size: 32px;
+      color: var(--stone); font-weight: 400; margin-bottom: 12px;
+    }
+    .section-sub { font-size: 16px; color: var(--slate); max-width: 600px; line-height: 1.7; }
+
+    /* ── O que é SomaVio — 3 colunas ── */
+    .what-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .what-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 28px;
+      transition: box-shadow 0.2s;
+    }
+    .what-card:hover { box-shadow: var(--shadow-2); }
+    .what-icon {
+      width: 44px; height: 44px; background: var(--glacier);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+    }
+    .what-icon svg { color: var(--sage); width: 22px; height: 22px; }
+    .what-title { font-size: 17px; font-weight: 600; color: var(--stone); margin-bottom: 10px; }
+    .what-text { font-size: 14px; color: var(--slate); line-height: 1.65; }
+
+    /* ── Alinhamento Alberta — 2 colunas ── */
+    .alignment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .alignment-text { font-size: 15px; color: var(--slate); line-height: 1.7; }
+    .alignment-text p { margin-bottom: 16px; }
+    .alignment-text p:last-child { margin-bottom: 0; }
+    .alignment-stat-stack { display: flex; flex-direction: column; gap: 16px; }
+    .alignment-stat {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 20px 24px;
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .alignment-stat-number {
+      font-family: var(--font-display); font-size: 32px;
+      color: var(--stone); font-weight: 700; line-height: 1;
+      flex-shrink: 0;
+    }
+    .alignment-stat-label { font-size: 14px; font-weight: 600; color: var(--stone); margin-bottom: 4px; }
+    .alignment-stat-source { font-size: 11px; color: var(--slate); line-height: 1.4; }
+
+    /* ── O problema ── */
+    .problem-list { display: flex; flex-direction: column; gap: 16px; max-width: 780px; }
+    .problem-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 20px 24px;
+    }
+    .problem-icon {
+      width: 36px; height: 36px; background: rgba(107,127,110,0.12);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .problem-icon svg { color: var(--sage); width: 18px; height: 18px; }
+    .problem-title { font-size: 15px; font-weight: 600; color: var(--stone); margin-bottom: 5px; }
+    .problem-text { font-size: 13px; color: var(--slate); line-height: 1.55; }
+
+    /* ── Como funciona ── */
+    .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .how-col { display: flex; flex-direction: column; gap: 14px; }
+    .how-num {
+      font-family: var(--font-display); font-size: 48px;
+      color: var(--glacier); font-weight: 700; line-height: 1;
+    }
+    .how-icon-el { color: var(--sage); width: 32px; height: 32px; }
+    .how-title { font-size: 17px; font-weight: 600; color: var(--stone); }
+    .how-text { font-size: 14px; color: var(--slate); line-height: 1.65; }
+
+    /* ── Potencial de dados ── */
+    .data-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .data-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 24px;
+    }
+    .data-icon {
+      width: 36px; height: 36px; background: var(--glacier);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .data-icon svg { color: var(--sage); width: 18px; height: 18px; }
+    .data-title { font-size: 15px; font-weight: 600; color: var(--stone); margin-bottom: 8px; }
+    .data-text { font-size: 13px; color: var(--slate); line-height: 1.6; }
+    .data-example {
+      margin-top: 12px; padding: 10px 14px;
+      background: rgba(214,228,225,0.4); border-radius: 6px;
+      font-size: 12px; color: var(--slate); font-style: italic; line-height: 1.4;
+    }
+
+    /* ── Estágio atual — honesto ── */
+    .stage-card {
+      background: rgba(214,228,225,0.3);
+      border: 1px solid var(--glacier);
+      border-radius: var(--r-card); padding: 32px;
+      max-width: 780px;
+    }
+    .stage-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--sage); color: var(--white);
+      font-size: 11px; font-weight: 700; padding: 4px 12px;
+      border-radius: var(--r-pill); text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 16px;
+    }
+    .stage-label svg { width: 12px; height: 12px; }
+    .stage-title { font-size: 20px; font-weight: 700; color: var(--stone); margin-bottom: 12px; }
+    .stage-text { font-size: 14px; color: var(--slate); line-height: 1.65; margin-bottom: 12px; }
+    .stage-list { display: flex; flex-direction: column; gap: 8px; }
+    .stage-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: var(--stone);
+    }
+    .stage-item svg { color: var(--care-teal); width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* ── Disclaimer não-endosso ── */
+    .non-endorse {
+      background: rgba(44,44,42,0.04);
+      border: 1px solid rgba(44,44,42,0.08);
+      border-radius: var(--r-card); padding: 16px 20px;
+      font-size: 12px; color: var(--slate); line-height: 1.6;
+      margin-top: 32px; display: flex; align-items: flex-start; gap: 10px;
+    }
+    .non-endorse svg { color: var(--slate); flex-shrink: 0; width: 15px; height: 15px; margin-top: 1px; }
+
+    /* ── Fontes ── */
+    .sources-list { display: flex; flex-direction: column; gap: 10px; }
+    .source-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 13px; color: var(--slate); line-height: 1.5;
+    }
+    .source-item::before {
+      content: '–'; color: var(--sage); flex-shrink: 0; font-weight: 600;
+    }
+
+    /* ── CTA institucional ── */
+    .cta-institutional {
+      background: var(--stone); padding: 80px 0; text-align: left;
+    }
+    .cta-inst-label {
+      color: var(--glacier); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .cta-inst-headline {
+      font-family: var(--font-display); font-size: 32px;
+      color: var(--white); font-weight: 400; margin-bottom: 14px; max-width: 600px;
+    }
+    .cta-inst-sub {
+      font-size: 15px; color: var(--glacier); margin-bottom: 28px; max-width: 500px; line-height: 1.6;
+    }
+    .cta-inst-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--sage); color: var(--white);
+      padding: 14px 28px; border-radius: var(--r-btn);
+      font-size: 15px; font-weight: 600; transition: background 0.2s;
+    }
+    .cta-inst-btn:hover { background: #5a6f60; }
+
+    /* ── Footer B2B ── */
+    .footer-b2b { background: var(--stone); padding: 48px 0 32px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr 1.3fr 1fr; gap: 40px;
+      margin-bottom: 32px;
+    }
+    .footer-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 18px;
+      color: var(--white); font-weight: 700; margin-bottom: 12px;
+    }
+    .footer-tagline { font-size: 13px; color: var(--glacier); margin-bottom: 6px; }
+    .footer-copy { font-size: 11px; color: var(--slate); }
+    .footer-col-title { color: var(--glacier); margin-bottom: 14px; }
+    .footer-col a {
+      display: block; font-size: 13px; color: rgba(255,255,255,0.7);
+      margin-bottom: 9px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--white); }
+    .footer-message {
+      font-size: 11px; color: var(--slate); line-height: 1.6;
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 980px) {
+      .what-grid { grid-template-columns: 1fr; }
+      .alignment-grid { grid-template-columns: 1fr; }
+      .how-grid { grid-template-columns: 1fr; gap: 24px; }
+      .data-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 720px) {
+      .container { padding: 0 16px; }
+      .header-inner { padding: 0 16px; }
+      .main-nav { display: none; }
+      .b2b-hero { padding: 56px 0 48px; }
+      .b2b-hero-title { font-size: 30px; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- [1] CONTEXT BAR -->
+<div class="context-bar">
+  <span><span class="ctx-accent">For Organizations · SomaVio</span></span>
+</div>
+
+<!-- [2] HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo" aria-label="SomaVio home">
+      <span class="logo-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </span>
+      SomaVio
+    </a>
+    <nav class="main-nav" aria-label="Site navigation">
+      <a href="index.html">Explore</a>
+      <a href="hotels.html">For Hotels</a>
+      <a href="partners.html">For Partners</a>
+      <a href="organizations.html" style="color:var(--white);">For Organizations</a>
+      <a href="safety.html">Safety</a><a href="local-rules.html">Local Rules</a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-selector-wrap">
+        <button class="lang-toggle" id="lang-toggle" aria-label="Language" aria-expanded="false">
+          EN
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button class="lang-option active" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
+          <button class="lang-option" data-lang="pt"><span class="lang-flag">🇧🇷</span> Português</button>
+          <button class="lang-option" data-lang="es"><span class="lang-flag">🇪🇸</span> Español</button>
+          <button class="lang-option" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
+          <button class="lang-option" data-lang="ja"><span class="lang-flag">🇯🇵</span> 日本語</button>
+          <button class="lang-option" data-lang="ko"><span class="lang-flag">🇰🇷</span> 한국어</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO — Stone sólido, institucional, sem CTA primário -->
+<section class="b2b-hero">
+  <div class="container">
+    <div class="b2b-hero-label">For Organizations</div>
+    <h1 class="b2b-hero-title">A complementary visitor layer for Alberta's tourism ecosystem.</h1>
+    <p class="b2b-hero-sub">SomaVio helps visitors navigate Canmore and Kananaskis more safely and meaningfully — surfacing official guidance, local context and curated recommendations in one place. We're in early validation. This document explains what we're building and why it may be relevant to your work.</p>
+    <a href="mailto:hello@somavio.ca" class="b2b-hero-contact">Get in touch →</a>
+  </div>
+</section>
+
+<!-- O QUE É SOMAVIO — 3 colunas -->
+<section class="section section-mist">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">What SomaVio is</h2>
+      <p class="section-sub">A digital companion for visitors already in the region — not a booking platform, not an OTA. A contextual layer built to complement what already exists.</p>
+    </div>
+    <div class="what-grid">
+      <div class="what-card">
+        <div class="what-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <h3 class="what-title">Official safety, always visible</h3>
+        <p class="what-text">Trail conditions, wildlife alerts and weather from Parks Canada, Alberta Parks and Travel Alberta are always present — attributed, current and accessible in the visitor's language. SomaVio does not generate safety content. It surfaces and contextualizes official sources.</p>
+      </div>
+      <div class="what-card">
+        <div class="what-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        </div>
+        <h3 class="what-title">Local discovery, contextually</h3>
+        <p class="what-text">Recommendations adapt to real conditions — weather, time of day, trail status and visitor intent. A rainy afternoon surfaces different suggestions than a clear morning. Visitors get what's actually good right now, not a generic list.</p>
+      </div>
+      <div class="what-card">
+        <div class="what-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 class="what-title">Aggregated regional signals</h3>
+        <p class="what-text">As the platform scales, aggregated visitor behaviour data can help tourism organizations understand what visitors are actually doing — by category, time of day and context. Anonymized. Never individual. In pilot validation now.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALINHAMENTO COM ALBERTA -->
+<section class="section section-white">
+  <div class="container">
+    <div class="alignment-grid">
+      <div>
+        <div class="section-head" style="margin-bottom:24px;">
+          <h2 class="section-title">Aligned with Alberta's tourism direction</h2>
+        </div>
+        <div class="alignment-text">
+          <p>Alberta's Provincial Tourism Strategy targets CAD $25B in annual tourism revenue by 2035 — a 60% increase from current levels. Achieving that goal requires not just more visitors, but better visitor experiences that generate repeat visits, word-of-mouth and deeper regional spending.</p>
+          <p>SomaVio addresses the in-destination experience gap: the moment between arrival and departure when visitors need local guidance, safety information and help making the most of where they are.</p>
+          <p>We're not a marketing platform. We don't attract visitors to Alberta. We help the visitors already here have a safer, richer, more locally connected experience — which is where yield improvement actually happens.</p>
+          <p>International arrivals in Alberta grew 4% in early 2026, against a national decline of 5%. That divergence reflects real regional strength — and real visitor demand for meaningful experience, not just access.</p>
+        </div>
+      </div>
+      <div class="alignment-stat-stack">
+        <div class="alignment-stat">
+          <div class="alignment-stat-number">$25B</div>
+          <div>
+            <div class="alignment-stat-label">Alberta tourism revenue target by 2035</div>
+            <div class="alignment-stat-source">Alberta Government Provincial Tourism Strategy, 2024 — policy target</div>
+          </div>
+        </div>
+        <div class="alignment-stat">
+          <div class="alignment-stat-number">+4%</div>
+          <div>
+            <div class="alignment-stat-label">International arrivals in Alberta, early 2026</div>
+            <div class="alignment-stat-source">Statistics Canada / Alberta Government, February 2026 (vs –5% nationally)</div>
+          </div>
+        </div>
+        <div class="alignment-stat">
+          <div class="alignment-stat-number">$1B+</div>
+          <div>
+            <div class="alignment-stat-label">Visitor spending, Canmore & Kananaskis, 2025</div>
+            <div class="alignment-stat-source">Destination Canada / Tourism Canmore Kananaskis, 2025</div>
+          </div>
+        </div>
+        <div class="alignment-stat">
+          <div class="alignment-stat-number">4.9M</div>
+          <div>
+            <div class="alignment-stat-label">Visitors to Kananaskis annually</div>
+            <div class="alignment-stat-source">Alberta Parks / CBC News, 2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- O PROBLEMA QUE ABORDAMOS -->
+<section class="section section-mist">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">The gap we're addressing</h2>
+      <p class="section-sub">Three real problems for visitors in Canmore and Kananaskis that no existing platform fully solves.</p>
+    </div>
+    <div class="problem-list">
+      <div class="problem-item">
+        <div class="problem-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <div class="problem-title">Safety information is fragmented</div>
+          <p class="problem-text">Trail conditions, wildlife alerts and weather live on separate government websites — in English only, with no contextual connection to what a visitor is planning to do. International visitors routinely head out without knowing current conditions. SomaVio surfaces official information in the right language at the right moment.</p>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div>
+          <div class="problem-title">Generic recommendations miss the moment</div>
+          <p class="problem-text">Review platforms and destination websites offer static lists. They don't know it's raining, that the trail is closed, or that a visitor just finished a 4-hour hike. Contextual recommendations — based on real conditions and visitor intent — are largely absent from the in-destination experience.</p>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div>
+          <div class="problem-title">In-destination visitor behaviour is a data blind spot</div>
+          <p class="problem-text">Tourism organizations know how many visitors arrive and broad spending numbers. What they don't know is what visitors actually do once they're here — which trails, which categories, which contexts drive the most engagement. That gap makes it hard to optimize the visitor experience at a regional level.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="section section-white">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">How SomaVio works</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-col">
+        <div class="how-num">01</div>
+        <svg class="how-icon-el" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>
+        <h3 class="how-title">Visitor accesses via QR or link</h3>
+        <p class="how-text">No app download. Visitors access SomaVio through a QR code at their hotel or a direct link — and immediately get a contextual guide for where they are and what's happening today.</p>
+      </div>
+      <div class="how-col">
+        <div class="how-num">02</div>
+        <svg class="how-icon-el" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <h3 class="how-title">Official safety always first</h3>
+        <p class="how-text">Safety information from Parks Canada, Alberta Parks and Environment Canada appears before any commercial content. Attribution is explicit. Sources are always visible. Language is calm and informative — never alarmist.</p>
+      </div>
+      <div class="how-col">
+        <div class="how-num">03</div>
+        <svg class="how-icon-el" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+        <h3 class="how-title">Contextual local recommendations</h3>
+        <p class="how-text">Recommendations adapt to conditions — weather, time of day, trail status. Hotels and local businesses can feature their offers within a contextual, curated framework. No paid-placement algorithm.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POTENCIAL DE DADOS -->
+<section class="section section-mist">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Regional data potential</h2>
+      <p class="section-sub">As SomaVio scales, aggregated visitor behaviour signals could offer tourism organizations a new view of in-destination patterns. All data is anonymized. No individual visitor data is ever shared.</p>
+    </div>
+    <div class="data-grid">
+      <div class="data-card">
+        <div class="data-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><polyline points="18 17 13 12 8 16 3 11"/></svg>
+        </div>
+        <h3 class="data-title">Category engagement by time of day</h3>
+        <p class="data-text">Understand which experience categories — outdoor, wellness, dining, cultural — are most engaged during different periods and weather conditions.</p>
+        <div class="data-example">Illustrative: "Rainy afternoon wellness engagement is 3× higher than fair-weather days."</div>
+      </div>
+      <div class="data-card">
+        <div class="data-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3 class="data-title">Visitor language and origin patterns</h3>
+        <p class="data-text">Aggregated language usage data can indicate visitor origin patterns and multilingual demand — informing translation priorities and market focus.</p>
+        <div class="data-example">Illustrative: "PT and JA are the most active non-EN languages in Canmore in Q1."</div>
+      </div>
+      <div class="data-card">
+        <div class="data-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="data-title">Safety content engagement</h3>
+        <p class="data-text">Track how often safety information is accessed, which alert types generate the most engagement, and whether visitors are acting on official guidance.</p>
+        <div class="data-example">Illustrative: "Wildlife alert views increased 40% on days with active Parks Canada notices."</div>
+      </div>
+      <div class="data-card">
+        <div class="data-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+        <h3 class="data-title">Seasonal and temporal patterns</h3>
+        <p class="data-text">Understand how visitor intent and engagement patterns shift across seasons, times of week and weather conditions — useful for planning and capacity management.</p>
+        <div class="data-example">Illustrative: "Indoor activity engagement peaks on weekends with afternoon precipitation."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESTÁGIO ATUAL — honesto -->
+<section class="section section-white">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Where we are now</h2>
+    </div>
+    <div class="stage-card">
+      <div class="stage-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Pilot validation phase
+      </div>
+      <h3 class="stage-title">Early stage. Being honest about it.</h3>
+      <p class="stage-text">SomaVio is in active development and early validation. We are not claiming endorsement from any government body or tourism organization. We are not making projections about scale or impact. What we are doing:</p>
+      <ul class="stage-list">
+        <li class="stage-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Building and testing the product with a small cohort of hotels and local businesses in Canmore</li>
+        <li class="stage-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Validating that contextual recommendations and safety information improve visitor experience</li>
+        <li class="stage-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Learning what data signals are meaningful and how to present them usefully</li>
+        <li class="stage-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Identifying whether there is a genuine role for SomaVio in Alberta's wider tourism ecosystem</li>
+      </ul>
+    </div>
+
+    <div class="non-endorse">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>References to organizations, government bodies and tourism initiatives on this page do not imply partnership, endorsement, approval or participation. All data is cited with source. Illustrative scenarios are clearly labelled as such.</span>
+    </div>
+  </div>
+</section>
+
+<!-- FONTES -->
+<section class="section section-mist">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title" style="font-size:22px;">Data sources</h2>
+    </div>
+    <div class="sources-list">
+      <div class="source-item">Parks Canada / CBC News (March 2026): 4.5M annual visitors to Banff National Park — subject to Parks Canada final audit</div>
+      <div class="source-item">Alberta Parks / CBC News (2024): 4.9M annual visitors to Kananaskis Country</div>
+      <div class="source-item">Destination Canada / Tourism Canmore Kananaskis (2025): CAD $1B+ visitor spending in Canmore Kananaskis region</div>
+      <div class="source-item">Alberta Government Provincial Tourism Strategy (2024): CAD $25B revenue target by 2035 — policy target, not a projection</div>
+      <div class="source-item">Statistics Canada / Alberta Government (February 2026): +4% international arrivals in Alberta vs –5% nationally</div>
+      <div class="source-item">Global Wellness Institute (2024): $894B global wellness tourism market, projected $1.38T by 2029</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA INSTITUCIONAL -->
+<section class="cta-institutional">
+  <div class="container">
+    <div class="cta-inst-label">Get in touch</div>
+    <h2 class="cta-inst-headline">Interested in what we're building?</h2>
+    <p class="cta-inst-sub">We welcome conversations with organizations working in Alberta's tourism and safety ecosystem. No commitments — just a conversation.</p>
+    <a href="mailto:hello@somavio.ca" class="cta-inst-btn">Reach out →</a>
+  </div>
+</section>
+
+<!-- FOOTER B2B -->
+<footer class="footer-b2b">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <span class="logo-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </span>
+          SomaVio
+        </div>
+        <p class="footer-tagline">Local guidance for Alberta.</p>
+        <p class="footer-copy">© 2025 SomaVio</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Visitors</div>
+        <a href="index.html">Explore</a>
+        <a href="category.html">Categories</a>
+        <a href="trip.html">Plan Your Day</a>
+        <a href="safety.html">Safety</a><a href="local-rules.html">Local Rules</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Partners</div>
+        <a href="hotels.html">For Hotels</a>
+        <a href="partners.html">For Local Businesses</a>
+        <a href="organizations.html">For Organizations</a>
+        <a href="studio.html">Partner Studio</a>
+        <p class="footer-message">SomaVio complements existing systems. It does not replace PMS, OTA or emergency procedures.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">Legal</div>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const langToggle = document.getElementById('lang-toggle');
+    const langDropdown = document.getElementById('lang-dropdown');
+    langToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown.classList.toggle('open');
+      langToggle.setAttribute('aria-expanded', langDropdown.classList.contains('open'));
+    });
+    document.addEventListener('click', () => {
+      langDropdown?.classList.remove('open');
+      langToggle?.setAttribute('aria-expanded', 'false');
+    });
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      btn.addEventListener('click', function() {
+        localStorage.setItem('sv_lang', this.getAttribute('data-lang'));
+        document.querySelectorAll('.lang-option').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  });
+</script>
+
+
+<!-- DRAWER GLOBAL -->
+<style>
+.drawer-overlay{position:fixed;inset:0;z-index:500;background:rgba(44,44,42,0.55);opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:501;width:min(320px,85vw);background:#2C2C2A;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.drawer-logo{display:flex;align-items:center;gap:8px;font-family:Georgia,serif;font-size:18px;color:#fff;font-weight:700;}
+.drawer-logo-icon{width:28px;height:28px;background:#C8923A;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.drawer-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:rgba(255,255,255,0.7);}
+.drawer-nav{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.drawer-nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);padding:12px 20px 6px;}
+.drawer-nav a{display:flex;align-items:center;gap:12px;padding:12px 20px;font-size:15px;font-weight:500;color:rgba(255,255,255,0.82);transition:background 0.15s;text-decoration:none;}
+.drawer-nav a:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.drawer-nav a svg{width:17px;height:17px;color:#6B7F6E;flex-shrink:0;}
+.drawer-lang{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+.drawer-lang-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);margin-bottom:10px;}
+.drawer-lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.drawer-lang-btn{padding:9px 6px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;cursor:pointer;text-align:center;}
+.drawer-lang-btn.active{background:#6B7F6E;border-color:#6B7F6E;color:#fff;}
+.drawer-footer{margin-top:auto;padding:16px 20px;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;border-top:1px solid rgba(255,255,255,0.06);}
+</style>
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Navigation menu">
+  <div class="drawer-header">
+    <div class="drawer-logo"><div class="drawer-logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>SomaVio</div>
+    <button class="drawer-close" onclick="closeDrawer()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-nav">
+    <div class="drawer-nav-label">Navigate</div>
+    <a href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</a>
+    <a href="category.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>Explore Canmore</a>
+    <a href="trip.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Plan Your Day</a>
+    <a href="safety.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Safety</a>
+    <a href="hotel.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Guest Hub</a>
+    <a href="partners.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>For Partners</a>
+  </div>
+  <div class="drawer-lang">
+    <div class="drawer-lang-label">Language</div>
+    <div class="drawer-lang-grid">
+      <button class="drawer-lang-btn active" data-lang="en" onclick="setDrawerLang(this)">🇬🇧 EN</button>
+      <button class="drawer-lang-btn" data-lang="pt" onclick="setDrawerLang(this)">🇧🇷 PT</button>
+      <button class="drawer-lang-btn" data-lang="es" onclick="setDrawerLang(this)">🇪🇸 ES</button>
+      <button class="drawer-lang-btn" data-lang="fr" onclick="setDrawerLang(this)">🇫🇷 FR</button>
+      <button class="drawer-lang-btn" data-lang="ja" onclick="setDrawerLang(this)">🇯🇵 JA</button>
+      <button class="drawer-lang-btn" data-lang="ko" onclick="setDrawerLang(this)">🇰🇷 KO</button>
+    </div>
+  </div>
+  <div class="drawer-footer">SomaVio · Local guidance for Alberta<br>© 2025</div>
+</div>
+<script>
+function openDrawer(){document.getElementById("drawer").classList.add("open");document.getElementById("drawer-overlay").classList.add("open");document.body.style.overflow="hidden";}
+function closeDrawer(){document.getElementById("drawer").classList.remove("open");document.getElementById("drawer-overlay").classList.remove("open");document.body.style.overflow="";}
+function setDrawerLang(btn){document.querySelectorAll(".drawer-lang-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");localStorage.setItem("sv_lang",btn.getAttribute("data-lang"));closeDrawer();}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeDrawer();});
+</script>
+
+<script src="assets/js/somavio-live.js" defer></script>
+</body>
+</html>

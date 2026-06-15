@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Alpine Hotel · SomaVio Guest Hub</title>
+  <meta name="description" content="Your stay guide for Canmore. Local recommendations, hotel info, and safety — built for where you are right now." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    /* ═══════════════════════════════════════════════
+       DESIGN SYSTEM TOKENS — imutáveis
+    ════════════════════════════════════════════════ */
+    :root {
+      --stone:       #2C2C2A;
+      --sage:        #6B7F6E;
+      --mist:        #F4F1EC;
+      --glacier:     #D6E4E1;
+      --amber:       #C8923A;
+      --slate:       #4A5568;
+      --white:       #FFFFFF;
+      --care-blue:   #3B82F6;
+      --care-amber:  #D97706;
+      --care-teal:   #0D9488;
+      --emergency:   #DC2626;
+      --shadow-1: 0 1px 3px rgba(44,44,42,0.08);
+      --shadow-2: 0 4px 12px rgba(44,44,42,0.12);
+      --shadow-3: 0 8px 32px rgba(44,44,42,0.18);
+      --r-card: 8px;
+      --r-btn:  6px;
+      --r-pill: 100px;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--mist);
+      color: var(--stone);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    ul { list-style: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .label-caps {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════════
+       [1] CONTEXT BAR
+    ════════════════════════════════════════════════ */
+    .context-bar {
+      position: sticky; top: 0; z-index: 100;
+      height: 36px; background: var(--mist);
+      border-bottom: 1px solid rgba(44,44,42,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; color: var(--slate);
+      letter-spacing: 0.04em;
+    }
+    .ctx-accent { color: var(--sage); font-weight: 600; }
+
+    /* ═══════════════════════════════════════════════
+       [2] HEADER GUEST HUB
+       Fundo Stone — tom funcional, distinto da Home
+    ════════════════════════════════════════════════ */
+    .hub-header {
+      position: sticky; top: 36px; z-index: 99;
+      height: 64px; background: var(--stone);
+      display: flex; align-items: center;
+    }
+    .hub-header-inner {
+      display: flex; align-items: center; width: 100%;
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 20px;
+      color: var(--white); font-weight: 700; flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 32px; height: 32px; background: var(--amber);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { color: var(--white); }
+
+    /* Divisor + nome do hotel */
+    .hub-hotel-divider {
+      width: 1px; height: 24px;
+      background: rgba(255,255,255,0.2);
+      margin: 0 16px; flex-shrink: 0;
+    }
+    .hub-hotel-name {
+      font-size: 13px; color: var(--glacier); font-weight: 500;
+    }
+
+    .hub-header-actions {
+      display: flex; align-items: center; gap: 12px;
+      margin-left: auto; flex-shrink: 0;
+    }
+
+    /* My Trip pill — SAGE SÓLIDO (nunca translúcido) */
+    .my-trip-pill {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--sage); color: var(--white);
+      padding: 7px 14px; border-radius: var(--r-pill);
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+      border: none;
+    }
+    .my-trip-pill:hover { background: #5a6f60; }
+    .my-trip-pill svg { width: 16px; height: 16px; color: var(--white); }
+    .my-trip-pill .trip-count {
+      background: var(--amber); color: var(--white);
+      font-size: 11px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    /* My Trip pill — sticky bottom-right após sair do hero */
+    .my-trip-pill-sticky {
+      position: fixed; bottom: 28px; right: 28px; z-index: 200;
+      display: none; /* começa oculto, JS ativa */
+      flex-direction: column; align-items: flex-end; gap: 0;
+    }
+    .my-trip-pill-sticky .my-trip-pill {
+      box-shadow: var(--shadow-3);
+    }
+
+    /* Seletor de idioma */
+    .lang-selector-wrap { position: relative; }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: var(--r-pill);
+      color: var(--white); font-size: 13px; font-weight: 500;
+      background: transparent; cursor: pointer; transition: border-color 0.2s;
+    }
+    .lang-toggle:hover { border-color: rgba(255,255,255,0.4); }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-2); padding: 8px; min-width: 140px;
+      display: none; flex-direction: column; gap: 2px; z-index: 200;
+    }
+    .lang-dropdown.open { display: flex; }
+    .lang-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; color: var(--slate);
+      background: none; cursor: pointer; text-align: left; width: 100%;
+      transition: background 0.15s;
+    }
+    .lang-option:hover { background: var(--mist); }
+    .lang-option.active { font-weight: 600; color: var(--stone); background: var(--glacier); }
+    .lang-flag { font-size: 16px; }
+
+    /* ═══════════════════════════════════════════════
+       [3] ÂNCORA COGNITIVA
+       Foto panorâmica Canmore — overlay Stone 42%
+       CORREÇÃO 1 do briefing
+    ════════════════════════════════════════════════ */
+    .hub-anchor {
+      position: relative; height: 360px;
+      background-image:
+        linear-gradient(rgba(44,44,42,0.42), rgba(44,44,42,0.42)),
+        url('https://images.unsplash.com/photo-1609948543911-0b428dc58e4e?w=1440&q=85&auto=format&fit=crop');
+      background-size: cover; background-position: center;
+      display: flex; align-items: flex-end;
+    }
+    .hub-anchor-content {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px 40px;
+      width: 100%;
+    }
+    .hub-anchor-label {
+      color: var(--glacier); letter-spacing: 0.25em;
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    /* CORREÇÃO 2 — headline correta conforme briefing */
+    .hub-anchor-headline {
+      font-family: var(--font-display); font-size: 36px;
+      color: var(--white); font-weight: 400; line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .hub-anchor-sub {
+      font-size: 14px; color: rgba(255,255,255,0.85);
+    }
+
+    /* CORREÇÃO 3 — My Trip pill na âncora: Sage sólido */
+    .hub-anchor-trip {
+      position: absolute; top: 20px; right: 40px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       [4] SAFETY BAR — 3 estados (mesma lógica da Home)
+    ════════════════════════════════════════════════ */
+    .safety-bar {
+      display: flex; align-items: center;
+      padding: 12px 0; font-size: 13px;
+      transition: all 300ms ease-out;
+    }
+    .safety-bar-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      width: 100%; display: flex; align-items: center; gap: 12px;
+    }
+    .safety-bar.state-info { background: var(--glacier); }
+    .safety-bar.state-info .safety-icon { color: var(--care-teal); }
+    .safety-bar.state-warning {
+      background: rgba(217,119,6,0.12);
+      border-left: 3px solid var(--care-amber);
+    }
+    .safety-bar.state-warning .safety-icon { color: var(--care-amber); }
+    .safety-bar.state-emergency {
+      background: var(--white);
+      border-left: 4px solid var(--emergency);
+    }
+    .safety-bar.state-emergency .safety-icon { color: var(--emergency); }
+    .safety-icon { flex-shrink: 0; display: flex; align-items: center; }
+    .safety-text { color: var(--stone); flex: 1; line-height: 1.4; }
+    .safety-source { color: var(--slate); font-size: 11px; font-weight: 600; margin-left: 4px; }
+    .safety-link {
+      color: var(--sage); font-weight: 600; font-size: 13px;
+      white-space: nowrap; transition: color 0.2s; flex-shrink: 0;
+    }
+    .safety-link:hover { color: var(--stone); }
+    .safety-action-btn {
+      background: var(--care-amber); color: var(--white);
+      padding: 7px 16px; border-radius: var(--r-btn);
+      font-size: 13px; font-weight: 600; white-space: nowrap;
+      cursor: pointer; transition: opacity 0.2s; border: none;
+    }
+    .safety-action-btn:hover { opacity: 0.9; }
+
+    /* ═══════════════════════════════════════════════
+       [5] HOTEL BASICS
+    ════════════════════════════════════════════════ */
+    .section { padding: 48px 0; }
+    .section-mist { background: var(--mist); }
+    .section-white { background: var(--white); }
+    .section-stone { background: var(--stone); }
+
+    .section-title {
+      font-size: 18px; font-weight: 600; color: var(--stone);
+      margin-bottom: 20px;
+    }
+    .basics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .basics-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .basics-icon {
+      width: 32px; height: 32px; background: var(--glacier);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    }
+    .basics-icon svg { color: var(--sage); width: 18px; height: 18px; }
+    .basics-label { font-size: 13px; font-weight: 700; color: var(--stone); }
+    .basics-detail { font-size: 12px; color: var(--slate); line-height: 1.5; }
+
+    /* ═══════════════════════════════════════════════
+       [6] QUICK HELP
+    ════════════════════════════════════════════════ */
+    .quick-help { background: var(--glacier); padding: 24px 0; }
+    .quick-help-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .quick-help-label {
+      font-size: 12px; font-weight: 700; color: var(--slate);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-right: 4px;
+    }
+    .quick-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--white); border-radius: var(--r-pill);
+      padding: 10px 18px; font-size: 13px; font-weight: 500; color: var(--stone);
+      border: none; cursor: pointer; transition: background 0.2s, color 0.2s;
+      box-shadow: var(--shadow-1);
+    }
+    .quick-btn svg { width: 16px; height: 16px; color: var(--sage); }
+    .quick-btn:hover { background: var(--sage); color: var(--white); }
+    .quick-btn:hover svg { color: var(--white); }
+    .quick-btn.emergency { border: 1.5px solid rgba(220,38,38,0.2); }
+    .quick-btn.emergency svg { color: var(--emergency); }
+    .quick-btn.emergency:hover { background: var(--emergency); color: var(--white); border-color: var(--emergency); }
+    .quick-btn.emergency:hover svg { color: var(--white); }
+
+    /* ═══════════════════════════════════════════════
+       [7] WHAT'S GOOD TODAY + CONTEXTUAL OFFER
+    ════════════════════════════════════════════════ */
+    .whats-good-title {
+      font-size: 20px; font-weight: 700; color: var(--amber);
+      margin-bottom: 20px;
+    }
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .place-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .place-card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .place-card-img { height: 160px; }
+    .place-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .place-card-body { padding: 16px; }
+    .place-card-title { font-size: 15px; font-weight: 600; color: var(--stone); margin-bottom: 4px; }
+    .place-card-sub { font-size: 13px; color: var(--slate); margin-bottom: 12px; line-height: 1.4; }
+    .place-card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .tag {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: var(--r-pill);
+      background: var(--glacier); color: var(--stone);
+    }
+    .place-card-cta {
+      display: inline-flex; align-items: center; gap: 4px;
+      border: 1.5px solid var(--sage); color: var(--sage);
+      padding: 8px 14px; border-radius: var(--r-btn);
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      background: transparent; transition: all 0.2s;
+    }
+    .place-card-cta:hover { background: var(--sage); color: var(--white); }
+
+    /* Contextual Offer */
+    .contextual-offer {
+      background: rgba(200,146,58,0.08);
+      border: 1px solid var(--glacier);
+      border-left: 3px solid var(--amber);
+      border-radius: var(--r-card); padding: 20px; margin-top: 16px;
+      display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start;
+    }
+    .offer-badge {
+      display: inline-block; background: var(--amber); color: var(--white);
+      font-size: 10px; font-weight: 700; padding: 3px 10px;
+      border-radius: var(--r-pill); text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 8px;
+    }
+    .offer-title { font-size: 15px; font-weight: 600; color: var(--stone); margin-bottom: 6px; }
+    .offer-desc { font-size: 13px; color: var(--slate); line-height: 1.5; }
+    .offer-cta {
+      flex-shrink: 0;
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1.5px solid var(--sage); color: var(--sage);
+      padding: 10px 18px; border-radius: var(--r-btn);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      background: transparent; white-space: nowrap; transition: all 0.2s;
+      align-self: center;
+    }
+    .offer-cta:hover { background: var(--sage); color: var(--white); }
+
+    /* ═══════════════════════════════════════════════
+       [8] LOCAL OPTIONS (Around you)
+    ════════════════════════════════════════════════ */
+    .local-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .local-cell {
+      background: var(--white); border-radius: var(--r-card);
+      padding: 20px; box-shadow: var(--shadow-1);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .local-cell:hover { background: var(--glacier); box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .local-cell.is-featured { border-top: 2px solid var(--amber); }
+    .local-featured-label {
+      font-size: 10px; font-weight: 700; color: var(--amber);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
+    }
+    .local-icon {
+      width: 32px; height: 32px; color: var(--sage); margin-bottom: 12px;
+    }
+    .local-title { font-size: 14px; font-weight: 600; color: var(--stone); margin-bottom: 4px; }
+    .local-sub { font-size: 12px; color: var(--slate); }
+
+    /* ═══════════════════════════════════════════════
+       [9] STAYCARE
+    ════════════════════════════════════════════════ */
+    .staycare {
+      background: var(--mist);
+      padding: 32px 0;
+      border-top: 1px solid rgba(44,44,42,0.06);
+    }
+    .staycare-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: flex-start; gap: 24px;
+    }
+    .staycare-icon {
+      width: 40px; height: 40px; color: var(--sage); flex-shrink: 0; margin-top: 2px;
+    }
+    .staycare-title {
+      font-family: var(--font-display); font-size: 22px;
+      color: var(--stone); font-weight: 700; margin-bottom: 6px;
+    }
+    .staycare-sub { font-size: 14px; color: var(--slate); margin-bottom: 14px; line-height: 1.5; }
+    .staycare-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .staycare-link {
+      font-size: 14px; font-weight: 600; color: var(--sage);
+      transition: color 0.2s;
+    }
+    .staycare-link:hover { color: var(--stone); }
+
+    /* ═══════════════════════════════════════════════
+       MODAL (substitui alert nativo)
+    ════════════════════════════════════════════════ */
+    .hub-modal-overlay {
+      position: fixed; inset: 0; background: rgba(44,44,42,0.6);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 300; opacity: 0;
+      animation: modalFadeIn 0.2s ease forwards;
+    }
+    @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .hub-modal {
+      background: var(--white); border-radius: 12px;
+      padding: 32px; max-width: 480px; width: 90%;
+      box-shadow: var(--shadow-3);
+      animation: modalSlideUp 0.2s ease forwards;
+    }
+    @keyframes modalSlideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .hub-modal-title {
+      font-family: var(--font-display); font-size: 24px;
+      font-weight: 700; color: var(--stone); margin-bottom: 10px;
+    }
+    .hub-modal-desc {
+      font-size: 14px; color: var(--slate); line-height: 1.6; margin-bottom: 24px;
+    }
+    .hub-modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+    .hub-modal-btn {
+      padding: 11px 22px; border-radius: var(--r-btn);
+      font-size: 14px; font-weight: 600; cursor: pointer; border: none;
+      transition: all 0.2s;
+    }
+    .hub-modal-btn-primary { background: var(--sage); color: var(--white); }
+    .hub-modal-btn-primary:hover { background: #5a6f60; }
+    .hub-modal-btn-ghost {
+      background: var(--mist); color: var(--stone);
+      border: 1.5px solid var(--glacier);
+    }
+    .hub-modal-btn-ghost:hover { background: var(--glacier); }
+
+    /* ═══════════════════════════════════════════════
+       RODAPÉ SIMPLIFICADO (Guest Hub — fechado)
+    ════════════════════════════════════════════════ */
+    .hub-footer {
+      background: var(--stone); padding: 24px 0;
+    }
+    .hub-footer-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+    }
+    .hub-footer-brand {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 16px;
+      color: var(--white); font-weight: 700;
+    }
+    .hub-footer-note { font-size: 11px; color: var(--slate); line-height: 1.5; max-width: 560px; }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .basics-grid { grid-template-columns: repeat(2, 1fr); }
+      .cards-grid { grid-template-columns: 1fr; }
+      .local-grid { grid-template-columns: repeat(2, 1fr); }
+      .contextual-offer { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .container { padding: 0 16px; }
+
+      /* Header — evitar overflow */
+      .hub-header-inner { padding: 0 16px; overflow: hidden; }
+      /* Ocultar nome do hotel e divisor no mobile — muito largo */
+      .hub-hotel-divider,
+      .hub-hotel-name { display: none; }
+      /* Ocultar seletor de idioma no mobile — foco no pill */
+      .lang-selector-wrap { display: none; }
+
+      /* Pill da âncora — oculto no mobile (já existe no header) */
+      .hub-anchor-trip { display: none; }
+
+      /* Âncora */
+      .hub-anchor { height: 280px; }
+      .hub-anchor-content { padding: 0 16px 28px; }
+      .hub-anchor-headline { font-size: 26px; }
+
+      /* Safety bar */
+      .safety-bar-inner { padding: 0 16px; }
+
+      /* Quick help scroll horizontal no mobile */
+      .quick-help-inner {
+        padding: 0 16px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* Basics */
+      .basics-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+      /* Local grid */
+      .local-grid { grid-template-columns: 1fr; }
+
+      /* StayCare */
+      .staycare-inner { padding: 0 16px; flex-direction: column; }
+
+      /* Footer */
+      .hub-footer-inner { flex-direction: column; text-align: center; padding: 0 16px; }
+    }
+    /* ── Drawer global ── */
+    .hamburger-btn{background:none;border:none;cursor:pointer;color:var(--white);display:flex;align-items:center;padding:4px;}
+    .drawer-overlay{position:fixed;inset:0;z-index:500;background:rgba(44,44,42,0.55);opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+    .drawer-overlay.open{opacity:1;pointer-events:all;}
+    .drawer{position:fixed;top:0;right:0;bottom:0;z-index:501;width:min(320px,85vw);background:var(--stone);display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;}
+    .drawer.open{transform:translateX(0);}
+    .drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .drawer-logo{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:18px;color:var(--white);font-weight:700;}
+    .drawer-logo-icon{width:28px;height:28px;background:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+    .drawer-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:rgba(255,255,255,0.7);}
+    .drawer-nav{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .drawer-nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);padding:12px 20px 6px;}
+    .drawer-nav a{display:flex;align-items:center;gap:12px;padding:12px 20px;font-size:15px;font-weight:500;color:rgba(255,255,255,0.82);transition:background 0.15s;text-decoration:none;}
+    .drawer-nav a:hover{background:rgba(255,255,255,0.06);color:var(--white);}
+    .drawer-nav a svg{width:17px;height:17px;color:var(--sage);flex-shrink:0;}
+    .drawer-lang{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+    .drawer-lang-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);margin-bottom:10px;}
+    .drawer-lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    .drawer-lang-btn{padding:9px 6px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:center;}
+    .drawer-lang-btn.active{background:var(--sage);border-color:var(--sage);color:var(--white);}
+    .drawer-footer{margin-top:auto;padding:16px 20px;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;border-top:1px solid rgba(255,255,255,0.06);}
+
+    /* ── Guest Chat ── */
+    .chat-section{background:var(--white);border-radius:var(--r-card);box-shadow:var(--shadow-2);overflow:hidden;margin-bottom:32px;}
+    .chat-header{background:var(--stone);padding:16px 20px;display:flex;align-items:center;gap:12px;}
+    .chat-header-icon{width:36px;height:36px;background:var(--sage);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .chat-header-icon svg{width:16px;height:16px;color:var(--white);}
+    .chat-header-info{}
+    .chat-header-title{font-size:14px;font-weight:700;color:var(--white);}
+    .chat-header-sub{font-size:11px;color:rgba(255,255,255,0.55);}
+    .chat-header-lang{margin-left:auto;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:var(--r-pill);padding:5px 12px;font-size:11px;font-weight:700;color:var(--white);cursor:pointer;display:flex;align-items:center;gap:5px;}
+
+    /* Selector de idioma do chat */
+    .chat-lang-select{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:var(--r-pill);padding:5px 10px;font-size:12px;font-weight:700;color:var(--white);cursor:pointer;margin-left:auto;}
+    .chat-lang-select option{background:var(--stone);color:var(--white);}
+
+    .chat-presets{padding:14px 16px;border-bottom:1px solid rgba(44,44,42,0.06);background:var(--mist);}
+    .chat-presets-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--slate);margin-bottom:10px;}
+    .chat-preset-grid{display:flex;flex-wrap:wrap;gap:8px;}
+    .preset-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r-pill);border:1.5px solid var(--glacier);background:var(--white);font-size:13px;font-weight:500;color:var(--stone);cursor:pointer;transition:all 0.15s;}
+    .preset-btn:hover{background:var(--glacier);border-color:var(--sage);}
+    .preset-btn svg{width:13px;height:13px;color:var(--sage);}
+
+    .chat-messages{padding:16px;min-height:220px;max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--white);}
+    .msg{display:flex;flex-direction:column;max-width:82%;}
+    .msg.guest{align-self:flex-end;align-items:flex-end;}
+    .msg.hotel{align-self:flex-start;align-items:flex-start;}
+    .msg-bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;}
+    .msg.guest .msg-bubble{background:var(--sage);color:var(--white);border-bottom-right-radius:3px;}
+    .msg.hotel .msg-bubble{background:var(--mist);color:var(--stone);border-bottom-left-radius:3px;}
+    .msg-meta{font-size:10px;color:var(--slate);margin-top:3px;display:flex;align-items:center;gap:4px;}
+    .msg-translated{font-size:11px;color:rgba(255,255,255,0.65);margin-top:4px;font-style:italic;}
+    .msg.hotel .msg-translated{color:var(--slate);}
+    .msg-translated-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:var(--care-teal);}
+    .msg-translated-badge svg{width:10px;height:10px;}
+
+    .chat-input-area{padding:12px 16px;border-top:1px solid rgba(44,44,42,0.08);display:flex;gap:10px;align-items:flex-end;background:var(--white);}
+    .chat-input{flex:1;border:1.5px solid var(--glacier);border-radius:20px;padding:10px 16px;font-size:14px;font-family:var(--font-body);resize:none;outline:none;line-height:1.4;max-height:100px;transition:border-color 0.2s;}
+    .chat-input:focus{border-color:var(--sage);}
+    .chat-send-btn{width:40px;height:40px;border-radius:50%;background:var(--sage);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s;}
+    .chat-send-btn:hover{background:#5a6f60;}
+    .chat-send-btn svg{width:16px;height:16px;color:var(--white);}
+    .chat-disclaimer{padding:8px 16px 12px;font-size:10px;color:var(--slate);text-align:center;background:var(--white);}
+
+    /* Hotel staff view toggle */
+    .view-toggle{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+    .view-toggle-label{font-size:12px;font-weight:600;color:var(--slate);}
+    .view-toggle-btn{padding:6px 14px;border-radius:var(--r-pill);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--glacier);background:transparent;color:var(--slate);transition:all 0.15s;}
+    .view-toggle-btn.active{background:var(--stone);border-color:var(--stone);color:var(--white);}
+    .hotel-staff-view{background:var(--stone);border-radius:var(--r-card);padding:16px 20px;margin-bottom:12px;display:none;}
+    .hotel-staff-view.visible{display:block;}
+    .staff-view-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:12px;}
+    .staff-msg{background:rgba(255,255,255,0.06);border-radius:8px;padding:12px;margin-bottom:8px;}
+    .staff-msg-room{font-size:11px;font-weight:700;color:var(--amber);margin-bottom:4px;}
+    .staff-msg-text{font-size:13px;color:rgba(255,255,255,0.85);margin-bottom:6px;}
+    .staff-msg-original{font-size:11px;color:rgba(255,255,255,0.4);font-style:italic;}
+    .staff-reply-area{display:flex;gap:8px;margin-top:10px;}
+    .staff-reply-input{flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--white);font-family:var(--font-body);outline:none;}
+    .staff-reply-input::placeholder{color:rgba(255,255,255,0.3);}
+    .staff-reply-btn{padding:8px 16px;background:var(--sage);border:none;border-radius:6px;color:var(--white);font-size:13px;font-weight:600;cursor:pointer;}
+
+    @media(prefers-reduced-motion:reduce){.drawer,.drawer-overlay{transition:none;}}
+  </style>
+</head>
+<body>
+
+<!-- [1] CONTEXT BAR -->
+<div class="context-bar">
+  <span><span class="ctx-accent">Canmore · Your Stay Guide</span></span>
+</div>
+
+<!-- [2] HEADER GUEST HUB -->
+<header class="hub-header">
+  <div class="hub-header-inner">
+    <a href="index.html" class="logo" aria-label="SomaVio home">
+      <span class="logo-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </span>
+      SomaVio
+    </a>
+
+    <span class="hub-hotel-divider" aria-hidden="true"></span>
+    <span class="hub-hotel-name">The Alpine Hotel</span>
+
+    <div class="hub-header-actions">
+      <!-- My Trip pill no header — Sage sólido -->
+      <button class="my-trip-pill" id="trip-pill-header" onclick="toggleTripSidebar()" aria-label="My Trip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <span id="trip-pill-text">My Trip — Start saving</span>
+        <span class="trip-count" id="trip-count-badge" style="display:none">0</span>
+      </button>
+
+      <div class="lang-selector-wrap">
+        <button class="lang-toggle" id="lang-toggle" aria-label="Language selector" aria-expanded="false">
+          EN
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button class="lang-option active" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
+          <button class="lang-option" data-lang="pt"><span class="lang-flag">🇧🇷</span> Português</button>
+          <button class="lang-option" data-lang="es"><span class="lang-flag">🇪🇸</span> Español</button>
+          <button class="lang-option" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
+          <button class="lang-option" data-lang="ja"><span class="lang-flag">🇯🇵</span> 日本語</button>
+          <button class="lang-option" data-lang="ko"><span class="lang-flag">🇰🇷</span> 한국어</button>
+        </div>
+      </div>
+
+      <button class="hamburger-btn" aria-label="Open menu" onclick="openDrawer()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MENU DRAWER GLOBAL -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Navigation menu">
+  <div class="drawer-header">
+    <div class="drawer-logo">
+      <div class="drawer-logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+      SomaVio
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-nav">
+    <div class="drawer-nav-label">Navigation</div>
+    <a href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</a>
+    <a href="category.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>Explore Canmore</a>
+    <a href="trip.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Plan Your Day</a>
+    <a href="safety.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Safety & Conditions</a>
+    <a href="safety-sponsored.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>About Canmore</a>
+  </div>
+  <div class="drawer-lang">
+    <div class="drawer-lang-label">Language / Idioma</div>
+    <div class="drawer-lang-grid">
+      <button class="drawer-lang-btn active" data-lang="en" onclick="setLang(this)">🇬🇧 EN</button>
+      <button class="drawer-lang-btn" data-lang="pt" onclick="setLang(this)">🇧🇷 PT</button>
+      <button class="drawer-lang-btn" data-lang="es" onclick="setLang(this)">🇪🇸 ES</button>
+      <button class="drawer-lang-btn" data-lang="fr" onclick="setLang(this)">🇫🇷 FR</button>
+      <button class="drawer-lang-btn" data-lang="ja" onclick="setLang(this)">🇯🇵 JA</button>
+      <button class="drawer-lang-btn" data-lang="ko" onclick="setLang(this)">🇰🇷 KO</button>
+    </div>
+  </div>
+  <div class="drawer-footer">SomaVio Guest Hub · The Alpine Hotel<br>© 2025 SomaVio</div>
+</div>
+
+<!-- [HERO] Hotel hero com imagem, clima e check-in -->
+<section class="hub-hero" id="hub-anchor" style="position:relative;min-height:280px;background:linear-gradient(160deg,#1a2b3c 0%,#2d4a3e 100%);overflow:hidden;">
+  <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1400&q=80&auto=format&fit=crop&crop=center"
+       alt="The Alpine Hotel mountain view"
+       style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.38;"
+       loading="eager" referrerpolicy="no-referrer" />
+  <div style="position:relative;z-index:2;max-width:860px;margin:0 auto;padding:40px 24px 32px;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,0.6);margin-bottom:8px;">Your stay guide · Canmore</div>
+    <h1 style="font-family:Georgia,serif;font-size:clamp(26px,5vw,38px);font-weight:400;color:#fff;margin:0 0 6px;line-height:1.15;">The Alpine Hotel</h1>
+    <p style="font-size:14px;color:rgba(255,255,255,0.7);margin:0 0 20px;">Check-in: Today &nbsp;·&nbsp; Check-out: In 3 nights</p>
+    <!-- Clima card inline na hero -->
+    <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.13);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:10px 16px;">
+      <span style="font-size:20px;">🌤</span>
+      <div>
+        <div style="font-size:18px;font-weight:700;color:#fff;" class="weather-temp">—</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.75);" class="weather-cond">Loading…</div>
+      </div>
+      <div style="border-left:1px solid rgba(255,255,255,0.2);padding-left:12px;margin-left:4px;">
+        <div class="sv-alert-timestamp" style="color:rgba(255,255,255,0.55);font-size:10px;margin:0;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- [SAFETY BAR] Alerta compacto com timestamp -->
+<div class="safety-bar state-info" id="safety-bar" style="border-bottom:1px solid rgba(44,44,42,0.1);">
+  <div class="safety-bar-inner" style="padding-top:9px;padding-bottom:9px;">
+    <span class="safety-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+    </span>
+    <div style="flex:1;min-width:0;">
+      <span class="safety-text">Mountain conditions today: Clear skies, trails in good shape.</span>
+      <span class="sv-alert-timestamp">Updated today, 9:14 AM · Source: Parks Canada</span>
+    </div>
+    <a href="safety.html" class="safety-link" style="font-size:12px;white-space:nowrap;">View full report →</a>
+  </div>
+</div>
+
+<!-- [TABS] Navegação principal: Hub / Chat / Partners / StayCare -->
+<div style="background:#fff;border-bottom:2px solid rgba(44,44,42,0.08);position:sticky;top:0;z-index:50;">
+  <div style="max-width:860px;margin:0 auto;display:flex;">
+    <button class="hub-tab active" data-tab="hub" onclick="switchHubTab('hub',this)" style="flex:1;padding:14px 8px;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#6b7280;transition:all .2s;">Hub</button>
+    <button class="hub-tab" data-tab="chat" onclick="switchHubTab('chat',this)" style="flex:1;padding:14px 8px;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#6b7280;transition:all .2s;">Chat</button>
+    <button class="hub-tab" data-tab="partners" onclick="switchHubTab('partners',this)" style="flex:1;padding:14px 8px;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#6b7280;transition:all .2s;">Partners</button>
+    <button class="hub-tab" data-tab="staycare" onclick="switchHubTab('staycare',this)" style="flex:1;padding:14px 8px;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#6b7280;transition:all .2s;">StayCare</button>
+  </div>
+</div>
+
+<style>
+.hub-tab.active { color: #2d6e6e !important; border-bottom-color: #2d6e6e !important; }
+.hub-tab-panel { display: none; }
+.hub-tab-panel.active { display: block; }
+.hub-request-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hub-req-btn { display: flex; align-items: center; gap: 10px; background: #f7f4f0; border: 1px solid rgba(44,44,42,.1); border-radius: 10px; padding: 12px 14px; cursor: pointer; text-align: left; transition: background .15s; }
+.hub-req-btn:hover { background: #ede9e3; }
+.hub-req-icon { font-size: 20px; flex-shrink: 0; }
+.hub-req-label { font-size: 13px; font-weight: 600; color: #2C2C2A; }
+.hub-service-card { background: #fff; border: 1px solid rgba(44,44,42,.09); border-radius: 12px; padding: 16px; display: flex; align-items: flex-start; gap: 12px; }
+.hub-service-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.hub-service-name { font-size: 14px; font-weight: 700; color: #2C2C2A; margin-bottom: 2px; }
+.hub-service-hours { font-size: 12px; color: #6b7280; }
+.hub-service-cta { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 600; color: #2d6e6e; cursor: pointer; background: none; border: none; padding: 0; }
+.staycare-cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.staycare-cat-btn { display: flex; align-items: center; gap: 10px; background: #f7f4f0; border: 1px solid rgba(44,44,42,.1); border-radius: 10px; padding: 14px; cursor: pointer; text-align: left; transition: all .15s; }
+.staycare-cat-btn:hover { background: #fdf6e8; border-color: #c8952a; }
+.staycare-cat-btn.selected { background: #fdf6e8; border-color: #c8952a; border-width: 2px; }
+.staycare-cat-icon { font-size: 22px; }
+.staycare-cat-label { font-size: 13px; font-weight: 600; color: #2C2C2A; }
+.partner-hub-card { background: #fff; border: 1px solid rgba(44,44,42,.09); border-radius: 14px; overflow: hidden; margin-bottom: 14px; }
+.partner-hub-img { width: 100%; height: 140px; object-fit: cover; }
+.partner-hub-body { padding: 14px 16px; }
+.partner-hub-name { font-size: 15px; font-weight: 700; color: #2C2C2A; margin-bottom: 4px; }
+.partner-hub-desc { font-size: 13px; color: #6b7280; margin-bottom: 8px; line-height: 1.4; }
+.partner-hub-tag { display: inline-flex; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; background: #e8f4f4; color: #2d6e6e; margin-right: 4px; }
+.partner-hub-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 8px 14px; border-radius: 8px; background: #2d6e6e; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; }
+.experience-box { margin-top: 12px; border: 1px solid rgba(44,44,42,.1); border-radius: 10px; overflow: hidden; }
+.experience-toggle { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #f7f4f0; cursor: pointer; border: none; width: 100%; text-align: left; font-size: 13px; font-weight: 700; color: #2C2C2A; }
+.experience-body { padding: 14px; background: #fff; display: none; }
+.experience-body.open { display: block; animation: slideDown .22s ease; }
+.experience-row { display: flex; gap: 8px; margin-bottom: 10px; font-size: 13px; }
+.experience-row-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.experience-row-label { font-weight: 600; color: #2C2C2A; min-width: 80px; }
+.experience-row-value { color: #4A5568; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 480px) { .hub-request-grid, .staycare-cat-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+
+<!-- ── ABA HUB ── -->
+<div class="hub-tab-panel active" id="tab-hub">
+  <div style="max-width:860px;margin:0 auto;padding:24px 24px 40px;">
+
+    <!-- SEÇÃO A: Pedidos rápidos -->
+    <div style="background:#fff;border:1px solid rgba(44,44,42,.09);border-radius:14px;padding:20px;margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;color:#2C2C2A;margin-bottom:4px;">What do you need?</div>
+      <div style="font-size:13px;color:#6b7280;margin-bottom:16px;">Quick requests for the hotel team.</div>
+      <div class="hub-request-grid">
+        <button class="hub-req-btn" onclick="switchHubTab('chat',document.querySelector('[data-tab=chat]'))">
+          <span class="hub-req-icon">🛏</span><span class="hub-req-label">Extra bedding</span>
+        </button>
+        <button class="hub-req-btn" onclick="switchHubTab('chat',document.querySelector('[data-tab=chat]'))">
+          <span class="hub-req-icon">🍽</span><span class="hub-req-label">Room service</span>
+        </button>
+        <button class="hub-req-btn" onclick="switchHubTab('chat',document.querySelector('[data-tab=chat]'))">
+          <span class="hub-req-icon">🧹</span><span class="hub-req-label">Room cleaning</span>
+        </button>
+        <button class="hub-req-btn" onclick="switchHubTab('chat',document.querySelector('[data-tab=chat]'))">
+          <span class="hub-req-icon">🕐</span><span class="hub-req-label">Check-out time</span>
+        </button>
+        <button class="hub-req-btn" onclick="switchHubTab('chat',document.querySelector('[data-tab=chat]'))">
+          <span class="hub-req-icon">🚗</span><span class="hub-req-label">Taxi / transport</span>
+        </button>
+        <button class="hub-req-btn" onclick="switchHubTab('chat',document.querySelector('[data-tab=chat]'))">
+          <span class="hub-req-icon">📶</span><span class="hub-req-label">Wi-Fi password</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SEÇÃO B: Serviços do hotel -->
+    <div style="background:#fff;border:1px solid rgba(44,44,42,.09);border-radius:14px;padding:20px;margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;color:#2C2C2A;margin-bottom:4px;">Available at your hotel</div>
+      <div style="font-size:13px;color:#6b7280;margin-bottom:16px;">Included with your stay or bookable on request.</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="hub-service-card">
+          <span class="hub-service-icon">🧖</span>
+          <div>
+            <div class="hub-service-name">Spa &amp; Wellness</div>
+            <div class="hub-service-hours">Open 10 AM – 8 PM · Reservations: ext. 250</div>
+            <button class="hub-service-cta" onclick="switchHubTab('chat',document.querySelector('[data-tab=chat]'))">Book via chat →</button>
+          </div>
+        </div>
+        <div class="hub-service-card">
+          <span class="hub-service-icon">🍳</span>
+          <div>
+            <div class="hub-service-name">Restaurant &amp; Bar</div>
+            <div class="hub-service-hours">Breakfast 7–10 AM · Dinner 5–9 PM · Bar until midnight</div>
+            <button class="hub-service-cta" onclick="switchHubTab('chat',document.querySelector('[data-tab=chat]'))">Reserve a table →</button>
+          </div>
+        </div>
+        <div class="hub-service-card">
+          <span class="hub-service-icon">🏋️</span>
+          <div>
+            <div class="hub-service-name">Fitness Centre</div>
+            <div class="hub-service-hours">Open 6 AM – 10 PM · Level B1 · No reservation needed</div>
+          </div>
+        </div>
+        <div class="hub-service-card">
+          <span class="hub-service-icon">🅿️</span>
+          <div>
+            <div class="hub-service-name">Parking</div>
+            <div class="hub-service-hours">P1 — Complimentary for guests · WiFi: AlpineHotel_Guest</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO C: StayCare entry (goldLight) -->
+    <div style="background:#fdf6e8;border:1px solid rgba(200,149,42,.2);border-radius:14px;padding:20px;display:flex;align-items:flex-start;gap:14px;">
+      <span style="font-size:24px;flex-shrink:0;margin-top:2px;">💛</span>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:#2C2C2A;margin-bottom:4px;">Something not as expected?</div>
+        <div style="font-size:13px;color:#6b7280;margin-bottom:14px;line-height:1.5;">Let us know now — our team is here to make it right before you check out.</div>
+        <button onclick="switchHubTab('staycare',document.querySelector('[data-tab=staycare]'))"
+          style="display:inline-flex;align-items:center;gap:8px;background:#c8952a;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;">
+          How is your stay going? →
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── ABA CHAT ── -->
+<div class="hub-tab-panel" id="tab-chat">
+  <div style="max-width:860px;margin:0 auto;padding:24px 24px 40px;">
+    <div style="background:#fff;border:1px solid rgba(44,44,42,.09);border-radius:14px;overflow:hidden;">
+      <div style="background:#1a2332;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="color:#7ca4a4;font-size:11px;letter-spacing:.1em;text-transform:uppercase;">The Alpine Hotel</div>
+          <div style="color:#fff;font-weight:700;font-size:14px;margin-top:2px;">Concierge team · replies in your language</div>
+        </div>
+        <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#4ade80;font-weight:600;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;"></span> Online now
+        </span>
+      </div>
+      <div style="padding:16px;border-bottom:1px solid rgba(44,44,42,.08);">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:10px;">Quick requests</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <span style="padding:6px 12px;border:1px solid rgba(44,44,42,.12);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;background:#f7f4f0;">🛏 Extra bedding</span>
+          <span style="padding:6px 12px;border:1px solid rgba(44,44,42,.12);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;background:#f7f4f0;">🍽 Room service</span>
+          <span style="padding:6px 12px;border:1px solid rgba(44,44,42,.12);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;background:#f7f4f0;">🧹 Housekeeping</span>
+          <span style="padding:6px 12px;border:1px solid rgba(44,44,42,.12);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;background:#f7f4f0;">📶 Wi-Fi</span>
+          <span style="padding:6px 12px;border:1px solid rgba(44,44,42,.12);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;background:#f7f4f0;">🚗 Taxi</span>
+        </div>
+      </div>
+      <!-- Messages area -->
+      <div style="padding:16px;min-height:180px;">
+        <div style="display:flex;justify-content:flex-start;margin-bottom:14px;">
+          <div style="max-width:80%;background:#f7f4f0;border-radius:12px 12px 12px 3px;padding:12px 14px;font-size:13px;color:#2C2C2A;line-height:1.5;">
+            ご滞在へようこそ！何かお手伝いできることはありますか？
+            <div style="font-size:10px;color:#9ca3af;margin-top:4px;">Translated for you · just now</div>
+            <div style="font-size:10px;color:#9ca3af;">Hotel sent: "Welcome! How can we help you today?"</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;border-top:1px solid rgba(44,44,42,.08);display:flex;gap:10px;">
+        <input type="text" placeholder="Type your message…" style="flex:1;border:1px solid rgba(44,44,42,.12);border-radius:8px;padding:10px 14px;font-size:13px;outline:none;font-family:inherit;" />
+        <button style="background:#2d6e6e;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;">Send</button>
+      </div>
+      <div style="padding:10px 16px;border-top:1px solid rgba(44,44,42,.06);font-size:11px;color:#9ca3af;text-align:center;">
+        Messages are translated automatically · Hotel receives your message in English
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ABA PARTNERS ── -->
+<div class="hub-tab-panel" id="tab-partners">
+  <div style="max-width:860px;margin:0 auto;padding:24px 24px 40px;">
+    <div style="font-size:15px;font-weight:700;color:#2C2C2A;margin-bottom:4px;">Recommended by your hotel</div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:20px;">Local picks curated for Alpine Hotel guests.</div>
+
+    <div class="partner-hub-card">
+      <img class="partner-hub-img" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80&auto=format&fit=crop" alt="Summit Wellness Spa" referrerpolicy="no-referrer" />
+      <div class="partner-hub-body">
+        <div class="partner-hub-name">Summit Wellness Spa</div>
+        <span class="partner-hub-tag">Wellness</span><span class="partner-hub-tag">5 min walk</span>
+        <p class="partner-hub-desc">Post-hike recovery. Massage, sauna & hot pool with mountain views. Same-day availability for Alpine Hotel guests.</p>
+        <div class="experience-box">
+          <button class="experience-toggle" onclick="toggleExperience(this)">
+            <span>Como é a experiência aqui</span><span class="exp-arrow">＋</span>
+          </button>
+          <div class="experience-body">
+            <div class="experience-row"><span class="experience-row-icon">📋</span><span class="experience-row-label">Format</span><span class="experience-row-value">Appointment recommended · walk-in when available</span></div>
+            <div class="experience-row"><span class="experience-row-icon">⏰</span><span class="experience-row-label">Arrive</span><span class="experience-row-value">10 minutes before your session</span></div>
+            <div class="experience-row"><span class="experience-row-icon">📵</span><span class="experience-row-label">Phone</span><span class="experience-row-value">Silent mode or off during treatments</span></div>
+            <div class="experience-row"><span class="experience-row-icon">💳</span><span class="experience-row-label">Gratuity</span><span class="experience-row-value">15–18% is customary for full-service treatments</span></div>
+            <div class="experience-row"><span class="experience-row-icon">💬</span><span class="experience-row-label">Local tip</span><span class="experience-row-value">Book early in the day — evening slots fill fast in peak season</span></div>
+          </div>
+        </div>
+        <a href="partner-wellness.html" class="partner-hub-cta">View details →</a>
+      </div>
+    </div>
+
+    <div class="partner-hub-card">
+      <img class="partner-hub-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80&auto=format&fit=crop" alt="The Grizzly Paw" referrerpolicy="no-referrer" />
+      <div class="partner-hub-body">
+        <div class="partner-hub-name">The Grizzly Paw Brewery &amp; Eatery</div>
+        <span class="partner-hub-tag">Dining</span><span class="partner-hub-tag">8 min walk</span>
+        <p class="partner-hub-desc">Local brewery with seasonal menu, mountain views and craft beer brewed on site. A Canmore landmark.</p>
+        <div class="experience-box">
+          <button class="experience-toggle" onclick="toggleExperience(this)">
+            <span>Como é a experiência aqui</span><span class="exp-arrow">＋</span>
+          </button>
+          <div class="experience-body">
+            <div class="experience-row"><span class="experience-row-icon">🍽</span><span class="experience-row-label">Style</span><span class="experience-row-value">Full-service restaurant — you'll be seated</span></div>
+            <div class="experience-row"><span class="experience-row-icon">📋</span><span class="experience-row-label">Reservation</span><span class="experience-row-value">Recommended on weekends and holidays</span></div>
+            <div class="experience-row"><span class="experience-row-icon">🧾</span><span class="experience-row-label">Prices</span><span class="experience-row-value">Tax not included in menu prices</span></div>
+            <div class="experience-row"><span class="experience-row-icon">💳</span><span class="experience-row-label">Gratuity</span><span class="experience-row-value">15–18% is customary at full-service restaurants</span></div>
+            <div class="experience-row"><span class="experience-row-icon">💬</span><span class="experience-row-label">Local tip</span><span class="experience-row-value">Kitchen closes early — aim to arrive before 8:30 PM</span></div>
+          </div>
+        </div>
+        <a href="partner-cafe.html" class="partner-hub-cta">View details →</a>
+      </div>
+    </div>
+
+    <div class="partner-hub-card">
+      <img class="partner-hub-img" src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=80&auto=format&fit=crop" alt="Alpine Gear Rentals" referrerpolicy="no-referrer" />
+      <div class="partner-hub-body">
+        <div class="partner-hub-name">Alpine Gear Rentals</div>
+        <span class="partner-hub-tag">Outdoor</span><span class="partner-hub-tag">12 min walk</span>
+        <p class="partner-hub-desc">E-bikes, snowshoes, trekking poles and trail gear. First-timer discount available for Alpine Hotel guests.</p>
+        <div class="experience-box">
+          <button class="experience-toggle" onclick="toggleExperience(this)">
+            <span>Como é a experiência aqui</span><span class="exp-arrow">＋</span>
+          </button>
+          <div class="experience-body">
+            <div class="experience-row"><span class="experience-row-icon">🪪</span><span class="experience-row-label">Required</span><span class="experience-row-value">Valid ID and credit card for deposit</span></div>
+            <div class="experience-row"><span class="experience-row-icon">⏰</span><span class="experience-row-label">Return</span><span class="experience-row-value">Check return time before leaving — late fees apply</span></div>
+            <div class="experience-row"><span class="experience-row-icon">🎫</span><span class="experience-row-label">Passes</span><span class="experience-row-value">Kananaskis Conservation Pass required for some trails</span></div>
+            <div class="experience-row"><span class="experience-row-icon">💬</span><span class="experience-row-label">Local tip</span><span class="experience-row-value">Book e-bikes the night before — they go fast on weekends</span></div>
+          </div>
+        </div>
+        <a href="partner-rental.html" class="partner-hub-cta">View details →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── ABA STAYCARE ── -->
+<div class="hub-tab-panel" id="tab-staycare">
+  <div style="max-width:860px;margin:0 auto;padding:24px 24px 40px;">
+    <div id="sc-step-1">
+      <div style="text-align:center;padding:8px 0 20px;">
+        <div style="font-size:24px;margin-bottom:8px;">💛</div>
+        <div style="font-size:18px;font-weight:700;color:#2C2C2A;margin-bottom:6px;">Something not as expected?</div>
+        <div style="font-size:14px;color:#6b7280;line-height:1.5;max-width:420px;margin:0 auto;">Let us know now — our team is here to make it right before you check out.</div>
+      </div>
+      <div class="staycare-cat-grid">
+        <button class="staycare-cat-btn" onclick="selectScCategory(this,'Room / comfort')">
+          <span class="staycare-cat-icon">🛏</span><span class="staycare-cat-label">Room / comfort</span>
+        </button>
+        <button class="staycare-cat-btn" onclick="selectScCategory(this,'Temperature / heating')">
+          <span class="staycare-cat-icon">🌡</span><span class="staycare-cat-label">Temperature / heating</span>
+        </button>
+        <button class="staycare-cat-btn" onclick="selectScCategory(this,'Noise')">
+          <span class="staycare-cat-icon">🔊</span><span class="staycare-cat-label">Noise</span>
+        </button>
+        <button class="staycare-cat-btn" onclick="selectScCategory(this,'Wi-Fi / TV')">
+          <span class="staycare-cat-icon">📶</span><span class="staycare-cat-label">Wi-Fi / TV</span>
+        </button>
+        <button class="staycare-cat-btn" onclick="selectScCategory(this,'Bathroom / amenities')">
+          <span class="staycare-cat-icon">🚿</span><span class="staycare-cat-label">Bathroom / amenities</span>
+        </button>
+        <button class="staycare-cat-btn" onclick="selectScCategory(this,'Something else')">
+          <span class="staycare-cat-icon">💬</span><span class="staycare-cat-label">Something else</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="sc-step-2" style="display:none;">
+      <button onclick="document.getElementById('sc-step-2').style.display='none';document.getElementById('sc-step-1').style.display='block';" style="background:none;border:none;color:#6b7280;font-size:13px;cursor:pointer;margin-bottom:16px;">← Back</button>
+      <div style="font-size:16px;font-weight:700;color:#2C2C2A;margin-bottom:4px;" id="sc-category-label">Room / comfort</div>
+      <div style="font-size:13px;color:#6b7280;margin-bottom:16px;">Our team will reach out during your stay.</div>
+      <textarea id="sc-note" placeholder="Anything else we should know? (optional)" rows="4"
+        style="width:100%;border:1px solid rgba(44,44,42,.12);border-radius:10px;padding:12px 14px;font-size:13px;font-family:inherit;resize:none;outline:none;box-sizing:border-box;"></textarea>
+      <button onclick="submitStaycare()" style="width:100%;margin-top:12px;background:#c8952a;color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;">
+        Let us know →
+      </button>
+    </div>
+
+    <div id="sc-step-3" style="display:none;text-align:center;padding:32px 0;">
+      <div style="font-size:36px;margin-bottom:12px;">✅</div>
+      <div style="font-size:18px;font-weight:700;color:#2C2C2A;margin-bottom:8px;">We received it.</div>
+      <div style="font-size:14px;color:#6b7280;line-height:1.6;max-width:360px;margin:0 auto;">
+        Someone from our team will reach out during your stay. We want the rest of your time here to be just right.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchHubTab(tabId, btn) {
+  document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.hub-tab-panel').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  var panel = document.getElementById('tab-' + tabId);
+  if (panel) panel.classList.add('active');
+}
+
+function toggleExperience(btn) {
+  var body = btn.nextElementSibling;
+  var arrow = btn.querySelector('.exp-arrow');
+  body.classList.toggle('open');
+  if (arrow) arrow.textContent = body.classList.contains('open') ? '－' : '＋';
+}
+
+function selectScCategory(btn, label) {
+  document.querySelectorAll('.staycare-cat-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('sc-category-label').textContent = label;
+  document.getElementById('sc-step-1').style.display = 'none';
+  document.getElementById('sc-step-2').style.display = 'block';
+}
+
+function submitStaycare() {
+  document.getElementById('sc-step-2').style.display = 'none';
+  document.getElementById('sc-step-3').style.display = 'block';
+}
+</script>
+
+<!-- RODAPÉ GUEST HUB -->
+<footer class="hub-footer">
+  <div class="hub-footer-inner">
+    <div class="hub-footer-brand">
+      <span class="logo-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </span>
+      SomaVio
+    </div>
+    <p class="hub-footer-note">SomaVio complements existing systems. It does not replace PMS, OTA or emergency procedures.<br><a href="local-rules.html" style="color:var(--sage);font-weight:700;">Local rules & fine risks →</a></p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div id="hub-modal" style="display:none; position:fixed; inset:0; z-index:300;" role="dialog" aria-modal="true">
+  <div class="hub-modal-overlay" onclick="closeModal()">
+    <div class="hub-modal" onclick="event.stopPropagation()">
+      <h2 class="hub-modal-title" id="modal-title"></h2>
+      <p class="hub-modal-desc" id="modal-desc"></p>
+      <div class="hub-modal-actions">
+        <button class="hub-modal-btn hub-modal-btn-ghost" onclick="closeModal()">Close</button>
+        <button class="hub-modal-btn hub-modal-btn-primary" id="modal-save-btn" onclick="saveFromModal()">Save to My Trip</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Trip state ── */
+  let tripItems = [];
+
+  function updateTripUI() {
+    const count = tripItems.length;
+    const badge = document.getElementById('trip-count-badge');
+    const badgeSticky = document.getElementById('trip-count-sticky');
+    const pillText = document.getElementById('trip-pill-text');
+    const stickyText = document.getElementById('trip-pill-sticky-text');
+
+    if (count > 0) {
+      badge.textContent = count;
+      badge.style.display = 'flex';
+      badgeSticky.textContent = count;
+      badgeSticky.style.display = 'flex';
+      if (pillText) pillText.textContent = `My Trip (${count})`;
+      if (stickyText) stickyText.textContent = `My Trip (${count})`;
+    } else {
+      badge.style.display = 'none';
+      badgeSticky.style.display = 'none';
+      if (pillText) pillText.textContent = 'My Trip — Start saving';
+      if (stickyText) stickyText.textContent = 'My Trip';
+    }
+  }
+
+  function saveToTrip(name, category, btn) {
+    if (!tripItems.find(i => i.name === name)) {
+      tripItems.push({ name, category });
+      if (btn) {
+        btn.textContent = '✓ Saved';
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+      }
+      updateTripUI();
+    }
+  }
+
+  /* ── Sticky pill (aparece ao sair do hero) ── */
+  const anchorEl = document.getElementById('hub-anchor');
+  const stickyPill = document.getElementById('trip-pill-sticky');
+
+  const observer = new IntersectionObserver(([entry]) => {
+    stickyPill.style.display = entry.isIntersecting ? 'none' : 'flex';
+  }, { threshold: 0 });
+
+  if (anchorEl) observer.observe(anchorEl);
+
+  /* ── Trip sidebar placeholder ── */
+  function toggleTripSidebar() {
+    const count = tripItems.length;
+    const items = count > 0
+      ? tripItems.map(i => `• ${i.name} (${i.category})`).join('\n')
+      : 'No stops saved yet. Explore and save places to your trip.';
+    openModal('My Trip', items, null);
+  }
+
+  /* ── Modal ── */
+  let currentModalItem = null;
+
+  function openModal(title, desc, itemName) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-desc').textContent = desc;
+    currentModalItem = itemName;
+    const saveBtn = document.getElementById('modal-save-btn');
+    saveBtn.style.display = itemName ? 'block' : 'none';
+    document.getElementById('hub-modal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('hub-modal').style.display = 'none';
+    currentModalItem = null;
+  }
+
+  function saveFromModal() {
+    if (currentModalItem) {
+      saveToTrip(currentModalItem, 'Saved', null);
+    }
+    closeModal();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  /* ── Drawer ── */
+  function openDrawer(){
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawer-overlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function closeDrawer(){
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawer-overlay').classList.remove('open');
+    document.body.style.overflow='';
+  }
+  function setLang(btn){
+    const lang=btn.getAttribute('data-lang');
+    document.querySelectorAll('.drawer-lang-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    localStorage.setItem('sv_lang',lang);
+    closeDrawer();
+  }
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDrawer();});
+
+  /* ── Chat bilíngue ── */
+  const CHAT_STRINGS = {
+    en: {
+      welcome: "Welcome to The Alpine Hotel! How can we help you today?",
+      welcome_label: "Quick requests",
+      placeholder: "Type your message...",
+      disclaimer: "Messages are translated automatically · Hotel receives your message in English",
+      preset_bedding: "🛏 Extra bedding",
+      preset_roomservice: "🍽 Room service",
+      preset_cleaning: "🧹 Room cleaning",
+      preset_checkout: "🗓 Check-out time",
+      preset_taxi: "🚗 Taxi / transport",
+      preset_wifi: "📶 WiFi password",
+      presets_label: "Quick requests",
+      msg_bedding: "Could you please bring extra towels and pillows to my room?",
+      msg_roomservice: "I'd like to order room service. Can you send me the menu?",
+      msg_cleaning: "Could you please clean my room this afternoon?",
+      msg_checkout: "What time is check-out? Is late check-out available?",
+      msg_taxi: "Could you arrange a taxi to Calgary Airport for tomorrow morning?",
+      msg_wifi: "What is the WiFi password for my room?",
+      reply_bedding: "Of course! We'll bring extra towels and pillows to your room within 15 minutes.",
+      reply_roomservice: "Room service is available 7 AM – 10 PM. I'll send the menu to your room right away!",
+      reply_cleaning: "Absolutely! We'll have housekeeping visit your room between 2–4 PM.",
+      reply_checkout: "Check-out is at 11:00 AM. Late check-out until 1 PM is available for CAD $30. Just let us know!",
+      reply_taxi: "We'll arrange a taxi for you. What time do you need to be at the airport?",
+      reply_wifi: "Your WiFi network is AlpineHotel_Guest. The password was provided at check-in — ask at the front desk anytime!",
+      translated_for_you: "Translated for you",
+      hotel_sent: "Hotel sent:",
+      you_sent: "You sent (EN):",
+    },
+    ja: {
+      welcome: "ザ・アルパインホテルへようこそ！何かお手伝いできることはありますか？",
+      welcome_label: "クイックリクエスト",
+      placeholder: "メッセージを入力してください...",
+      disclaimer: "メッセージは自動翻訳されます · ホテルには英語で届きます",
+      preset_bedding: "🛏 寝具の追加",
+      preset_roomservice: "🍽 ルームサービス",
+      preset_cleaning: "🧹 お部屋の清掃",
+      preset_checkout: "🗓 チェックアウト時間",
+      preset_taxi: "🚗 タクシー手配",
+      preset_wifi: "📶 WiFiパスワード",
+      presets_label: "クイックリクエスト",
+      msg_bedding: "タオルと枕を追加でお部屋に持ってきていただけますか？",
+      msg_roomservice: "ルームサービスを注文したいのですが、メニューを送っていただけますか？",
+      msg_cleaning: "今日の午後、お部屋を清掃していただけますか？",
+      msg_checkout: "チェックアウトは何時ですか？レイトチェックアウトは可能ですか？",
+      msg_taxi: "明日の朝、カルガリー空港までタクシーを手配していただけますか？",
+      msg_wifi: "お部屋のWiFiパスワードを教えていただけますか？",
+      reply_bedding: "かしこまりました！15分以内に追加のタオルと枕をお持ちします。",
+      reply_roomservice: "ルームサービスは午前7時〜午後10時にご利用いただけます。ただいまメニューをお部屋にお送りします！",
+      reply_cleaning: "もちろんです！午後2時〜4時の間にお部屋の清掃に伺います。",
+      reply_checkout: "チェックアウトは午前11時です。午後1時までのレイトチェックアウトはCAD30でご利用いただけます。",
+      reply_taxi: "タクシーを手配いたします。空港には何時にお着きになる必要がありますか？",
+      reply_wifi: "WiFiネットワーク名はAlpineHotel_Guestです。パスワードはチェックイン時にお渡ししておりますが、フロントデスクにいつでもお尋ねください！",
+      translated_for_you: "翻訳済み",
+      hotel_sent: "ホテルからの原文 (EN):",
+      you_sent: "送信内容 (EN):",
+    },
+    pt: {
+      welcome: "Bem-vindo ao The Alpine Hotel! Como podemos ajudá-lo hoje?",
+      welcome_label: "Pedidos rápidos",
+      placeholder: "Digite sua mensagem...",
+      disclaimer: "Mensagens traduzidas automaticamente · O hotel recebe em inglês",
+      preset_bedding: "🛏 Roupa de cama extra",
+      preset_roomservice: "🍽 Serviço de quarto",
+      preset_cleaning: "🧹 Limpeza do quarto",
+      preset_checkout: "🗓 Horário de check-out",
+      preset_taxi: "🚗 Táxi / transporte",
+      preset_wifi: "📶 Senha do WiFi",
+      presets_label: "Pedidos rápidos",
+      msg_bedding: "Poderia trazer toalhas e travesseiros extras para o meu quarto?",
+      msg_roomservice: "Gostaria de pedir serviço de quarto. Pode me enviar o cardápio?",
+      msg_cleaning: "Poderia limpar meu quarto esta tarde?",
+      msg_checkout: "A que horas é o check-out? Check-out tardio está disponível?",
+      msg_taxi: "Poderia providenciar um táxi para o aeroporto de Calgary amanhã de manhã?",
+      msg_wifi: "Qual é a senha do WiFi do meu quarto?",
+      reply_bedding: "Claro! Levaremos toalhas e travesseiros extras ao seu quarto em 15 minutos.",
+      reply_roomservice: "O serviço de quarto está disponível das 7h às 22h. Enviarei o cardápio ao seu quarto agora mesmo!",
+      reply_cleaning: "Com certeza! A camareira visitará seu quarto entre 14h e 16h.",
+      reply_checkout: "O check-out é às 11h. O check-out tardio até 13h está disponível por CAD $30.",
+      reply_taxi: "Vamos providenciar um táxi para você. A que horas precisa estar no aeroporto?",
+      reply_wifi: "A rede WiFi é AlpineHotel_Guest. A senha foi fornecida no check-in — pergunte na recepção!",
+      translated_for_you: "Traduzido para você",
+      hotel_sent: "Hotel enviou (EN):",
+      you_sent: "Você enviou (EN):",
+    },
+    es: {
+      welcome: "¡Bienvenido al The Alpine Hotel! ¿En qué podemos ayudarle hoy?",
+      presets_label: "Solicitudes rápidas",
+      placeholder: "Escribe tu mensaje...",
+      disclaimer: "Mensajes traducidos automáticamente · El hotel los recibe en inglés",
+      preset_bedding: "🛏 Ropa de cama extra",
+      preset_roomservice: "🍽 Servicio a la habitación",
+      preset_cleaning: "🧹 Limpieza de habitación",
+      preset_checkout: "🗓 Hora de check-out",
+      preset_taxi: "🚗 Taxi / transporte",
+      preset_wifi: "📶 Contraseña WiFi",
+      msg_bedding: "¿Podría traer toallas y almohadas adicionales a mi habitación?",
+      msg_roomservice: "Me gustaría pedir servicio a la habitación. ¿Puede enviarme el menú?",
+      msg_cleaning: "¿Podría limpiar mi habitación esta tarde?",
+      msg_checkout: "¿A qué hora es el check-out? ¿Está disponible el check-out tardío?",
+      msg_taxi: "¿Podría organizar un taxi al aeropuerto de Calgary mañana por la mañana?",
+      msg_wifi: "¿Cuál es la contraseña del WiFi de mi habitación?",
+      reply_bedding: "¡Por supuesto! Llevaremos toallas y almohadas adicionales a su habitación en 15 minutos.",
+      reply_roomservice: "El servicio a la habitación está disponible de 7h a 22h. ¡Le envío el menú enseguida!",
+      reply_cleaning: "¡Claro! El servicio de limpieza visitará su habitación entre las 14h y las 16h.",
+      reply_checkout: "El check-out es a las 11h. El check-out tardío hasta la 1 PM está disponible por CAD $30.",
+      reply_taxi: "Le organizamos un taxi. ¿A qué hora necesita estar en el aeropuerto?",
+      reply_wifi: "La red WiFi es AlpineHotel_Guest. La contraseña se proporcionó al hacer el check-in.",
+      translated_for_you: "Traducido para usted",
+      hotel_sent: "El hotel envió (EN):",
+      you_sent: "Usted envió (EN):",
+    },
+    fr: {
+      welcome: "Bienvenue au The Alpine Hotel ! Comment pouvons-nous vous aider aujourd'hui ?",
+      presets_label: "Demandes rapides",
+      placeholder: "Tapez votre message...",
+      disclaimer: "Messages traduits automatiquement · L'hôtel les reçoit en anglais",
+      preset_bedding: "🛏 Literie supplémentaire",
+      preset_roomservice: "🍽 Service en chambre",
+      preset_cleaning: "🧹 Nettoyage de chambre",
+      preset_checkout: "🗓 Heure de check-out",
+      preset_taxi: "🚗 Taxi / transport",
+      preset_wifi: "📶 Mot de passe WiFi",
+      msg_bedding: "Pourriez-vous apporter des serviettes et des oreillers supplémentaires dans ma chambre ?",
+      msg_roomservice: "Je voudrais commander le service en chambre. Pouvez-vous m'envoyer le menu ?",
+      msg_cleaning: "Pourriez-vous nettoyer ma chambre cet après-midi ?",
+      msg_checkout: "À quelle heure est le check-out ? Le check-out tardif est-il disponible ?",
+      msg_taxi: "Pourriez-vous organiser un taxi pour l'aéroport de Calgary demain matin ?",
+      msg_wifi: "Quel est le mot de passe WiFi de ma chambre ?",
+      reply_bedding: "Bien sûr ! Nous apporterons des serviettes et des oreillers supplémentaires dans votre chambre dans 15 minutes.",
+      reply_roomservice: "Le service en chambre est disponible de 7h à 22h. Je vous envoie le menu immédiatement !",
+      reply_cleaning: "Absolument ! Le service d'entretien passera dans votre chambre entre 14h et 16h.",
+      reply_checkout: "Le check-out est à 11h. Le check-out tardif jusqu'à 13h est disponible pour CAD 30 $.",
+      reply_taxi: "Nous allons vous organiser un taxi. À quelle heure devez-vous être à l'aéroport ?",
+      reply_wifi: "Le réseau WiFi est AlpineHotel_Guest. Le mot de passe vous a été remis à l'arrivée.",
+      translated_for_you: "Traduit pour vous",
+      hotel_sent: "L'hôtel a envoyé (EN) :",
+      you_sent: "Vous avez envoyé (EN) :",
+    },
+    ko: {
+      welcome: "알파인 호텔에 오신 것을 환영합니다! 무엇을 도와드릴까요?",
+      presets_label: "빠른 요청",
+      placeholder: "메시지를 입력하세요...",
+      disclaimer: "메시지는 자동 번역됩니다 · 호텔에는 영어로 전달됩니다",
+      preset_bedding: "🛏 침구 추가",
+      preset_roomservice: "🍽 룸서비스",
+      preset_cleaning: "🧹 객실 청소",
+      preset_checkout: "🗓 체크아웃 시간",
+      preset_taxi: "🚗 택시 / 교통",
+      preset_wifi: "📶 WiFi 비밀번호",
+      msg_bedding: "수건과 베개를 추가로 방에 가져다주실 수 있나요?",
+      msg_roomservice: "룸서비스를 주문하고 싶습니다. 메뉴를 보내주실 수 있나요?",
+      msg_cleaning: "오늘 오후에 방 청소를 해주실 수 있나요?",
+      msg_checkout: "체크아웃은 몇 시인가요? 늦은 체크아웃이 가능한가요?",
+      msg_taxi: "내일 아침 캘거리 공항까지 택시를 예약해 주실 수 있나요?",
+      msg_wifi: "방의 WiFi 비밀번호가 무엇인가요?",
+      reply_bedding: "물론입니다! 15분 이내에 수건과 베개를 추가로 가져다 드리겠습니다.",
+      reply_roomservice: "룸서비스는 오전 7시~오후 10시에 이용 가능합니다. 지금 바로 메뉴를 보내드리겠습니다!",
+      reply_cleaning: "물론입니다! 오후 2시~4시 사이에 객실 청소를 해드리겠습니다.",
+      reply_checkout: "체크아웃은 오전 11시입니다. CAD $30에 오후 1시까지 늦은 체크아웃이 가능합니다.",
+      reply_taxi: "택시를 예약해 드리겠습니다. 공항에 몇 시에 도착해야 하나요?",
+      reply_wifi: "WiFi 네트워크는 AlpineHotel_Guest입니다. 비밀번호는 체크인 시 제공되었습니다.",
+      translated_for_you: "번역됨",
+      hotel_sent: "호텔 발송 (EN):",
+      you_sent: "전송 내용 (EN):",
+    }
+  };
+
+  const HOTEL_REPLIES_EN = {
+    extra_towels: "Of course! We'll bring extra towels and pillows to your room within 15 minutes.",
+    bedding: "Of course! We'll bring extra towels and pillows to your room within 15 minutes.",
+    roomservice: "Room service is available 7 AM – 10 PM. I'll send the menu to your room right away!",
+    cleaning: "Absolutely! We'll have housekeeping visit your room between 2–4 PM.",
+    checkout: "Check-out is at 11:00 AM. Late check-out until 1 PM is available for CAD $30. Just let us know!",
+    taxi: "We'll arrange a taxi for you. What time do you need to be at the airport?",
+    wifi: "Your WiFi network is AlpineHotel_Guest. The password was provided at check-in — ask at the front desk anytime!"
+  };
+
+  let currentChatLang = 'ja';
+  let msgCount = 0;
+
+  function t(key){ return (CHAT_STRINGS[currentChatLang]||CHAT_STRINGS.en)[key] || CHAT_STRINGS.en[key] || ''; }
+
+  function changeChatLang(lang){
+    currentChatLang = lang;
+    updateChatUI();
+  }
+
+  function updateChatUI(){
+    const s = CHAT_STRINGS[currentChatLang] || CHAT_STRINGS.en;
+    document.getElementById('presets-label').textContent = s.presets_label || 'Quick requests';
+    document.getElementById('preset-bedding').textContent = s.preset_bedding;
+    document.getElementById('preset-roomservice').textContent = s.preset_roomservice;
+    document.getElementById('preset-cleaning').textContent = s.preset_cleaning;
+    document.getElementById('preset-checkout').textContent = s.preset_checkout;
+    document.getElementById('preset-taxi').textContent = s.preset_taxi;
+    document.getElementById('preset-wifi').textContent = s.preset_wifi;
+    document.getElementById('chat-input').placeholder = s.placeholder;
+    document.getElementById('chat-disclaimer').textContent = s.disclaimer;
+    document.getElementById('welcome-msg').textContent = s.welcome;
+  }
+
+  function sendPreset(type){
+    const s = CHAT_STRINGS[currentChatLang] || CHAT_STRINGS.en;
+    const enStrings = CHAT_STRINGS.en;
+    const guestMsg = s['msg_'+type];
+    const enMsg = enStrings['msg_'+type];
+    const replyKey = type;
+    const hotelReplyEN = HOTEL_REPLIES_EN[replyKey] || "Thank you for your request! Our team will assist you shortly.";
+    const hotelReplyLang = s['reply_'+type] || hotelReplyEN;
+    if(!guestMsg) return;
+    appendGuestMsg(guestMsg, enMsg);
+    setTimeout(()=>{ appendHotelMsg(hotelReplyLang, hotelReplyEN); }, 900);
+    addStaffMessage(enMsg, guestMsg, hotelReplyEN);
+  }
+
+  function sendGuestMessage(){
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if(!text) return;
+    // Simula envio — mostra msg do hóspede + resposta genérica do hotel
+    const enVersion = "[Auto-translated to English]";
+    appendGuestMsg(text, enVersion);
+    input.value='';
+    setTimeout(()=>{
+      const s = CHAT_STRINGS[currentChatLang]||CHAT_STRINGS.en;
+      const replyEN = "Thank you for your message! Our concierge team will get back to you shortly.";
+      const replyLang = currentChatLang==='ja' ? "メッセージありがとうございます。コンシェルジュチームがすぐにご連絡いたします。"
+        : currentChatLang==='pt' ? "Obrigado pela sua mensagem! Nossa equipe entrará em contato em breve."
+        : currentChatLang==='es' ? "¡Gracias por su mensaje! Nuestro equipo le responderá en breve."
+        : currentChatLang==='fr' ? "Merci pour votre message ! Notre équipe vous répondra sous peu."
+        : currentChatLang==='ko' ? "메시지 감사합니다! 컨시어지 팀이 곧 연락드리겠습니다."
+        : replyEN;
+      appendHotelMsg(replyLang, replyEN);
+    }, 1000);
+  }
+
+  function appendGuestMsg(text, enText){
+    msgCount++;
+    const s = CHAT_STRINGS[currentChatLang]||CHAT_STRINGS.en;
+    const div = document.createElement('div');
+    div.className='msg guest';
+    div.innerHTML=`
+      <div class="msg-bubble">${text}</div>
+      <div class="msg-meta">You · just now</div>
+      <div class="msg-translated">${s.you_sent||'You sent (EN):'} "${enText}"</div>`;
+    const box=document.getElementById('chat-messages');
+    box.appendChild(div);
+    box.scrollTop=box.scrollHeight;
+  }
+
+  function appendHotelMsg(text, enText){
+    const s = CHAT_STRINGS[currentChatLang]||CHAT_STRINGS.en;
+    const div=document.createElement('div');
+    div.className='msg hotel';
+    div.innerHTML=`
+      <div class="msg-bubble">${text}</div>
+      <div class="msg-meta"><span class="msg-translated-badge"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>${s.translated_for_you||'Translated for you'}</span> · just now</div>
+      <div class="msg-translated">${s.hotel_sent||'Hotel sent:'} "${enText}"</div>`;
+    const box=document.getElementById('chat-messages');
+    box.appendChild(div);
+    box.scrollTop=box.scrollHeight;
+  }
+
+  function addStaffMessage(enMsg, originalMsg, replyEN){
+    const existing=document.getElementById('staff-messages');
+    const div=document.createElement('div');
+    div.className='staff-msg';
+    div.innerHTML=`
+      <div class="staff-msg-room">Room 204 · Guest · 🌐 ${currentChatLang.toUpperCase()}</div>
+      <div class="staff-msg-text">Guest asks: "${enMsg}"</div>
+      <div class="staff-msg-original">Original (${currentChatLang.toUpperCase()}): "${originalMsg}"</div>`;
+    existing.prepend(div);
+  }
+
+  function staffReply(inputId, replyKey){
+    const input=document.getElementById(inputId);
+    const text=input.value.trim()||HOTEL_REPLIES_EN[replyKey];
+    const s=CHAT_STRINGS[currentChatLang]||CHAT_STRINGS.en;
+    const replyLang=s['reply_'+replyKey]||text;
+    appendHotelMsg(replyLang, text);
+    input.value='';
+    switchView('guest', document.querySelector('.view-toggle-btn'));
+  }
+
+  function switchView(view, btn){
+    document.querySelectorAll('.view-toggle-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('guest-view').style.display = view==='guest'?'block':'none';
+    document.getElementById('staff-view').classList.toggle('visible', view==='staff');
+  }
+
+  function handleChatKey(e){
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendGuestMessage();}
+  }
+
+  // Inicializa UI do chat com japonês
+  document.addEventListener('DOMContentLoaded',()=>{ updateChatUI(); });
+</script>
+
+<script src="assets/js/somavio-live.js" defer></script>
+
+<script>
+// Auto-populate weather in hotel hero
+(function() {
+  function updateHotelHeroWeather() {
+    var summary = window.SomaVioWeatherSummary;
+    if (!summary) return;
+    var lang = (localStorage.getItem('sv_lang') || 'en');
+    var tempEl = document.querySelector('.hub-hero .weather-temp');
+    var condEl = document.querySelector('.hub-hero .weather-cond');
+    if (tempEl && summary.temp !== null) {
+      var c = summary.temp;
+      tempEl.textContent = (lang === 'en') ? c + '°C / ' + Math.round(c * 9/5 + 32) + '°F' : c + '°C';
+    }
+    if (condEl) condEl.textContent = summary.condition || '';
+    // Update timestamp
+    var tsEls = document.querySelectorAll('.hub-hero .sv-alert-timestamp');
+    tsEls.forEach(function(el) {
+      var now = new Date();
+      var h = now.getHours(), m = now.getMinutes();
+      var period = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      var time = h + ':' + String(m).padStart(2,'0') + ' ' + period;
+      el.textContent = 'Updated today, ' + time + ' · Open-Meteo';
+    });
+  }
+  var attempts = 0;
+  var iv = setInterval(function() {
+    attempts++;
+    if (window.SomaVioWeatherSummary || attempts > 25) { clearInterval(iv); updateHotelHeroWeather(); }
+  }, 300);
+})();
+</script>
+</body>
+</html>

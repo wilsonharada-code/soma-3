@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SomaVio | Local guidance for Alberta</title>
+  <meta name="description" content="Local guidance for Canmore, Kananaskis & beyond. Smarter days. Deeper experiences." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    /* ═══════════════════════════════════════════════
+       01 — SISTEMA DE DESIGN GLOBAL
+    ════════════════════════════════════════════════ */
+    :root {
+      --stone:       #2C2C2A;
+      --sage:        #6B7F6E;
+      --mist:        #F4F1EC;
+      --glacier:     #D6E4E1;
+      --amber:       #C8923A;
+      --slate:       #4A5568;
+      --white:       #FFFFFF;
+
+      --care-blue:   #3B82F6;
+      --care-amber:  #D97706;
+      --care-teal:   #0D9488;
+      --emergency:   #DC2626;
+
+      --shadow-1: 0 1px 3px rgba(44,44,42,0.08);
+      --shadow-2: 0 4px 12px rgba(44,44,42,0.12);
+      --shadow-3: 0 8px 32px rgba(44,44,42,0.18);
+
+      --r-card: 8px;
+      --r-btn:  6px;
+      --r-pill: 100px;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--mist);
+      color: var(--stone);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    ul { list-style: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .label-caps {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════════
+       02 — CONTEXT BAR
+    ════════════════════════════════════════════════ */
+    .context-bar {
+      position: sticky; top: 0; z-index: 100;
+      height: 36px; background: var(--mist);
+      border-bottom: 1px solid rgba(44,44,42,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; color: var(--slate);
+      letter-spacing: 0.04em;
+    }
+    .ctx-accent { color: var(--sage); font-weight: 600; }
+
+    /* ═══════════════════════════════════════════════
+       02 — HEADER
+    ════════════════════════════════════════════════ */
+    .site-header {
+      position: sticky; top: 36px; z-index: 99;
+      height: 64px; background: var(--stone);
+      display: flex; align-items: center;
+    }
+    .header-inner {
+      display: flex; align-items: center; width: 100%;
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 20px;
+      color: var(--white); font-weight: 700; flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 32px; height: 32px; background: var(--amber);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { color: var(--white); }
+
+    .main-nav {
+      display: flex; align-items: center; gap: 2px;
+      margin-left: 36px; flex: 1;
+    }
+    .main-nav a {
+      padding: 6px 11px; font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.8); border-radius: var(--r-btn);
+      transition: color 0.2s, background 0.2s;
+    }
+    .main-nav a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+
+    .header-actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+    .staying-here {
+      font-size: 13px; color: rgba(255,255,255,0.65);
+      transition: color 0.2s;
+    }
+    .staying-here:hover { color: var(--white); }
+
+    .lang-selector-wrap { position: relative; }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: var(--r-pill);
+      color: var(--white); font-size: 13px; font-weight: 500;
+      background: transparent; cursor: pointer; transition: border-color 0.2s;
+    }
+    .lang-toggle:hover { border-color: rgba(255,255,255,0.4); }
+    .lang-toggle svg { color: rgba(255,255,255,0.6); }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-2); padding: 8px; min-width: 140px;
+      display: none; flex-direction: column; gap: 2px; z-index: 200;
+    }
+    .lang-dropdown.open { display: flex; }
+    .lang-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; color: var(--slate);
+      background: none; cursor: pointer; text-align: left; width: 100%;
+      transition: background 0.15s, color 0.15s;
+    }
+    .lang-option:hover { background: var(--mist); color: var(--stone); }
+    .lang-option.active { font-weight: 600; color: var(--stone); background: var(--glacier); }
+    .lang-flag { font-size: 16px; }
+
+    .fav-icon {
+      width: 22px; height: 22px; color: rgba(255,255,255,0.7);
+      transition: color 0.2s; cursor: pointer;
+    }
+    .fav-icon:hover { color: var(--white); }
+
+    .mobile-actions { display: none; align-items: center; gap: 16px; }
+
+    /* ═══════════════════════════════════════════════
+       03 — HERO
+    ════════════════════════════════════════════════ */
+    .hero {
+      position: relative; min-height: 560px;
+      display: flex; align-items: center;
+      background-image:
+        linear-gradient(to right,
+          rgba(44,44,42,0.65) 0%,
+          rgba(44,44,42,0.35) 60%,
+          rgba(44,44,42,0.15) 100%),
+        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1440&q=85&auto=format&fit=crop');
+      background-size: cover; background-position: center;
+    }
+    .hero-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; width: 100%; }
+    .hero-label {
+      color: var(--glacier); letter-spacing: 0.25em;
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .hero-title {
+      font-family: var(--font-display); font-size: 48px;
+      color: var(--white); font-weight: 400; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero-title em { font-style: italic; }
+    .hero-sub {
+      font-size: 18px; font-weight: 400; color: var(--mist);
+      max-width: 520px; margin-bottom: 28px; line-height: 1.5;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--sage); color: var(--white);
+      padding: 14px 28px; border-radius: var(--r-btn);
+      font-size: 16px; font-weight: 600; transition: background 0.2s;
+    }
+    .hero-cta:hover { background: #5a6f60; }
+    .hero-seal {
+      position: absolute; bottom: 28px; left: 0; width: 100%;
+    }
+    .hero-seal-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      font-size: 11px; color: var(--mist); letter-spacing: 0.13em;
+      font-weight: 500; display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       04 — SAFETY BAR (3 estados)
+    ════════════════════════════════════════════════ */
+    /* ── Safety bar base ── */
+    .safety-bar {
+      display: flex; align-items: stretch;
+      font-size: 13px; transition: all 300ms ease-out;
+      position: relative;
+    }
+    .safety-bar-inner {
+      max-width: 1280px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 40px;
+    }
+
+    /* Estado 1 — Informativo */
+    .safety-bar.state-info {
+      background: var(--glacier);
+      border-bottom: 2px solid rgba(13,148,136,0.2);
+    }
+    .safety-bar.state-info .safety-icon { color: var(--care-teal); }
+    .safety-bar.state-info .safety-bar-label { color: var(--care-teal); }
+
+    /* Estado 2 — Atenção / Wildlife */
+    .safety-bar.state-warning {
+      background: rgba(217,119,6,0.10);
+      border-left: 5px solid var(--care-amber);
+      border-bottom: 2px solid rgba(217,119,6,0.2);
+    }
+    .safety-bar.state-warning .safety-icon { color: var(--care-amber); }
+    .safety-bar.state-warning .safety-bar-label { color: var(--care-amber); }
+
+    /* Estado 3 — Emergência */
+    .safety-bar.state-emergency {
+      background: var(--white);
+      border-left: 5px solid var(--emergency);
+      border-bottom: 2px solid rgba(220,38,38,0.15);
+    }
+    .safety-bar.state-emergency .safety-icon { color: var(--emergency); }
+    .safety-bar.state-emergency .safety-bar-label { color: var(--emergency); }
+
+    .safety-icon-wrap {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .state-info .safety-icon-wrap { background: rgba(13,148,136,0.12); }
+    .state-warning .safety-icon-wrap { background: rgba(217,119,6,0.12); }
+    .state-emergency .safety-icon-wrap { background: rgba(220,38,38,0.10); }
+
+    .safety-icon { display: flex; align-items: center; }
+    .safety-icon svg { width: 18px; height: 18px; }
+
+    .safety-text-block { flex: 1; min-width: 0; }
+    .safety-bar-label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.12em; display: block; margin-bottom: 2px;
+    }
+    .safety-text { color: var(--stone); font-size: 13px; font-weight: 500; }
+    .safety-source {
+      color: var(--slate); font-size: 11px; font-weight: 600;
+      margin-left: 6px;
+    }
+    .safety-action-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--care-amber); color: var(--white);
+      padding: 9px 18px; border-radius: var(--r-btn);
+      font-size: 13px; font-weight: 700; white-space: nowrap;
+      border: none; cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .safety-action-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .safety-action-btn svg { width: 14px; height: 14px; }
+    .safety-emergency-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--emergency); color: var(--white);
+      padding: 9px 18px; border-radius: var(--r-btn);
+      font-size: 13px; font-weight: 700; white-space: nowrap;
+      border: none; cursor: pointer; transition: opacity 0.2s;
+      flex-shrink: 0;
+    }
+    .safety-emergency-btn:hover { opacity: 0.9; }
+    .safety-link {
+      color: var(--sage); font-weight: 600; font-size: 13px;
+      white-space: nowrap; transition: color 0.2s; flex-shrink: 0;
+    }
+    .safety-link:hover { color: var(--stone); }
+
+    /* ── Wildlife Modal ── */
+    .wildlife-modal-overlay {
+      position: fixed; inset: 0; z-index: 400;
+      background: rgba(44,44,42,0.65);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      animation: wm-fade 0.25s ease;
+    }
+    @keyframes wm-fade { from { opacity: 0; } to { opacity: 1; } }
+
+    .wildlife-modal {
+      background: var(--white); border-radius: 12px;
+      width: 100%; max-width: 640px;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: var(--shadow-3);
+      animation: wm-slide 0.25s ease;
+    }
+    @keyframes wm-slide { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .wm-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 24px 24px 0; gap: 12px;
+    }
+    .wm-alert-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(217,119,6,0.12);
+      border: 1px solid rgba(217,119,6,0.3);
+      border-radius: var(--r-pill); padding: 6px 14px;
+      font-size: 11px; font-weight: 800; color: var(--care-amber);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .wm-alert-badge svg { width: 13px; height: 13px; }
+    .wm-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--mist); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; border: none; color: var(--slate);
+      transition: background 0.2s;
+    }
+    .wm-close:hover { background: var(--glacier); }
+    .wm-close svg { width: 16px; height: 16px; }
+
+    .wm-body { padding: 20px 24px 0; }
+
+    .wm-title {
+      font-family: var(--font-display); font-size: 24px;
+      color: var(--stone); font-weight: 700; margin-bottom: 6px;
+    }
+    .wm-meta {
+      font-size: 12px; color: var(--slate); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .wm-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--slate); }
+    .wm-source { font-weight: 700; color: var(--sage); }
+
+    /* Sections dentro do modal */
+    .wm-section {
+      border-radius: var(--r-card); padding: 18px 20px; margin-bottom: 14px;
+    }
+    .wm-section-title {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.12em; margin-bottom: 14px;
+    }
+
+    .wm-section-encounter {
+      background: rgba(217,119,6,0.07);
+      border: 1px solid rgba(217,119,6,0.2);
+    }
+    .wm-section-encounter .wm-section-title { color: var(--care-amber); }
+
+    .wm-section-spray {
+      background: rgba(44,44,42,0.04);
+      border: 1px solid rgba(44,44,42,0.08);
+    }
+    .wm-section-spray .wm-section-title { color: var(--stone); }
+
+    .wm-section-before {
+      background: rgba(13,148,136,0.06);
+      border: 1px solid rgba(13,148,136,0.15);
+    }
+    .wm-section-before .wm-section-title { color: var(--care-teal); }
+
+    .wm-steps { display: flex; flex-direction: column; gap: 12px; }
+    .wm-step { display: flex; align-items: flex-start; gap: 12px; }
+    .wm-step-icon {
+      font-size: 20px; flex-shrink: 0; line-height: 1.3;
+    }
+    .wm-step-content { flex: 1; }
+    .wm-step-title { font-size: 14px; font-weight: 700; color: var(--stone); margin-bottom: 2px; }
+    .wm-step-desc { font-size: 13px; color: var(--slate); line-height: 1.5; }
+    .wm-step-desc strong { color: var(--stone); font-weight: 700; }
+    .wm-step-desc em { color: var(--care-amber); font-style: normal; font-weight: 600; }
+
+    .wm-spray-note {
+      background: rgba(44,44,42,0.06); border-radius: 6px;
+      padding: 12px 14px; margin-top: 12px;
+      font-size: 12px; color: var(--slate); line-height: 1.6;
+    }
+    .wm-spray-note strong { color: var(--stone); }
+
+    .wm-checklist { display: flex; flex-direction: column; gap: 10px; }
+    .wm-check-item { display: flex; align-items: flex-start; gap: 10px; }
+    .wm-check-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--care-teal); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .wm-check-dot svg { width: 12px; height: 12px; color: var(--white); }
+    .wm-check-text { font-size: 13px; color: var(--stone); line-height: 1.45; }
+    .wm-check-text span { font-size: 11px; color: var(--slate); display: block; margin-top: 1px; }
+
+    .wm-disclaimer {
+      background: rgba(44,44,42,0.04);
+      border-top: 1px solid rgba(44,44,42,0.08);
+      padding: 14px 24px;
+      font-size: 11px; color: var(--slate); line-height: 1.65;
+    }
+    .wm-disclaimer strong { color: var(--stone); }
+
+    .wm-actions {
+      display: flex; gap: 10px; padding: 16px 24px 20px;
+      flex-wrap: wrap;
+    }
+    .wm-btn-primary {
+      flex: 1; min-width: 200px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: var(--sage); color: var(--white);
+      padding: 12px 20px; border-radius: var(--r-btn);
+      font-size: 14px; font-weight: 700; border: none; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .wm-btn-primary:hover { background: #5a6f60; }
+    .wm-btn-ghost {
+      flex: 1; min-width: 160px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: transparent; color: var(--stone);
+      padding: 12px 20px; border-radius: var(--r-btn);
+      font-size: 14px; font-weight: 600;
+      border: 1.5px solid var(--glacier); cursor: pointer;
+      transition: background 0.2s;
+    }
+    .wm-btn-ghost:hover { background: var(--glacier); }
+    .wm-btn-ghost svg { width: 13px; height: 13px; }
+
+    /* ═══════════════════════════════════════════════
+       SECTION SHARED
+    ════════════════════════════════════════════════ */
+    .section { padding: 64px 0; }
+    .section-mist { background: var(--mist); }
+    .section-white { background: var(--white); }
+    .section-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 28px; gap: 16px;
+    }
+    .section-title { font-size: 20px; font-weight: 600; color: var(--stone); }
+    .section-link { font-size: 14px; font-weight: 500; color: var(--sage); transition: color 0.2s; }
+    .section-link:hover { color: var(--stone); }
+
+    /* ═══════════════════════════════════════════════
+       05 — FEATURED BY CONDITIONS
+    ════════════════════════════════════════════════ */
+    .featured-title { color: var(--amber); }
+    .featured-carousel {
+      display: flex; gap: 16px; overflow-x: auto;
+      scroll-snap-type: x mandatory; padding-bottom: 8px;
+      scrollbar-width: thin;
+    }
+    .featured-card {
+      flex: 0 0 260px; scroll-snap-align: start;
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .featured-card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .featured-card.is-featured { border-top: 2px solid var(--amber); }
+    .featured-card-img { position: relative; height: 160px; }
+    .featured-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .featured-tag {
+      position: absolute; top: 12px; left: 12px;
+      background: rgba(44,44,42,0.8); color: var(--white);
+      font-size: 11px; font-weight: 600; padding: 4px 12px;
+      border-radius: var(--r-pill);
+    }
+    .featured-card-body { padding: 16px; }
+    .featured-label {
+      font-size: 10px; font-weight: 700; color: var(--amber);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;
+    }
+    .featured-card-title { font-size: 15px; font-weight: 600; color: var(--stone); margin-bottom: 4px; }
+    .featured-card-sub { font-size: 13px; color: var(--slate); margin-bottom: 12px; line-height: 1.4; }
+    .featured-card-cta { font-size: 13px; font-weight: 600; color: var(--sage); }
+
+    /* ═══════════════════════════════════════════════
+       06 — EXPLORE BY CATEGORY
+    ════════════════════════════════════════════════ */
+    .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .cat-cell {
+      background: var(--white); border-radius: var(--r-card);
+      padding: 24px; transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .cat-cell:hover { background: var(--glacier); box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .cat-icon {
+      width: 32px; height: 32px; color: var(--sage); margin-bottom: 14px;
+    }
+    .cat-label { font-size: 14px; font-weight: 600; color: var(--stone); margin-bottom: 4px; }
+    .cat-sub { font-size: 12px; color: var(--slate); }
+
+    /* ═══════════════════════════════════════════════
+       07 — TODAY / THIS WEEK
+    ════════════════════════════════════════════════ */
+    .tabs { display: flex; gap: 24px; margin-bottom: 24px; border-bottom: 1px solid rgba(44,44,42,0.08); }
+    .tab {
+      padding: 8px 2px 12px; font-size: 16px; font-weight: 600;
+      color: var(--slate); border-bottom: 2px solid transparent;
+      margin-bottom: -1px; transition: color 0.2s, border-color 0.2s;
+    }
+    .tab.active { color: var(--stone); border-bottom-color: var(--sage); }
+    .today-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .today-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .today-card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .today-card-img { position: relative; aspect-ratio: 1; }
+    .today-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .today-period {
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(200,146,58,0.92); color: var(--white);
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: var(--r-pill);
+    }
+    .today-card-body { padding: 14px; }
+    .today-card-title { font-size: 14px; font-weight: 600; color: var(--stone); margin-bottom: 6px; }
+    .today-time { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--slate); margin-bottom: 8px; }
+    .today-time svg { width: 14px; height: 14px; }
+    .today-type {
+      display: inline-block; background: var(--glacier); color: var(--stone);
+      font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: var(--r-pill);
+    }
+
+    /* ═══════════════════════════════════════════════
+       08 — HOW SOMAVIO WORKS
+    ════════════════════════════════════════════════ */
+    .how-head { text-align: center; margin-bottom: 48px; }
+    .how-headline {
+      font-family: var(--font-display); font-size: 36px;
+      color: var(--stone); font-weight: 400; margin-bottom: 14px;
+    }
+    .how-sub { font-size: 16px; color: var(--slate); max-width: 560px; margin: 0 auto; }
+    .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    .how-col { text-align: center; }
+    .how-icon { width: 40px; height: 40px; color: var(--sage); margin: 0 auto 16px; }
+    .how-col-title { font-size: 18px; font-weight: 600; color: var(--stone); margin-bottom: 10px; }
+    .how-col-text { font-size: 15px; color: var(--slate); line-height: 1.5; }
+    .how-timeline { display: none; }
+
+    /* ═══════════════════════════════════════════════
+       09 — FAIXA B2B DISCRETA
+    ════════════════════════════════════════════════ */
+    .b2b-strip {
+      background: var(--glacier); padding: 16px 40px; text-align: center;
+    }
+    .b2b-strip-text { font-size: 13px; color: var(--slate); }
+    .b2b-strip-link { font-size: 13px; font-weight: 600; color: var(--sage); margin-left: 6px; transition: color 0.2s; }
+    .b2b-strip-link:hover { color: var(--stone); }
+
+    /* ═══════════════════════════════════════════════
+       10 — LOCAL STORIES
+    ════════════════════════════════════════════════ */
+    .stories-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .story-card {
+      background: var(--white); border-radius: var(--r-card);
+      overflow: hidden; box-shadow: var(--shadow-1);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .story-card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .story-img { height: 220px; }
+    .story-img img { width: 100%; height: 100%; object-fit: cover; }
+    .story-body { padding: 20px; }
+    .story-pill {
+      display: inline-block; background: rgba(107,127,110,0.15); color: var(--sage);
+      font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: var(--r-pill);
+      margin-bottom: 12px;
+    }
+    .story-headline { font-size: 18px; font-weight: 600; color: var(--stone); margin-bottom: 12px; line-height: 1.3; }
+    .story-link { font-size: 14px; font-weight: 600; color: var(--sage); }
+
+    /* ═══════════════════════════════════════════════
+       11 — PROOF SOCIAL
+    ════════════════════════════════════════════════ */
+    .proof { background: var(--glacier); padding: 64px 0; }
+    .proof-label { color: var(--stone); text-align: center; margin-bottom: 32px; }
+    .proof-logos {
+      display: flex; align-items: center; justify-content: center;
+      gap: 48px; flex-wrap: wrap;
+    }
+    .proof-logo {
+      font-family: var(--font-display); font-size: 20px; font-weight: 700;
+      color: var(--stone); filter: grayscale(100%); opacity: 0.5;
+      transition: filter 0.3s, opacity 0.3s;
+    }
+    .proof-logo:hover { filter: grayscale(0%); opacity: 1; }
+
+    /* ═══════════════════════════════════════════════
+       12 — CAMADA INSTITUCIONAL
+    ════════════════════════════════════════════════ */
+    .institutional {
+      position: relative; padding: 80px 0;
+      background-image:
+        linear-gradient(rgba(44,44,42,0.5), rgba(44,44,42,0.5)),
+        url('https://images.unsplash.com/photo-1574856344991-aaa31b6f4b58?w=1280&q=85&auto=format&fit=crop');
+      background-size: cover; background-position: center;
+    }
+    .institutional-headline {
+      font-family: var(--font-display); font-size: 32px;
+      color: var(--mist); font-weight: 400; margin-bottom: 18px;
+    }
+    .institutional-body {
+      font-size: 15px; color: var(--glacier); max-width: 680px; line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════════
+       13 — SPONSORED SECTION
+    ════════════════════════════════════════════════ */
+    .sponsored {
+      background: rgba(44,44,42,0.04);
+      border-top: 1px solid var(--glacier);
+      border-bottom: 1px solid var(--glacier);
+      padding: 64px 0;
+    }
+    .sponsored-label { font-size: 12px; color: var(--slate); margin-bottom: 24px; }
+    .sponsored-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .sponsored-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .sponsored-card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .sponsored-card-img { height: 150px; }
+    .sponsored-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .sponsored-card-body { padding: 16px; }
+    .sponsored-card-title { font-size: 15px; font-weight: 600; color: var(--stone); margin-bottom: 4px; }
+    .sponsored-card-sub { font-size: 13px; color: var(--slate); margin-bottom: 12px; }
+    .sponsored-card-cta { font-size: 13px; font-weight: 600; color: var(--sage); }
+
+    /* ═══════════════════════════════════════════════
+       14 — CTA FINAL
+    ════════════════════════════════════════════════ */
+    .cta-final {
+      background: var(--sage); padding: 80px 0; text-align: center;
+    }
+    .cta-final-headline {
+      font-family: var(--font-display); font-size: 36px;
+      color: var(--white); font-weight: 400; margin-bottom: 28px;
+    }
+    .cta-final-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); color: var(--sage);
+      padding: 16px 40px; border-radius: var(--r-btn);
+      font-size: 16px; font-weight: 700; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-final-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
+
+    /* ═══════════════════════════════════════════════
+       15 — RODAPÉ B2B
+    ════════════════════════════════════════════════ */
+    .footer-b2b { background: var(--stone); padding: 64px 0 32px; }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr 1.3fr 1fr; gap: 40px;
+    }
+    .footer-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 20px;
+      color: var(--white); font-weight: 700; margin-bottom: 14px;
+    }
+    .footer-tagline { font-size: 13px; color: var(--glacier); margin-bottom: 8px; }
+    .footer-copy { font-size: 11px; color: var(--slate); }
+    .footer-col-title { color: var(--glacier); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 10px; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-message {
+      font-size: 11px; color: var(--slate); line-height: 1.6;
+      margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── Guest Hub mobile banner ── */
+    .guest-hub-banner {
+      display: none; /* oculto no desktop — nav já tem "Staying here?" */
+      align-items: center; gap: 8px;
+      background: var(--stone); color: rgba(255,255,255,0.8);
+      padding: 10px 16px; font-size: 13px;
+    }
+    .guest-hub-banner svg { color: var(--amber); flex-shrink: 0; }
+    .guest-hub-banner a {
+      color: var(--amber); font-weight: 700; margin-left: auto;
+      white-space: nowrap; transition: opacity 0.2s;
+    }
+    .guest-hub-banner a:hover { opacity: 0.85; }
+
+    @media (max-width: 980px) {
+      .guest-hub-banner { display: flex; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════════════ */
+    @media (max-width: 980px) {
+      .main-nav, .staying-here { display: none; }
+      .header-actions .fav-icon { display: none; }
+      /* Mantém seletor de idioma visível no mobile */
+      .header-actions .lang-selector-wrap { display: flex; }
+      .mobile-actions { display: flex; }
+      .hero-title { font-size: 36px; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .today-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 720px) {
+      .container { padding: 0 16px; }
+      .hero { min-height: 480px; }
+      .hero-inner { padding: 0 16px; }
+      .hero-title { font-size: 32px; }
+      .hero-sub { font-size: 16px; }
+      /* CTA fullwidth mobile */
+      .hero-cta { display: flex; width: 100%; justify-content: center; }
+      /* Selo: padding reduzido para não cortar em telas pequenas */
+      .hero-seal-inner { padding: 0 16px; }
+      /* Safety bar mobile */
+      .safety-bar-inner { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
+      .safety-action-btn { width: 100%; justify-content: center; }
+      .section { padding: 48px 0; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .today-grid { grid-template-columns: repeat(2, 1fr); }
+      .stories-grid { grid-template-columns: 1fr; }
+      .sponsored-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+
+      /* How SomaVio works — timeline vertical mobile */
+      .how-grid { display: none; }
+      .how-timeline { display: block; position: relative; padding-left: 28px; }
+      .how-timeline::before {
+        content: ''; position: absolute; left: 4px; top: 6px; bottom: 6px;
+        width: 2px; background: var(--glacier);
+      }
+      .timeline-item { position: relative; margin-bottom: 32px; }
+      .timeline-item:last-child { margin-bottom: 0; }
+      .timeline-item::before {
+        content: ''; position: absolute; left: -28px; top: 4px;
+        width: 10px; height: 10px; border-radius: 50%; background: var(--sage);
+      }
+      .timeline-label {
+        color: var(--sage); font-size: 11px; font-weight: 700;
+        letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px;
+      }
+      .timeline-title { font-size: 16px; font-weight: 600; color: var(--stone); margin-bottom: 4px; }
+      .timeline-text { font-size: 14px; color: var(--slate); }
+
+      .how-headline { font-size: 28px; }
+      .institutional-headline { font-size: 26px; }
+      .cta-final-headline { font-size: 28px; }
+
+      /* Wildlife modal mobile */
+      .wildlife-modal-overlay { padding: 0; align-items: flex-end; }
+      .wildlife-modal { border-radius: 16px 16px 0 0; max-height: 92vh; }
+      .wm-actions { flex-direction: column; }
+      .wm-btn-primary, .wm-btn-ghost { min-width: 0; }
+    }
+    /* ═══════════════════════════════════════
+       MENU DRAWER GLOBAL
+    ════════════════════════════════════════ */
+    .hamburger-btn{background:none;border:none;cursor:pointer;color:var(--white);display:flex;align-items:center;padding:4px;}
+    .drawer-overlay{position:fixed;inset:0;z-index:500;background:rgba(44,44,42,0.55);opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+    .drawer-overlay.open{opacity:1;pointer-events:all;}
+    .drawer{position:fixed;top:0;right:0;bottom:0;z-index:501;width:min(320px,85vw);background:var(--stone);display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;}
+    .drawer.open{transform:translateX(0);}
+    .drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .drawer-logo{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:18px;color:var(--white);font-weight:700;}
+    .drawer-logo-icon{width:28px;height:28px;background:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+    .drawer-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:rgba(255,255,255,0.7);transition:background 0.2s;}
+    .drawer-close:hover{background:rgba(255,255,255,0.16);}
+    .drawer-nav{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .drawer-nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);padding:12px 20px 6px;}
+    .drawer-nav a{display:flex;align-items:center;gap:12px;padding:12px 20px;font-size:15px;font-weight:500;color:rgba(255,255,255,0.82);transition:background 0.15s,color 0.15s;text-decoration:none;}
+    .drawer-nav a:hover{background:rgba(255,255,255,0.06);color:var(--white);}
+    .drawer-nav a svg{width:17px;height:17px;color:var(--sage);flex-shrink:0;}
+    .drawer-guest-hub{margin:16px 20px;background:rgba(200,146,58,0.12);border:1px solid rgba(200,146,58,0.3);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .drawer-guest-hub-text{font-size:13px;color:rgba(255,255,255,0.75);}
+    .drawer-guest-hub-link{font-size:13px;font-weight:700;color:var(--amber);white-space:nowrap;text-decoration:none;}
+    .drawer-lang{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+    .drawer-lang-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);margin-bottom:10px;}
+    .drawer-lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    .drawer-lang-btn{padding:9px 6px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:center;}
+    .drawer-lang-btn:hover{background:rgba(255,255,255,0.08);color:var(--white);}
+    .drawer-lang-btn.active{background:var(--sage);border-color:var(--sage);color:var(--white);}
+    .drawer-footer{margin-top:auto;padding:16px 20px;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;border-top:1px solid rgba(255,255,255,0.06);}
+    @media(prefers-reduced-motion:reduce){.drawer,.drawer-overlay{transition:none;}}
+  </style>
+</head>
+<body>
+
+<!-- [1] CONTEXT BAR -->
+<div class="context-bar">
+  <span><span class="ctx-accent">Alberta · SomaVio</span></span>
+</div>
+
+<!-- [2] HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo" aria-label="SomaVio home">
+      <span class="logo-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </span>
+      SomaVio
+    </a>
+
+    <nav class="main-nav" aria-label="Primary navigation">
+      <a href="category.html">Explore</a>
+      <a href="#">Stay</a>
+      <a href="#">Eat</a>
+      <a href="trip.html">Plan Your Day</a>
+      <a href="safety.html">Before You Go</a><a href="local-rules.html">Local Rules</a>
+      <a href="#">About Canmore</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="hotel.html" class="staying-here">Staying here? →</a>
+
+      <div class="lang-selector-wrap">
+        <button class="lang-toggle" id="lang-toggle" aria-label="Language selector" aria-expanded="false">
+          EN
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button class="lang-option active" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
+          <button class="lang-option" data-lang="pt"><span class="lang-flag">🇧🇷</span> Português</button>
+          <button class="lang-option" data-lang="es"><span class="lang-flag">🇪🇸</span> Español</button>
+          <button class="lang-option" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
+          <button class="lang-option" data-lang="ja"><span class="lang-flag">🇯🇵</span> 日本語</button>
+          <button class="lang-option" data-lang="ko"><span class="lang-flag">🇰🇷</span> 한국어</button>
+        </div>
+      </div>
+
+      <svg class="fav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-label="Favorites"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </div>
+
+    <div class="mobile-actions">
+      <button class="hamburger-btn" aria-label="Open menu" onclick="openDrawer()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MENU DRAWER GLOBAL -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Navigation menu">
+  <div class="drawer-header">
+    <div class="drawer-logo">
+      <div class="drawer-logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+      SomaVio
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-nav">
+    <div class="drawer-nav-label">Explore</div>
+    <a href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</a>
+    <a href="category.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>Explore Canmore</a>
+    <a href="trip.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Plan Your Day</a>
+    <a href="safety.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Safety & Conditions</a>
+    <a href="category.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>Dining & Eat</a>
+    <a href="hotels.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>Places to Stay</a>
+    <a href="safety-sponsored.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>About Canmore</a>
+  </div>
+  <div class="drawer-guest-hub">
+    <span class="drawer-guest-hub-text">Staying at a hotel?</span>
+    <a href="hotel.html" class="drawer-guest-hub-link">Open Guest Hub →</a>
+  </div>
+  <div class="drawer-lang">
+    <div class="drawer-lang-label">Language / Idioma</div>
+    <div class="drawer-lang-grid">
+      <button class="drawer-lang-btn active" data-lang="en" onclick="setLang(this)">🇬🇧 EN</button>
+      <button class="drawer-lang-btn" data-lang="pt" onclick="setLang(this)">🇧🇷 PT</button>
+      <button class="drawer-lang-btn" data-lang="es" onclick="setLang(this)">🇪🇸 ES</button>
+      <button class="drawer-lang-btn" data-lang="fr" onclick="setLang(this)">🇫🇷 FR</button>
+      <button class="drawer-lang-btn" data-lang="ja" onclick="setLang(this)">🇯🇵 JA</button>
+      <button class="drawer-lang-btn" data-lang="ko" onclick="setLang(this)">🇰🇷 KO</button>
+    </div>
+  </div>
+  <div class="drawer-footer">SomaVio · Local guidance for Alberta<br>© 2025 · All rights reserved</div>
+</div>
+
+<!-- [3] HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label" data-i18n="hero_label">Local Guide · Alberta</div>
+    <h1 class="hero-title" data-i18n-html="hero_title">Welcome to the<br><em>Canadian Rockies</em></h1>
+    <p class="hero-sub" data-i18n="hero_sub">Local guidance for Canmore, Kananaskis & beyond.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+      <a href="category.html" class="hero-cta" data-i18n="hero_cta">Explore Canmore →</a>
+      <a href="local-rules.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:var(--r-btn,8px);border:1.5px solid rgba(255,255,255,0.55);color:rgba(255,255,255,0.9);font-size:14px;font-weight:600;text-decoration:none;background:rgba(255,255,255,0.08);backdrop-filter:blur(4px);transition:all 0.2s;" data-i18n="hero_rules_link">Rules &amp; passes →</a>
+    </div>
+  </div>
+  <div class="hero-seal">
+    <div class="hero-seal-inner">
+      <span aria-hidden="true">🍁</span> <span data-i18n="hero_seal">TOWN OF CANMORE · Alberta, Canada</span>
+    </div>
+  </div>
+</section>
+
+<!-- GUEST HUB MOBILE BANNER — visível apenas no mobile onde "Staying here?" some do nav -->
+<div class="guest-hub-banner">
+  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  <span>Staying at a hotel in Canmore?</span>
+  <a href="hotel.html">Open Guest Hub →</a>
+</div>
+
+<!-- [4] SAFETY BAR — banner compacto com timestamp -->
+<div class="safety-bar state-warning" id="safety-bar" role="alert" aria-live="polite">
+  <div class="safety-bar-inner" style="padding-top:10px;padding-bottom:10px;">
+    <div class="safety-icon-wrap">
+      <span class="safety-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </span>
+    </div>
+    <div class="safety-text-block" style="flex:1;min-width:0;">
+      <span class="safety-bar-label" data-i18n="alert_label">⚠ Wildlife Alert</span>
+      <span class="safety-text">
+        <span data-i18n="alert_text">Grizzly activity reported near Grassi Lakes Trail. Check before heading out.</span>
+      </span>
+      <span class="sv-alert-timestamp">Updated today, 9:14 AM · Source: Parks Canada — demo scenario</span>
+    </div>
+    <button class="safety-action-btn" onclick="openWildlifeModal()" aria-haspopup="dialog" style="padding:7px 14px;font-size:12px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span data-i18n="alert_btn">What to do →</span>
+    </button>
+  </div>
+</div>
+
+<!-- [4B] BEFORE YOU GO — APIs dinâmicas -->
+<div style="background:var(--mist,#F4F1EC);border-bottom:1px solid rgba(44,44,42,0.07);padding:20px 0;" id="sv-byg-section">
+  <div style="max-width:1280px;margin:0 auto;padding:0 40px;" id="sv-before-you-go">
+    <div class="sv-byg-label">Before you go today</div>
+    <div class="sv-byg-grid">
+      <div class="sv-byg-card sv-byg-warn">
+        <div class="sv-byg-icon">🎫</div>
+        <div class="sv-byg-title">Park pass</div>
+        <div class="sv-byg-value">May be required</div>
+        <div class="sv-byg-sub">Banff NP &amp; Kananaskis</div>
+        <a class="sv-byg-link" href="https://parks.canada.ca/pn-np/ab/banff/visit/passer-passes" target="_blank" rel="noopener">Check Parks Canada →</a>
+      </div>
+      <div class="sv-byg-card sv-byg-ok" id="sv-sun-card">
+        <div class="sv-byg-icon">🌄</div>
+        <div class="sv-byg-title">Sunrise / Sunset</div>
+        <div class="sv-byg-value" id="sv-sun-value">Loading…</div>
+        <div class="sv-byg-sub">Canmore today</div>
+      </div>
+      <div class="sv-byg-card sv-byg-ok" id="sv-road-card">
+        <div class="sv-byg-icon">🛣️</div>
+        <div class="sv-byg-title">Road conditions</div>
+        <div class="sv-byg-value" id="sv-road-value">Checking…</div>
+        <div class="sv-byg-sub">Hwy 1, 1A, 40, 742</div>
+        <a class="sv-byg-link" href="https://511.alberta.ca" target="_blank" rel="noopener" id="sv-road-link" style="display:none">View 511 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Sunrise/Sunset updater — runs after Open-Meteo loads
+(function() {
+  function updateSunCard() {
+    var raw = window._svWeatherRawDaily;
+    var summary = window.SomaVioWeatherSummary;
+    if (!summary && !raw) return;
+    var sunrise = summary && summary.sunrise ? summary.sunrise : null;
+    var sunset = null;
+    if (raw && raw.sunset && raw.sunset.length) {
+      var s = raw.sunset[0];
+      var m = s.match(/T(\d{2}):(\d{2})/);
+      if (m) {
+        var h = parseInt(m[1]), min = parseInt(m[2]);
+        var period = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        sunset = h + ':' + String(min).padStart(2,'0') + ' ' + period;
+      }
+    }
+    var el = document.getElementById('sv-sun-value');
+    if (!el) return;
+    if (sunrise && sunset) el.textContent = '\u2191 ' + sunrise + ' \u00b7 \u2193 ' + sunset;
+    else if (sunrise) el.textContent = '\u2191 ' + sunrise;
+    else el.textContent = 'See forecast';
+  }
+  // Poll until weather loads
+  var attempts = 0;
+  var iv = setInterval(function() {
+    attempts++;
+    if (window.SomaVioWeatherSummary || attempts > 25) { clearInterval(iv); updateSunCard(); }
+  }, 300);
+
+  // Road card updater
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(async function() {
+      if (typeof fetch511Alberta !== 'function') return;
+      var roads = await fetch511Alberta();
+      var valEl = document.getElementById('sv-road-value');
+      var cardEl = document.getElementById('sv-road-card');
+      var linkEl = document.getElementById('sv-road-link');
+      if (!valEl || !cardEl) return;
+      if (roads && roads.events && roads.events.length > 0) {
+        valEl.textContent = roads.events.length + ' active event' + (roads.events.length > 1 ? 's' : '');
+        cardEl.classList.remove('sv-byg-ok');
+        cardEl.classList.add('sv-byg-warn');
+        if (linkEl) linkEl.style.display = 'inline';
+      } else {
+        valEl.textContent = 'No active alerts';
+        if (linkEl) { linkEl.style.display = 'inline'; linkEl.textContent = 'View 511 \u2192'; }
+      }
+    }, 1500);
+  });
+})();
+</script>
+
+<!-- WILDLIFE MODAL -->
+<div id="wildlife-modal" role="dialog" aria-modal="true" aria-labelledby="wm-title" style="display:none;">
+  <div class="wildlife-modal-overlay" onclick="closeWildlifeModal()">
+    <div class="wildlife-modal" onclick="event.stopPropagation()">
+
+      <!-- Header -->
+      <div class="wm-header">
+        <div class="wm-alert-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Wildlife Alert Active
+        </div>
+        <button class="wm-close" onclick="closeWildlifeModal()" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="wm-body">
+        <h2 class="wm-title" id="wm-title">Grizzly bear activity reported</h2>
+        <div class="wm-meta">
+          <span>Grassi Lakes Trail area</span>
+          <span class="wm-meta-dot"></span>
+          <span>Updated today, 9:14 AM</span>
+          <span class="wm-meta-dot"></span>
+          <span class="wm-source">Source: Parks Canada</span>
+        </div>
+
+        <!-- Seção 1 — O que fazer se encontrar -->
+        <div class="wm-section wm-section-encounter">
+          <div class="wm-section-title">If you encounter a bear</div>
+          <div class="wm-steps">
+            <div class="wm-step">
+              <div class="wm-step-icon">🐻</div>
+              <div class="wm-step-content">
+                <div class="wm-step-title">Stay calm — do not run</div>
+                <div class="wm-step-desc">Running triggers the bear's pursuit instinct. Stand your ground and assess the situation.</div>
+              </div>
+            </div>
+            <div class="wm-step">
+              <div class="wm-step-icon">📢</div>
+              <div class="wm-step-content">
+                <div class="wm-step-title">Speak calmly, wave your arms</div>
+                <div class="wm-step-desc">Let the bear identify you as human, not prey. Talk in a calm, firm voice. Avoid direct eye contact.</div>
+              </div>
+            </div>
+            <div class="wm-step">
+              <div class="wm-step-icon">👥</div>
+              <div class="wm-step-content">
+                <div class="wm-step-title">Back away slowly — stay in groups</div>
+                <div class="wm-step-desc">Never turn your back. Move sideways or diagonally. Groups are safer — bears rarely approach groups of 4 or more.</div>
+              </div>
+            </div>
+            <div class="wm-step">
+              <div class="wm-step-icon">🫙</div>
+              <div class="wm-step-content">
+                <div class="wm-step-title">Use bear spray if bear is under 10 metres</div>
+                <div class="wm-step-desc">Deploy in a wide arc at ground level. Aim slightly downward, into the bear's face and path. <em>Do not use as insect repellent — it attracts bears when applied to clothing or gear.</em></div>
+              </div>
+            </div>
+            <div class="wm-step">
+              <div class="wm-step-icon">📵</div>
+              <div class="wm-step-content">
+                <div class="wm-step-title">Do not photograph or approach</div>
+                <div class="wm-step-desc">Maintain at least <strong>100 metres distance</strong> at all times. This is Parks Canada regulation, not a suggestion.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção 2 — Bear spray: nota legal -->
+        <div class="wm-section wm-section-spray">
+          <div class="wm-section-title">Bear spray — what you need to know</div>
+          <div class="wm-steps">
+            <div class="wm-step">
+              <div class="wm-step-icon">✅</div>
+              <div class="wm-step-content">
+                <div class="wm-step-title">Legal and recommended in Canada</div>
+                <div class="wm-step-desc">Bear spray is <strong>legal to carry and use</strong> for wildlife deterrence across Canada. Parks Canada recommends it on all backcountry trails.</div>
+              </div>
+            </div>
+            <div class="wm-step">
+              <div class="wm-step-icon">⚠️</div>
+              <div class="wm-step-content">
+                <div class="wm-step-title">Not the same as pepper spray</div>
+                <div class="wm-step-desc">Bear spray uses a different formulation and concentration. <strong>Pepper spray is classified as a prohibited weapon in Canada</strong> and cannot be carried.</div>
+              </div>
+            </div>
+            <div class="wm-step">
+              <div class="wm-step-icon">✈️</div>
+              <div class="wm-step-content">
+                <div class="wm-step-title">Cannot be brought across international borders</div>
+                <div class="wm-step-desc">Bear spray purchased abroad will be confiscated at Canadian customs. Purchase in Canmore before your hike.</div>
+              </div>
+            </div>
+          </div>
+          <div class="wm-spray-note">
+            <strong>Available in Canmore:</strong> Mountain Equipment (MEC), Sport Chek, Canadian Tire, most outdoor gear shops. Cost: approximately CAD $40–60. Practice deploying the safety clip before your hike.
+          </div>
+        </div>
+
+        <!-- Seção 3 — Antes de sair -->
+        <div class="wm-section wm-section-before">
+          <div class="wm-section-title">Before you head out today</div>
+          <div class="wm-checklist">
+            <div class="wm-check-item">
+              <div class="wm-check-dot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wm-check-text">Check current trail status before leaving
+                <span>Conditions may have changed since this alert was issued — verify at albertaparks.ca</span>
+              </div>
+            </div>
+            <div class="wm-check-item">
+              <div class="wm-check-dot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wm-check-text">Tell someone your route and expected return time
+                <span>If you don't return, someone needs to know where to look</span>
+              </div>
+            </div>
+            <div class="wm-check-item">
+              <div class="wm-check-dot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wm-check-text">Carry bear spray and know how to use it
+                <span>Practice removing the safety clip before you go — not during an encounter</span>
+              </div>
+            </div>
+            <div class="wm-check-item">
+              <div class="wm-check-dot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wm-check-text">Hike in groups of 4 or more when possible
+                <span>Bears rarely approach larger groups — especially important during active wildlife alerts</span>
+              </div>
+            </div>
+            <div class="wm-check-item">
+              <div class="wm-check-dot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wm-check-text">Download offline maps before heading out
+                <span>Cell signal is unreliable on most trails in this area</span>
+              </div>
+            </div>
+            <div class="wm-check-item">
+              <div class="wm-check-dot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wm-check-text">Emergency: call 911
+                <span>Parks Canada Dispatch (24/7): 1-888-773-8888</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disclaimer legal -->
+      <div class="wm-disclaimer">
+        <strong>Important:</strong> This information is provided for general visitor awareness only. It does not replace official guidance from Parks Canada, Alberta Emergency Services, or professional wilderness training. Always follow posted signs and instructions from park staff. SomaVio is not responsible for decisions made based on this content.
+        <br /><br />
+        <strong>Content source:</strong> Parks Canada Wildlife Safety Guidelines · Government of Canada Bear Spray Regulations
+      </div>
+
+      <!-- Ações -->
+      <div class="wm-actions">
+        <a href="safety-sponsored.html" class="wm-btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Full wildlife safety guide →
+        </a>
+        <a href="trip.html" class="wm-btn-ghost" onclick="closeWildlifeModal()">
+          See safe alternatives today →
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- [5] FEATURED BY TODAY'S CONDITIONS -->
+<section class="section section-white">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title featured-title" id="featured-title" data-i18n="featured_title">What's good today</h2>
+      <a href="category.html" class="section-link" data-i18n="featured_link">See all recommendations →</a>
+    </div>
+    <div class="featured-carousel">
+      <article class="featured-card is-featured">
+        <div class="featured-card-img">
+          <img data-sv-image="outdoor" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=520&q=80&auto=format&fit=crop&crop=center" alt="Grassi Lakes alpine mountain lake Canmore" loading="lazy" />
+          <span class="featured-tag">Great for now</span>
+        </div>
+        <div class="featured-card-body">
+          <div class="featured-label">Featured</div>
+          <h3 class="featured-card-title">Grassi Lakes Trail</h3>
+          <p class="featured-card-sub">Easy 2–3 hr hike. Turquoise water, clear conditions today.</p>
+          <a href="category.html" class="featured-card-cta">View details →</a>
+        </div>
+      </article>
+
+      <article class="featured-card">
+        <div class="featured-card-img">
+          <img data-sv-image="restaurant" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=520&q=80&auto=format&fit=crop" alt="Rustic restaurant table with warm light" loading="lazy" />
+          <span class="featured-tag">Local flavour</span>
+        </div>
+        <div class="featured-card-body">
+          <h3 class="featured-card-title">The Grizzly Paw</h3>
+          <p class="featured-card-sub">Local brewery & eatery. Seasonal menu, mountain views.</p>
+          <a href="partner-cafe.html" class="featured-card-cta">Learn more →</a>
+        </div>
+      </article>
+
+      <article class="featured-card">
+        <div class="featured-card-img">
+          <img data-sv-image="wellness" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=520&q=80&auto=format&fit=crop" alt="Thermal pool with mountain backdrop" loading="lazy" />
+          <span class="featured-tag">Relax &amp; recharge</span>
+        </div>
+        <div class="featured-card-body">
+          <h3 class="featured-card-title">Summit Wellness Spa</h3>
+          <p class="featured-card-sub">Post-hike recovery. Massage & sauna, same-day booking.</p>
+          <a href="partner-wellness.html" class="featured-card-cta">View details →</a>
+        </div>
+      </article>
+
+      <article class="featured-card">
+        <div class="featured-card-img">
+          <img data-sv-image="rental" src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=520&q=80&auto=format&fit=crop" alt="Mountain hiking gear and equipment rental" loading="lazy" />
+          <span class="featured-tag">Great for now</span>
+        </div>
+        <div class="featured-card-body">
+          <h3 class="featured-card-title">Alpine Gear Rentals</h3>
+          <p class="featured-card-sub">E-bikes & trail gear. First-time discount available.</p>
+          <a href="partner-rental.html" class="featured-card-cta">Learn more →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- [6] EXPLORE BY CATEGORY -->
+<section class="section section-mist">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title" data-i18n="cat_title">Explore by category</h2>
+      <a href="category.html" class="section-link" data-i18n="cat_link">View all →</a>
+    </div>
+    <div class="cat-grid">
+      <a href="category.html" class="cat-cell">
+        <svg class="cat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+        <div class="cat-label" data-i18n="cat_outdoor">Outdoor Adventures</div>
+        <div class="cat-sub" data-i18n="cat_outdoor_sub">Trails, lakes & guided hikes</div>
+      </a>
+      <a href="category.html" class="cat-cell">
+        <svg class="cat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+        <div class="cat-label" data-i18n="cat_dining">Dining & Local Flavour</div>
+        <div class="cat-sub" data-i18n="cat_dining_sub">Restaurants, cafés & breweries</div>
+      </a>
+      <a href="category.html" class="cat-cell">
+        <svg class="cat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+        <div class="cat-label" data-i18n="cat_stay">Places to Stay</div>
+        <div class="cat-sub" data-i18n="cat_stay_sub">Hotels, lodges & retreats</div>
+      </a>
+      <a href="category.html" class="cat-cell">
+        <svg class="cat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div class="cat-label" data-i18n="cat_wellness">Wellness & Recovery</div>
+        <div class="cat-sub" data-i18n="cat_wellness_sub">Spas, sauna & relaxation</div>
+      </a>
+      <a href="category.html" class="cat-cell">
+        <svg class="cat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z"/></svg>
+        <div class="cat-label" data-i18n="cat_arts">Arts & Culture</div>
+        <div class="cat-sub" data-i18n="cat_arts_sub">Museums, galleries & events</div>
+      </a>
+      <a href="category.html" class="cat-cell">
+        <svg class="cat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M15 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M3 20v-1a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v1"/><path d="M13 20v-1a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4v1"/></svg>
+        <div class="cat-label" data-i18n="cat_family">Family Friendly</div>
+        <div class="cat-sub" data-i18n="cat_family_sub">Activities for all ages</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- [7] TODAY / THIS WEEK -->
+<section class="section section-white">
+  <div class="container">
+    <div class="tabs" role="tablist">
+      <button class="tab active" role="tab" aria-selected="true" data-i18n="tab_today">Today</button>
+      <button class="tab" role="tab" aria-selected="false" data-i18n="tab_week">This Week</button>
+    </div>
+    <div class="section-head" style="margin-top:-8px;">
+      <span></span>
+      <a href="trip.html" class="section-link" data-i18n="today_link">View full calendar →</a>
+    </div>
+    <div class="today-grid">
+      <article class="today-card">
+        <div class="today-card-img">
+          <img data-sv-image="outdoor" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&q=80&auto=format&fit=crop" alt="Kayaking on a lake" loading="lazy" />
+          <span class="today-period">Morning</span>
+        </div>
+        <div class="today-card-body">
+          <h3 class="today-card-title">Kayak on Spray Lakes</h3>
+          <div class="today-time">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            8:00 – 11:00 AM
+          </div>
+          <span class="today-type">Easy</span>
+        </div>
+      </article>
+
+      <article class="today-card">
+        <div class="today-card-img">
+          <img data-sv-image="museum" src="https://images.unsplash.com/photo-1583361703300-2cf7b1b69ebb?w=400&q=80&auto=format&fit=crop" alt="Canmore Museum local history and culture" loading="lazy" />
+          <span class="today-period">Afternoon</span>
+        </div>
+        <div class="today-card-body">
+          <h3 class="today-card-title">Canmore Museum</h3>
+          <div class="today-time">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            9:30 AM – 12:00 PM
+          </div>
+          <span class="today-type">Family</span>
+        </div>
+      </article>
+
+      <article class="today-card">
+        <div class="today-card-img">
+          <img data-sv-image="indoor" src="https://images.unsplash.com/photo-1522163182402-834f871fd851?w=400&q=80&auto=format&fit=crop" alt="Via ferrata climbing" loading="lazy" />
+          <span class="today-period">Afternoon</span>
+        </div>
+        <div class="today-card-body">
+          <h3 class="today-card-title">Via Ferrata Adventure</h3>
+          <div class="today-time">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            1:00 – 4:00 PM
+          </div>
+          <span class="today-type">Adventure</span>
+        </div>
+      </article>
+
+      <article class="today-card">
+        <div class="today-card-img">
+          <img data-sv-image="music" src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=80&auto=format&fit=crop" alt="Live music performance" loading="lazy" />
+          <span class="today-period">Evening</span>
+        </div>
+        <div class="today-card-body">
+          <h3 class="today-card-title">Live Music at Iron Goat</h3>
+          <div class="today-time">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            7:30 – 10:00 PM
+          </div>
+          <span class="today-type">Live Music</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- [8] HOW SOMAVIO WORKS -->
+<section class="section section-mist">
+  <div class="container">
+    <div class="how-head">
+      <h2 class="how-headline">Before, during and after — we're here.</h2>
+      <p class="how-sub">SomaVio supports your whole journey, from first idea to final memory.</p>
+    </div>
+
+    <!-- Desktop: 3 columns -->
+    <div class="how-grid">
+      <div class="how-col">
+        <svg class="how-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+        <h3 class="how-col-title" data-i18n="how1_title">Plan smarter, not harder</h3>
+        <p class="how-col-text" data-i18n="how1_text">Save ideas and get context before you arrive.</p>
+      </div>
+      <div class="how-col">
+        <svg class="how-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        <h3 class="how-col-title" data-i18n="how2_title">Everything you need, right now</h3>
+        <p class="how-col-text" data-i18n="how2_text">Weather, safety, offers and local picks — in one place.</p>
+      </div>
+      <div class="how-col">
+        <svg class="how-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <h3 class="how-col-title" data-i18n="how3_title">After your day — we're still here.</h3>
+        <p class="how-col-text" data-i18n="how3_text">Your saved spots and trip recap, always accessible.</p>
+      </div>
+    </div>
+
+    <!-- Mobile: vertical timeline -->
+    <div class="how-timeline">
+      <div class="timeline-item">
+        <div class="timeline-label" data-i18n="timeline1_label">Before your stay</div>
+        <h3 class="timeline-title" data-i18n="how1_title">Plan smarter, not harder.</h3>
+        <p class="timeline-text" data-i18n="how1_text">Save ideas and get context before you arrive.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-label" data-i18n="timeline2_label">During your stay</div>
+        <h3 class="timeline-title" data-i18n="how2_title">Everything you need, right now.</h3>
+        <p class="timeline-text" data-i18n="how2_text">Weather, safety, offers and local picks — in one place.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-label" data-i18n="timeline3_label">After your stay</div>
+        <h3 class="timeline-title" data-i18n="how3_title">After your day — we're still here.</h3>
+        <p class="timeline-text" data-i18n="how3_text">Your saved spots and trip recap, always accessible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- [9] FAIXA B2B DISCRETA -->
+<div class="b2b-strip">
+  <span class="b2b-strip-text" data-i18n="b2b_text">Are you a hotel or local business?</span>
+  <a href="partners.html" class="b2b-strip-link" data-i18n="b2b_link">→ Partner with SomaVio</a>
+</div>
+
+<!-- [10] LOCAL STORIES & INSPIRATION -->
+<section class="section section-white">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Local stories &amp; inspiration</h2>
+    </div>
+    <div class="stories-grid">
+      <article class="story-card">
+        <div class="story-img">
+          <img data-sv-image="restaurant" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=700&q=80&auto=format&fit=crop" alt="Local food spread" loading="lazy" />
+        </div>
+        <div class="story-body">
+          <span class="story-pill">Local Guide</span>
+          <h3 class="story-headline">Where to eat like a local in Canmore</h3>
+          <a href="category.html" class="story-link">→ 8 spots worth seeking out</a>
+        </div>
+      </article>
+      <article class="story-card">
+        <div class="story-img">
+          <img data-sv-image="outdoor" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80&auto=format&fit=crop" alt="Mountain road trip" loading="lazy" />
+        </div>
+        <div class="story-body">
+          <span class="story-pill">Guide</span>
+          <h3 class="story-headline">5 epic day trips from Canmore</h3>
+          <a href="category.html" class="story-link">→ Road trips, hikes & hidden gems</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- [11] PROOF SOCIAL + PARTNERS -->
+<section class="proof">
+  <div class="container">
+    <div class="proof-label label-caps">Trusted by local partners</div>
+    <div class="proof-logos">
+      <span class="proof-logo">The Malcolm Hotel</span>
+      <span class="proof-logo">Grizzly Paw</span>
+      <span class="proof-logo">Nordic Centre</span>
+      <span class="proof-logo">Bow Valley</span>
+      <span class="proof-logo">Iron Goat</span>
+    </div>
+  </div>
+</section>
+
+<!-- [12] CAMADA INSTITUCIONAL -->
+<section class="institutional">
+  <div class="container">
+    <h2 class="institutional-headline">Supporting Alberta's tourism ecosystem.</h2>
+    <p class="institutional-body">SomaVio works alongside hotels, local businesses and tourism organizations to help visitors experience Canmore and Kananaskis more deeply — while keeping official safety guidance always within reach. A complementary layer, built for the region.</p>
+  </div>
+</section>
+
+<!-- [13] SPONSORED SECTION -->
+<section class="sponsored">
+  <div class="container">
+    <div class="sponsored-label">Local partners making this possible</div>
+    <div class="sponsored-grid">
+      <article class="sponsored-card">
+        <div class="sponsored-card-img">
+          <img data-sv-image="restaurant" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80&auto=format&fit=crop" alt="Restaurant table" loading="lazy" />
+        </div>
+        <div class="sponsored-card-body">
+          <h3 class="sponsored-card-title">The Grizzly Paw Brewery</h3>
+          <p class="sponsored-card-sub">Local craft beer & mountain dining</p>
+          <a href="partner-cafe.html" class="sponsored-card-cta">Learn more →</a>
+        </div>
+      </article>
+      <article class="sponsored-card">
+        <div class="sponsored-card-img">
+          <img data-sv-image="wellness" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&q=80&auto=format&fit=crop" alt="Spa pool" loading="lazy" />
+        </div>
+        <div class="sponsored-card-body">
+          <h3 class="sponsored-card-title">Summit Wellness Spa</h3>
+          <p class="sponsored-card-sub">Recovery & relaxation in the Rockies</p>
+          <a href="partner-wellness.html" class="sponsored-card-cta">Learn more →</a>
+        </div>
+      </article>
+      <article class="sponsored-card">
+        <div class="sponsored-card-img">
+          <img data-sv-image="rental" src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&q=80&auto=format&fit=crop" alt="Mountain gear rentals equipment" loading="lazy" />
+        </div>
+        <div class="sponsored-card-body">
+          <h3 class="sponsored-card-title">Alpine Gear Rentals</h3>
+          <p class="sponsored-card-sub">E-bikes, snowshoes & trail gear</p>
+          <a href="partner-rental.html" class="sponsored-card-cta">Learn more →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- [14] CTA FINAL -->
+<section class="cta-final">
+  <div class="container">
+    <h2 class="cta-final-headline" data-i18n="cta_headline">Your Alberta experience starts here.</h2>
+    <a href="category.html" class="cta-final-btn" data-i18n="cta_btn">Explore Canmore →</a>
+  </div>
+</section>
+
+<!-- [15] RODAPÉ B2B -->
+<footer class="footer-b2b">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <span class="logo-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </span>
+          SomaVio
+        </div>
+        <p class="footer-tagline">Local guidance for Alberta.</p>
+        <p class="footer-copy">© 2025 SomaVio</p>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Visitors</div>
+        <a href="category.html">Explore</a>
+        <a href="#">Stay</a>
+        <a href="#">Eat</a>
+        <a href="trip.html">Plan Your Day</a>
+        <a href="safety.html">Before You Go</a><a href="local-rules.html">Local Rules</a>
+        <a href="#">About Canmore</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Partners</div>
+        <a href="hotels.html">For Hotels</a>
+        <a href="partners.html">For Local Businesses</a>
+        <a href="organizations.html">For Organizations</a>
+        <a href="studio.html">Partner Studio</a>
+        <p class="footer-message">SomaVio complements existing systems. It does not replace PMS, OTA or emergency procedures.</p>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">Legal</div>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ═══════════════════════════════════════════
+     I18N — 6 idiomas · troca instantânea
+  ════════════════════════════════════════════ */
+  const TRANSLATIONS = {
+    en: {
+      hero_label:      'Local Guide · Alberta',
+      hero_title:      'Welcome to the<br><em>Canadian Rockies</em>',
+      hero_sub:        'Local guidance for Canmore, Kananaskis & beyond.',
+      hero_cta:        'Explore Canmore →',
+      hero_seal:       'TOWN OF CANMORE · Alberta, Canada',
+      alert_label:     '⚠ Wildlife Alert',
+      alert_text:      'Grizzly activity reported near Grassi Lakes Trail. Check before heading out.',
+      alert_source:    'Source: Parks Canada',
+      alert_btn:       'What to do →',
+      featured_title:  "What's good today",
+      featured_link:   'See all recommendations →',
+      cat_title:       'Explore by category',
+      cat_link:        'View all →',
+      cat_outdoor:     'Outdoor Adventures',
+      cat_outdoor_sub: 'Trails, lakes & guided hikes',
+      cat_dining:      'Dining & Local Flavour',
+      cat_dining_sub:  'Restaurants, cafés & breweries',
+      cat_stay:        'Places to Stay',
+      cat_stay_sub:    'Hotels, lodges & retreats',
+      cat_wellness:    'Wellness & Recovery',
+      cat_wellness_sub:'Spas, sauna & relaxation',
+      cat_arts:        'Arts & Culture',
+      cat_arts_sub:    'Museums, galleries & events',
+      cat_family:      'Family Friendly',
+      cat_family_sub:  'Activities for all ages',
+      tab_today:       'Today',
+      tab_week:        'This Week',
+      today_link:      'View full calendar →',
+      how_headline:    "Before, during and after — we're here.",
+      how_sub:         'SomaVio supports your whole journey, from first idea to final memory.',
+      how1_title:      'Plan smarter, not harder',
+      how1_text:       'Save ideas and get context before you arrive.',
+      how2_title:      'Everything you need, right now',
+      how2_text:       'Weather, safety, offers and local picks — in one place.',
+      how3_title:      "After your day — we're still here.",
+      how3_text:       'Your saved spots and trip recap, always accessible.',
+      timeline1_label: 'Before your stay',
+      timeline2_label: 'During your stay',
+      timeline3_label: 'After your stay',
+      b2b_text:        'Are you a hotel or local business?',
+      b2b_link:        '→ Partner with SomaVio',
+      cta_headline:    'Your Alberta experience starts here.',
+      cta_btn:         'Explore Canmore →',
+    },
+    pt: {
+      hero_label:      'Guia Local · Alberta',
+      hero_title:      'Bem-vindo às<br><em>Montanhas Rochosas</em>',
+      hero_sub:        'Guia local para Canmore, Kananaskis e região.',
+      hero_cta:        'Explorar Canmore →',
+      hero_seal:       'CIDADE DE CANMORE · Alberta, Canadá',
+      alert_label:     '⚠ Alerta de Vida Selvagem',
+      alert_text:      'Atividade de urso grizzly reportada perto da Trilha Grassi Lakes. Verifique antes de sair.',
+      alert_source:    'Fonte: Parks Canada',
+      alert_btn:       'O que fazer →',
+      featured_title:  'O que está bom hoje',
+      featured_link:   'Ver todas as recomendações →',
+      cat_title:       'Explorar por categoria',
+      cat_link:        'Ver tudo →',
+      cat_outdoor:     'Aventuras ao Ar Livre',
+      cat_outdoor_sub: 'Trilhas, lagos e passeios guiados',
+      cat_dining:      'Gastronomia Local',
+      cat_dining_sub:  'Restaurantes, cafés e cervejarias',
+      cat_stay:        'Onde Ficar',
+      cat_stay_sub:    'Hotéis, pousadas e retiros',
+      cat_wellness:    'Bem-estar e Recuperação',
+      cat_wellness_sub:'Spas, sauna e relaxamento',
+      cat_arts:        'Arte e Cultura',
+      cat_arts_sub:    'Museus, galerias e eventos',
+      cat_family:      'Família',
+      cat_family_sub:  'Atividades para todas as idades',
+      tab_today:       'Hoje',
+      tab_week:        'Esta Semana',
+      today_link:      'Ver calendário completo →',
+      how_headline:    'Antes, durante e depois — estamos aqui.',
+      how_sub:         'O SomaVio apoia toda a sua jornada, da primeira ideia à última lembrança.',
+      how1_title:      'Planeje de forma mais inteligente',
+      how1_text:       'Salve ideias e obtenha contexto antes de chegar.',
+      how2_title:      'Tudo o que precisa, agora',
+      how2_text:       'Clima, segurança, ofertas e dicas locais — em um só lugar.',
+      how3_title:      'Depois do seu dia — ainda estamos aqui.',
+      how3_text:       'Seus lugares salvos e resumo da viagem, sempre acessíveis.',
+      timeline1_label: 'Antes da sua estadia',
+      timeline2_label: 'Durante a sua estadia',
+      timeline3_label: 'Após a sua estadia',
+      b2b_text:        'Você é um hotel ou negócio local?',
+      b2b_link:        '→ Seja parceiro SomaVio',
+      cta_headline:    'Sua experiência em Alberta começa aqui.',
+      cta_btn:         'Explorar Canmore →',
+    },
+    es: {
+      hero_label:      'Guía Local · Alberta',
+      hero_title:      'Bienvenido a las<br><em>Montañas Rocosas</em>',
+      hero_sub:        'Guía local para Canmore, Kananaskis y más allá.',
+      hero_cta:        'Explorar Canmore →',
+      hero_seal:       'CIUDAD DE CANMORE · Alberta, Canadá',
+      alert_label:     '⚠ Alerta de Vida Silvestre',
+      alert_text:      'Actividad de oso grizzly reportada cerca del Sendero Grassi Lakes. Verifique antes de salir.',
+      alert_source:    'Fuente: Parks Canada',
+      alert_btn:       'Qué hacer →',
+      featured_title:  'Lo mejor de hoy',
+      featured_link:   'Ver todas las recomendaciones →',
+      cat_title:       'Explorar por categoría',
+      cat_link:        'Ver todo →',
+      cat_outdoor:     'Aventuras al Aire Libre',
+      cat_outdoor_sub: 'Senderos, lagos y excursiones guiadas',
+      cat_dining:      'Gastronomía Local',
+      cat_dining_sub:  'Restaurantes, cafés y cervecerías',
+      cat_stay:        'Dónde Hospedarse',
+      cat_stay_sub:    'Hoteles, posadas y retiros',
+      cat_wellness:    'Bienestar y Recuperación',
+      cat_wellness_sub:'Spas, sauna y relajación',
+      cat_arts:        'Arte y Cultura',
+      cat_arts_sub:    'Museos, galerías y eventos',
+      cat_family:      'Familiar',
+      cat_family_sub:  'Actividades para todas las edades',
+      tab_today:       'Hoy',
+      tab_week:        'Esta Semana',
+      today_link:      'Ver calendario completo →',
+      how_headline:    'Antes, durante y después — estamos aquí.',
+      how_sub:         'SomaVio apoya todo tu viaje, desde la primera idea hasta el último recuerdo.',
+      how1_title:      'Planifica de manera más inteligente',
+      how1_text:       'Guarda ideas y obtén contexto antes de llegar.',
+      how2_title:      'Todo lo que necesitas, ahora',
+      how2_text:       'Clima, seguridad, ofertas y consejos locales — en un solo lugar.',
+      how3_title:      'Después de tu día — seguimos aquí.',
+      how3_text:       'Tus lugares guardados y el resumen del viaje, siempre accesibles.',
+      timeline1_label: 'Antes de tu estadía',
+      timeline2_label: 'Durante tu estadía',
+      timeline3_label: 'Después de tu estadía',
+      b2b_text:        '¿Eres un hotel o negocio local?',
+      b2b_link:        '→ Asóciate con SomaVio',
+      cta_headline:    'Tu experiencia en Alberta empieza aquí.',
+      cta_btn:         'Explorar Canmore →',
+    },
+    fr: {
+      hero_label:      'Guide Local · Alberta',
+      hero_title:      'Bienvenue dans les<br><em>Rocheuses canadiennes</em>',
+      hero_sub:        'Guide local pour Canmore, Kananaskis et au-delà.',
+      hero_cta:        'Explorer Canmore →',
+      hero_seal:       'VILLE DE CANMORE · Alberta, Canada',
+      alert_label:     '⚠ Alerte Faune Sauvage',
+      alert_text:      'Activité de grizzly signalée près du sentier Grassi Lakes. Vérifiez avant de partir.',
+      alert_source:    'Source : Parcs Canada',
+      alert_btn:       'Que faire →',
+      featured_title:  "Ce qui est bien aujourd'hui",
+      featured_link:   'Voir toutes les recommandations →',
+      cat_title:       'Explorer par catégorie',
+      cat_link:        'Voir tout →',
+      cat_outdoor:     'Aventures en Plein Air',
+      cat_outdoor_sub: 'Sentiers, lacs et randonnées guidées',
+      cat_dining:      'Gastronomie Locale',
+      cat_dining_sub:  'Restaurants, cafés et brasseries',
+      cat_stay:        'Où Séjourner',
+      cat_stay_sub:    'Hôtels, lodges et retraites',
+      cat_wellness:    'Bien-être et Récupération',
+      cat_wellness_sub:'Spas, sauna et relaxation',
+      cat_arts:        'Arts et Culture',
+      cat_arts_sub:    'Musées, galeries et événements',
+      cat_family:      'En Famille',
+      cat_family_sub:  'Activités pour tous les âges',
+      tab_today:       "Aujourd'hui",
+      tab_week:        'Cette Semaine',
+      today_link:      'Voir le calendrier complet →',
+      how_headline:    'Avant, pendant et après — nous sommes là.',
+      how_sub:         'SomaVio soutient tout votre voyage, de la première idée au dernier souvenir.',
+      how1_title:      'Planifiez plus intelligemment',
+      how1_text:       'Sauvegardez des idées et obtenez du contexte avant votre arrivée.',
+      how2_title:      'Tout ce dont vous avez besoin, maintenant',
+      how2_text:       'Météo, sécurité, offres et bons plans locaux — en un seul endroit.',
+      how3_title:      'Après votre journée — nous sommes toujours là.',
+      how3_text:       'Vos lieux sauvegardés et le récapitulatif de votre voyage, toujours accessibles.',
+      timeline1_label: 'Avant votre séjour',
+      timeline2_label: 'Pendant votre séjour',
+      timeline3_label: 'Après votre séjour',
+      b2b_text:        'Vous êtes un hôtel ou une entreprise locale ?',
+      b2b_link:        '→ Devenez partenaire SomaVio',
+      cta_headline:    'Votre expérience en Alberta commence ici.',
+      cta_btn:         'Explorer Canmore →',
+    },
+    ja: {
+      hero_label:      'ローカルガイド · アルバータ',
+      hero_title:      'カナディアンロッキーへ<br><em>ようこそ</em>',
+      hero_sub:        'キャンモア、カナナスキスとその周辺のローカルガイド。',
+      hero_cta:        'キャンモアを探索 →',
+      hero_seal:       'キャンモア市 · アルバータ州、カナダ',
+      alert_label:     '⚠ 野生動物警報',
+      alert_text:      'グラッシーレイクストレイル付近でグリズリーの目撃情報があります。出発前に確認してください。',
+      alert_source:    '情報源：パークスカナダ',
+      alert_btn:       '対処法を見る →',
+      featured_title:  '今日のおすすめ',
+      featured_link:   'すべての推薦を見る →',
+      cat_title:       'カテゴリ別に探す',
+      cat_link:        'すべて見る →',
+      cat_outdoor:     'アウトドアアドベンチャー',
+      cat_outdoor_sub: 'トレイル、湖、ガイドハイキング',
+      cat_dining:      'ダイニング＆地元グルメ',
+      cat_dining_sub:  'レストラン、カフェ、醸造所',
+      cat_stay:        '宿泊施設',
+      cat_stay_sub:    'ホテル、ロッジ、リトリート',
+      cat_wellness:    'ウェルネス＆リカバリー',
+      cat_wellness_sub:'スパ、サウナ、リラクゼーション',
+      cat_arts:        'アート＆文化',
+      cat_arts_sub:    '博物館、ギャラリー、イベント',
+      cat_family:      'ファミリー向け',
+      cat_family_sub:  'すべての年齢に適した活動',
+      tab_today:       '今日',
+      tab_week:        '今週',
+      today_link:      'カレンダー全体を見る →',
+      how_headline:    '前も、中も、後も — ここにいます。',
+      how_sub:         'SomaVioは最初のアイデアから最後の思い出まで、旅全体をサポートします。',
+      how1_title:      'スマートに計画する',
+      how1_text:       '到着前にアイデアを保存してコンテキストを取得。',
+      how2_title:      '今必要なものすべてを',
+      how2_text:       '天気、安全、特典、地元情報 — 一か所に。',
+      how3_title:      '一日の後も — まだここにいます。',
+      how3_text:       '保存したスポットと旅のまとめ、いつでもアクセス可能。',
+      timeline1_label: '滞在前',
+      timeline2_label: '滞在中',
+      timeline3_label: '滞在後',
+      b2b_text:        'ホテルや地元ビジネスですか？',
+      b2b_link:        '→ SomaVioのパートナーになる',
+      cta_headline:    'アルバータ体験はここから始まります。',
+      cta_btn:         'キャンモアを探索 →',
+    },
+    ko: {
+      hero_label:      '로컬 가이드 · 앨버타',
+      hero_title:      '캐나다 로키 산맥에<br><em>오신 것을 환영합니다</em>',
+      hero_sub:        '캔모어, 카나나스키스 및 그 너머의 로컬 가이드.',
+      hero_cta:        '캔모어 탐색 →',
+      hero_seal:       '캔모어 시 · 앨버타주, 캐나다',
+      alert_label:     '⚠ 야생동물 경보',
+      alert_text:      '그래시 레이크스 트레일 근처에서 회색곰 활동이 보고되었습니다. 출발 전 확인하세요.',
+      alert_source:    '출처: 파크스 캐나다',
+      alert_btn:       '대처 방법 →',
+      featured_title:  '오늘의 추천',
+      featured_link:   '모든 추천 보기 →',
+      cat_title:       '카테고리별 탐색',
+      cat_link:        '전체 보기 →',
+      cat_outdoor:     '야외 모험',
+      cat_outdoor_sub: '트레일, 호수 및 가이드 하이킹',
+      cat_dining:      '다이닝 & 로컬 맛집',
+      cat_dining_sub:  '레스토랑, 카페 및 양조장',
+      cat_stay:        '숙박 시설',
+      cat_stay_sub:    '호텔, 롯지 및 리트리트',
+      cat_wellness:    '웰니스 & 회복',
+      cat_wellness_sub:'스파, 사우나 및 휴식',
+      cat_arts:        '예술 & 문화',
+      cat_arts_sub:    '박물관, 갤러리 및 이벤트',
+      cat_family:      '가족 친화적',
+      cat_family_sub:  '모든 연령을 위한 활동',
+      tab_today:       '오늘',
+      tab_week:        '이번 주',
+      today_link:      '전체 캘린더 보기 →',
+      how_headline:    '전에도, 중에도, 후에도 — 여기 있습니다.',
+      how_sub:         'SomaVio는 첫 번째 아이디어부터 마지막 기억까지 전체 여정을 지원합니다.',
+      how1_title:      '더 스마트하게 계획하기',
+      how1_text:       '도착 전에 아이디어를 저장하고 정보를 얻으세요.',
+      how2_title:      '지금 필요한 모든 것',
+      how2_text:       '날씨, 안전, 혜택 및 로컬 정보 — 한 곳에서.',
+      how3_title:      '하루가 끝난 후에도 — 여전히 여기 있습니다.',
+      how3_text:       '저장한 장소와 여행 요약, 언제든지 접근 가능.',
+      timeline1_label: '숙박 전',
+      timeline2_label: '숙박 중',
+      timeline3_label: '숙박 후',
+      b2b_text:        '호텔이나 로컬 비즈니스이신가요?',
+      b2b_link:        '→ SomaVio 파트너 되기',
+      cta_headline:    '앨버타 경험은 여기서 시작됩니다.',
+      cta_btn:         '캔모어 탐색 →',
+    }
+  };
+
+  const DEFAULT_LANG = 'en';
+
+  function applyLang(lang) {
+    const dict = TRANSLATIONS[lang] || TRANSLATIONS[DEFAULT_LANG];
+
+    /* data-i18n → textContent */
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+
+    /* data-i18n-html → innerHTML (para tags <br> e <em>) */
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+
+    document.documentElement.lang = lang;
+    localStorage.setItem('sv_lang', lang);
+  }
+
+  /* ── Wildlife Modal ── */
+  function openWildlifeModal() {
+    const modal = document.getElementById('wildlife-modal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeWildlifeModal() {
+    const modal = document.getElementById('wildlife-modal');
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeWildlifeModal();
+  });
+
+  /* ── Language dropdown ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    const langToggle = document.getElementById('lang-toggle');
+    const langDropdown = document.getElementById('lang-dropdown');
+
+    if (langToggle && langDropdown) {
+      langToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langDropdown.classList.toggle('open');
+        langToggle.setAttribute('aria-expanded', langDropdown.classList.contains('open'));
+      });
+
+      document.addEventListener('click', () => {
+        langDropdown.classList.remove('open');
+        langToggle.setAttribute('aria-expanded', 'false');
+      });
+
+      document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const lang = this.getAttribute('data-lang');
+          const label = lang.toUpperCase();
+
+          /* Aplica tradução instantânea */
+          applyLang(lang);
+
+          /* Atualiza UI do seletor */
+          document.querySelectorAll('.lang-option').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          langToggle.innerHTML = `${label} <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>`;
+          langDropdown.classList.remove('open');
+        });
+      });
+
+      /* Aplica idioma salvo ao carregar */
+      const saved = localStorage.getItem('sv_lang');
+      if (saved && saved !== DEFAULT_LANG && TRANSLATIONS[saved]) {
+        applyLang(saved);
+        const btn = document.querySelector(`.lang-option[data-lang="${saved}"]`);
+        if (btn) {
+          document.querySelectorAll('.lang-option').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          langToggle.innerHTML = `${saved.toUpperCase()} <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>`;
+        }
+      }
+    }
+
+    /* Today / This Week tabs */
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        this.classList.add('active');
+        this.setAttribute('aria-selected', 'true');
+      });
+    });
+
+    /* Sincroniza drawer-lang-btn com idioma salvo */
+    const savedLang = localStorage.getItem('sv_lang') || 'en';
+    document.querySelectorAll('.drawer-lang-btn').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-lang') === savedLang);
+    });
+  });
+
+  /* ── Drawer ── */
+  function openDrawer(){
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawer-overlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function closeDrawer(){
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawer-overlay').classList.remove('open');
+    document.body.style.overflow='';
+  }
+  function setLang(btn){
+    const lang=btn.getAttribute('data-lang');
+    document.querySelectorAll('.drawer-lang-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    if(typeof applyLang==='function') applyLang(lang);
+    else localStorage.setItem('sv_lang',lang);
+    const lt=document.getElementById('lang-toggle');
+    if(lt) lt.innerHTML=lang.toUpperCase()+' <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>';
+    // Sincroniza lang-option do header dropdown
+    document.querySelectorAll('.lang-option').forEach(b=>b.classList.toggle('active',b.getAttribute('data-lang')===lang));
+    closeDrawer();
+  }
+</script>
+
+<script src="assets/js/somavio-live.js" defer></script>
+</body>
+</html>

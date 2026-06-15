@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SomaVio | My Trip</title>
+  <meta name="description" content="Plan your Canmore adventure. Save places, organize by time of day, check weather and official conditions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    :root {
+      --stone:       #2C2C2A;
+      --sage:        #6B7F6E;
+      --mist:        #F4F1EC;
+      --glacier:     #D6E4E1;
+      --amber:       #C8923A;
+      --slate:       #4A5568;
+      --white:       #FFFFFF;
+      --care-teal:   #0D9488;
+      --care-amber:  #D97706;
+      --shadow-1: 0 1px 3px rgba(44,44,42,0.08);
+      --shadow-2: 0 4px 12px rgba(44,44,42,0.12);
+      --r-card: 8px;
+      --r-btn:  6px;
+      --r-pill: 100px;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--mist);
+      color: var(--stone);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    ul { list-style: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .label-caps { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+
+    /* ── Context Bar ── */
+    .context-bar {
+      position: sticky; top: 0; z-index: 100;
+      height: 36px; background: var(--mist);
+      border-bottom: 1px solid rgba(44,44,42,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; color: var(--slate);
+      letter-spacing: 0.04em;
+    }
+    .ctx-accent { color: var(--sage); font-weight: 600; }
+
+    /* ── Header ── */
+    .site-header {
+      position: sticky; top: 36px; z-index: 99;
+      height: 64px; background: var(--stone);
+      display: flex; align-items: center;
+    }
+    .header-inner {
+      display: flex; align-items: center; width: 100%;
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 20px;
+      color: var(--white); font-weight: 700; flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 32px; height: 32px; background: var(--amber);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { color: var(--white); }
+    .main-nav {
+      display: flex; align-items: center; gap: 4px;
+      margin-left: 36px; flex: 1;
+    }
+    .main-nav a {
+      padding: 6px 11px; font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.8); border-radius: var(--r-btn);
+      transition: color 0.2s, background 0.2s;
+    }
+    .main-nav a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+    .header-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+    .lang-selector-wrap { position: relative; }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px; border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: var(--r-pill); color: var(--white);
+      font-size: 13px; font-weight: 500; background: transparent;
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .lang-toggle:hover { border-color: rgba(255,255,255,0.4); }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-2); padding: 8px; min-width: 140px;
+      display: none; flex-direction: column; gap: 2px; z-index: 200;
+    }
+    .lang-dropdown.open { display: flex; }
+    .lang-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; color: var(--slate);
+      background: none; cursor: pointer; text-align: left; width: 100%;
+      transition: background 0.15s;
+    }
+    .lang-option:hover { background: var(--mist); }
+    .lang-option.active { font-weight: 600; color: var(--stone); background: var(--glacier); }
+    .lang-flag { font-size: 16px; }
+
+    /* ── Trip Header ── */
+    .trip-header {
+      background: var(--stone); padding: 48px 0 40px;
+    }
+    .trip-header-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+    }
+    .trip-title {
+      font-family: var(--font-display); font-size: 40px;
+      color: var(--white); font-weight: 400; margin-bottom: 8px;
+    }
+    .trip-sub { font-size: 15px; color: var(--glacier); }
+    .trip-count-badge {
+      background: var(--sage); color: var(--white);
+      font-size: 14px; font-weight: 600; padding: 10px 20px;
+      border-radius: var(--r-pill); white-space: nowrap;
+      display: flex; align-items: center; gap: 8px;
+      align-self: flex-start; margin-top: 8px;
+    }
+    .trip-count-badge svg { width: 16px; height: 16px; }
+
+    /* ── Filters ── */
+    .trip-filters {
+      background: var(--white);
+      border-bottom: 1px solid rgba(44,44,42,0.08);
+      padding: 14px 0;
+    }
+    .trip-filters-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .filter-label { font-size: 12px; font-weight: 700; color: var(--slate); margin-right: 4px; }
+    .filter-btn {
+      padding: 7px 16px; border-radius: var(--r-pill);
+      font-size: 13px; font-weight: 600; color: var(--slate);
+      border: 1.5px solid var(--glacier); background: var(--white);
+      transition: all 0.2s; cursor: pointer;
+    }
+    .filter-btn.active { background: var(--stone); color: var(--white); border-color: var(--stone); }
+    .filter-btn:hover:not(.active) { border-color: var(--sage); color: var(--sage); }
+
+    /* ── Main layout — 2 col ── */
+    .trip-layout {
+      display: grid; grid-template-columns: 1fr 340px;
+      gap: 24px; align-items: start;
+      max-width: 1280px; margin: 0 auto; padding: 32px 40px;
+    }
+
+    /* ── Trip list ── */
+    .trip-list { display: flex; flex-direction: column; gap: 12px; }
+
+    /* Empty state */
+    .trip-empty {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 64px 40px; text-align: center;
+    }
+    .trip-empty-icon {
+      width: 64px; height: 64px; background: var(--glacier);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; color: var(--sage);
+    }
+    .trip-empty-icon svg { width: 28px; height: 28px; }
+    .trip-empty-title {
+      font-family: var(--font-display); font-size: 24px;
+      color: var(--stone); font-weight: 700; margin-bottom: 10px;
+    }
+    .trip-empty-sub {
+      font-size: 14px; color: var(--slate); margin-bottom: 24px;
+      max-width: 420px; margin-left: auto; margin-right: auto; line-height: 1.6;
+    }
+    .trip-empty-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--sage); color: var(--white);
+      padding: 13px 24px; border-radius: var(--r-btn);
+      font-size: 14px; font-weight: 600; transition: background 0.2s;
+    }
+    .trip-empty-cta:hover { background: #5a6f60; }
+
+    /* Trip items */
+    .trip-item {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 18px 20px;
+      display: grid; grid-template-columns: 80px 1fr auto;
+      gap: 16px; align-items: center;
+      transition: box-shadow 0.2s;
+    }
+    .trip-item:hover { box-shadow: var(--shadow-2); }
+    .trip-item-img { width: 80px; height: 80px; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
+    .trip-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .trip-item-title { font-size: 15px; font-weight: 600; color: var(--stone); margin-bottom: 4px; }
+    .trip-item-meta { font-size: 12px; color: var(--slate); margin-bottom: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .trip-item-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: var(--r-pill); background: var(--glacier); color: var(--stone); }
+    .trip-item-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .trip-item-period {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--slate);
+    }
+    .trip-item-period select {
+      border: 1px solid var(--glacier); border-radius: 4px;
+      padding: 4px 8px; font-size: 12px; color: var(--stone);
+      background: var(--white); font-family: var(--font-body); cursor: pointer;
+    }
+    .trip-item-remove {
+      font-size: 11px; color: var(--slate); cursor: pointer;
+      transition: color 0.2s;
+    }
+    .trip-item-remove:hover { color: var(--stone); }
+
+    /* What's good today section */
+    .whats-good {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 24px; margin-top: 24px;
+    }
+    .whats-good-label {
+      font-size: 10px; font-weight: 700; color: var(--amber);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+    }
+    .whats-good-title { font-size: 16px; font-weight: 700; color: var(--stone); margin-bottom: 6px; }
+    .whats-good-sub { font-size: 13px; color: var(--slate); line-height: 1.5; margin-bottom: 16px; }
+    .whats-good-cards { display: flex; flex-direction: column; gap: 10px; }
+    .suggestion-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px; background: var(--mist); border-radius: 6px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .suggestion-item:hover { background: var(--glacier); }
+    .suggestion-img { width: 48px; height: 48px; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
+    .suggestion-img img { width: 100%; height: 100%; object-fit: cover; }
+    .suggestion-title { font-size: 13px; font-weight: 600; color: var(--stone); margin-bottom: 2px; }
+    .suggestion-meta { font-size: 11px; color: var(--slate); }
+    .suggestion-add { margin-left: auto; flex-shrink: 0; color: var(--sage); font-size: 12px; font-weight: 600; }
+
+    /* ── Sidebar ── */
+    .trip-sidebar { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 120px; }
+
+    .sidebar-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); padding: 20px;
+    }
+    .sidebar-card-title { font-size: 14px; font-weight: 700; color: var(--stone); margin-bottom: 14px; }
+
+    /* Weather summary */
+    .weather-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .weather-temp { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--stone); }
+    .weather-cond { font-size: 13px; color: var(--slate); }
+    .weather-detail { font-size: 12px; color: var(--slate); display: flex; gap: 12px; flex-wrap: wrap; }
+    .weather-source { font-size: 11px; font-weight: 600; color: rgba(74,85,104,0.6); margin-top: 8px; }
+
+    /* Official checks links */
+    .checks-list { display: flex; flex-direction: column; gap: 10px; }
+    .check-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 600; color: var(--stone);
+      background: var(--mist); transition: background 0.2s;
+    }
+    .check-link svg { width: 15px; height: 15px; color: var(--sage); flex-shrink: 0; }
+    .check-link:hover { background: var(--glacier); }
+    .check-link-arrow { margin-left: auto; color: var(--sage); font-size: 12px; }
+
+    /* Offline save */
+    .offline-card {
+      background: rgba(107,127,110,0.08);
+      border: 1.5px solid var(--glacier);
+      border-radius: var(--r-card); padding: 20px;
+    }
+    .offline-title { font-size: 14px; font-weight: 700; color: var(--stone); margin-bottom: 6px; }
+    .offline-sub { font-size: 12px; color: var(--slate); margin-bottom: 14px; line-height: 1.5; }
+    .offline-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; background: var(--sage); color: var(--white);
+      padding: 11px; border-radius: var(--r-btn); font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none; transition: background 0.2s;
+    }
+    .offline-btn:hover { background: #5a6f60; }
+    .offline-btn svg { width: 15px; height: 15px; }
+
+    /* ── Footer B2B ── */
+    .footer-b2b { background: var(--stone); padding: 64px 0 32px; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1.3fr 1fr; gap: 40px; margin-bottom: 32px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 18px; color: var(--white); font-weight: 700; margin-bottom: 12px; }
+    .footer-tagline { font-size: 13px; color: var(--glacier); margin-bottom: 6px; }
+    .footer-copy { font-size: 11px; color: var(--slate); }
+    .footer-col-title { color: var(--glacier); margin-bottom: 14px; }
+    .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 9px; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-message { font-size: 11px; color: var(--slate); line-height: 1.6; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+
+    /* ── Responsive ── */
+    @media (max-width: 980px) {
+      .trip-layout { grid-template-columns: 1fr; }
+      .trip-sidebar { position: static; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .container { padding: 0 16px; }
+      .header-inner { padding: 0 16px; }
+      .main-nav { display: none; }
+      .trip-header-inner { padding: 0 16px; flex-direction: column; align-items: flex-start; }
+      .trip-title { font-size: 30px; }
+      .trip-filters-inner { padding: 0 16px; }
+      .trip-layout { padding: 20px 16px; }
+      .trip-item { grid-template-columns: 64px 1fr; }
+      .trip-item-actions { grid-column: 1 / -1; flex-direction: row; align-items: center; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- [1] CONTEXT BAR -->
+<div class="context-bar">
+  <span><span class="ctx-accent">My Trip · SomaVio</span></span>
+</div>
+
+<!-- [2] HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo" aria-label="SomaVio home">
+      <span class="logo-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </span>
+      SomaVio
+    </a>
+    <nav class="main-nav" aria-label="Site navigation">
+      <a href="index.html">Explore</a>
+      <a href="#">Stay</a>
+      <a href="#">Eat</a>
+      <a href="trip.html" style="color:var(--white);">Plan Your Day</a>
+      <a href="safety.html">Safety</a><a href="local-rules.html">Local Rules</a>
+      <a href="#">About Canmore</a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-selector-wrap">
+        <button class="lang-toggle" id="lang-toggle" aria-label="Language selector" aria-expanded="false">
+          EN
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button class="lang-option active" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
+          <button class="lang-option" data-lang="pt"><span class="lang-flag">🇧🇷</span> Português</button>
+          <button class="lang-option" data-lang="es"><span class="lang-flag">🇪🇸</span> Español</button>
+          <button class="lang-option" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
+          <button class="lang-option" data-lang="ja"><span class="lang-flag">🇯🇵</span> 日本語</button>
+          <button class="lang-option" data-lang="ko"><span class="lang-flag">🇰🇷</span> 한국어</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TRIP HEADER -->
+<section class="trip-header">
+  <div class="trip-header-inner">
+    <div>
+      <h1 class="trip-title">My Trip</h1>
+      <p class="trip-sub">Your personal plan for Canmore. Save places, organize by time of day.</p>
+    </div>
+    <div class="trip-count-badge" id="trip-badge">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      <span id="badge-text">0 places saved</span>
+    </div>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="trip-filters">
+  <div class="trip-filters-inner">
+    <span class="filter-label">Show:</span>
+    <button class="filter-btn active" data-period="all" onclick="filterPeriod('all', this)">All</button>
+    <button class="filter-btn" data-period="morning" onclick="filterPeriod('morning', this)">Morning</button>
+    <button class="filter-btn" data-period="afternoon" onclick="filterPeriod('afternoon', this)">Afternoon</button>
+    <button class="filter-btn" data-period="evening" onclick="filterPeriod('evening', this)">Evening</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+  <div class="trip-layout">
+
+    <!-- LEFT — Trip list -->
+    <div>
+      <div class="trip-list" id="trip-list">
+        <!-- Empty state — shown by default, hidden when items exist -->
+        <div class="trip-empty" id="trip-empty">
+          <div class="trip-empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h2 class="trip-empty-title">No stops saved yet</h2>
+          <p class="trip-empty-sub">Explore Canmore and save places to build your personal plan. We'll help you organize by time of day and keep track of what's good right now.</p>
+          <a href="category.html" class="trip-empty-cta">
+            Start exploring →
+          </a>
+        </div>
+
+        <!-- Demo items — shown in demo mode -->
+        <div id="demo-items" style="display:none;">
+          <div class="trip-item" data-period="morning">
+            <div class="trip-item-img">
+              <img data-sv-image="outdoor" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=160&q=75&auto=format&fit=crop" alt="Grassi Lakes" loading="lazy" />
+            </div>
+            <div>
+              <div class="trip-item-title">Grassi Lakes Trail</div>
+              <div class="trip-item-meta">Easy · 5.6 km · 2–3 hrs</div>
+              <span class="trip-item-tag">Hiking</span>
+            </div>
+            <div class="trip-item-actions">
+              <div class="trip-item-period">
+                <select onchange="updatePeriod(this)">
+                  <option value="morning" selected>Morning</option>
+                  <option value="afternoon">Afternoon</option>
+                  <option value="evening">Evening</option>
+                </select>
+              </div>
+              <span class="trip-item-remove" onclick="removeItem(this)">Remove</span>
+            </div>
+          </div>
+
+          <div class="trip-item" data-period="afternoon">
+            <div class="trip-item-img">
+              <img data-sv-image="cafe" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=160&q=75&auto=format&fit=crop" alt="Mountain Grind Cafe" loading="lazy" />
+            </div>
+            <div>
+              <div class="trip-item-title">Mountain Grind Café</div>
+              <div class="trip-item-meta">Open until 5 PM · Walk-in welcome</div>
+              <span class="trip-item-tag">Café</span>
+            </div>
+            <div class="trip-item-actions">
+              <div class="trip-item-period">
+                <select onchange="updatePeriod(this)">
+                  <option value="morning">Morning</option>
+                  <option value="afternoon" selected>Afternoon</option>
+                  <option value="evening">Evening</option>
+                </select>
+              </div>
+              <span class="trip-item-remove" onclick="removeItem(this)">Remove</span>
+            </div>
+          </div>
+
+          <div class="trip-item" data-period="evening">
+            <div class="trip-item-img">
+              <img data-sv-image="wellness" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=160&q=75&auto=format&fit=crop" alt="Summit Wellness Spa" loading="lazy" />
+            </div>
+            <div>
+              <div class="trip-item-title">Summit Wellness Spa</div>
+              <div class="trip-item-meta">Post-hike recovery · Same-day booking</div>
+              <span class="trip-item-tag">Wellness</span>
+            </div>
+            <div class="trip-item-actions">
+              <div class="trip-item-period">
+                <select onchange="updatePeriod(this)">
+                  <option value="morning">Morning</option>
+                  <option value="afternoon">Afternoon</option>
+                  <option value="evening" selected>Evening</option>
+                </select>
+              </div>
+              <span class="trip-item-remove" onclick="removeItem(this)">Remove</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- What's good today suggestion -->
+      <div class="whats-good" id="whats-good">
+        <div class="whats-good-label">What's good today</div>
+        <h3 class="whats-good-title">Add these to your plan</h3>
+        <p class="whats-good-sub">Based on current conditions and time of day — things that are actually good right now.</p>
+        <div class="whats-good-cards">
+          <div class="suggestion-item" onclick="addSuggestion('Canmore Nordic Centre', 'Activities')">
+            <div class="suggestion-img">
+              <img data-sv-image="rental" src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=96&q=75&auto=format&fit=crop" alt="Nordic Centre" loading="lazy" />
+            </div>
+            <div>
+              <div class="suggestion-title">Canmore Nordic Centre</div>
+              <div class="suggestion-meta">Trail network · Open now · 1–5 hrs</div>
+            </div>
+            <span class="suggestion-add">+ Add</span>
+          </div>
+          <div class="suggestion-item" onclick="addSuggestion('The Grizzly Paw', 'Dining')">
+            <div class="suggestion-img">
+              <img data-sv-image="restaurant" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=96&q=75&auto=format&fit=crop" alt="Grizzly Paw" loading="lazy" />
+            </div>
+            <div>
+              <div class="suggestion-title">The Grizzly Paw</div>
+              <div class="suggestion-meta">Dining · Open for dinner</div>
+            </div>
+            <span class="suggestion-add">+ Add</span>
+          </div>
+          <div class="suggestion-item" onclick="addSuggestion('Kananaskis Valley Trail', 'Hiking')">
+            <div class="suggestion-img">
+              <img data-sv-image="outdoor" src="https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=96&q=75&auto=format&fit=crop" alt="Kananaskis" loading="lazy" />
+            </div>
+            <div>
+              <div class="suggestion-title">Kananaskis Valley Trail</div>
+              <div class="suggestion-meta">Hiking · Moderate · Open now</div>
+            </div>
+            <span class="suggestion-add">+ Add</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT — Sidebar -->
+    <aside class="trip-sidebar">
+
+      <!-- Weather -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Today's conditions</div>
+        <div class="weather-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--amber)"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <div>
+            <div class="weather-temp">18°C</div>
+            <div class="weather-cond">Partly cloudy</div>
+          </div>
+        </div>
+        <div class="weather-detail">
+          <span>Wind: 12 km/h</span>
+          <span>UV: Moderate</span>
+          <span>Sunrise: 5:48 AM</span>
+        </div>
+        <div class="weather-source">Source: Environment Canada</div>
+      </div>
+
+      <!-- Official checks quick links -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Check before you go</div>
+        <div class="checks-list">
+          <a href="https://albertaparks.ca/conservancy/visit-us/kananaskis/plan-your-visit/trail-reports/" target="_blank" rel="noopener" class="check-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6l9-3 9 3M3 18l9 3 9-3"/></svg>
+            Trail conditions
+            <span class="check-link-arrow">↗</span>
+          </a>
+          <a href="https://www.pc.gc.ca/en/pn-np/ab/banff-radium/securite-safety" target="_blank" rel="noopener" class="check-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Wildlife alerts
+            <span class="check-link-arrow">↗</span>
+          </a>
+          <a href="https://www.weather.gc.ca/city/pages/ab-52_metric_e.html" target="_blank" rel="noopener" class="check-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a7 7 0 0 0 0-14z"/></svg>
+            Weather forecast
+            <span class="check-link-arrow">↗</span>
+          </a>
+          <a href="safety.html" class="check-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            All safety checks →
+            <span class="check-link-arrow"></span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Offline save -->
+      <div class="offline-card">
+        <div class="offline-title">Save for offline</div>
+        <div class="offline-sub">Download your trip plan and maps to use without internet. Works in areas with no signal.</div>
+        <button class="offline-btn" onclick="saveOffline()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Save for offline
+        </button>
+      </div>
+
+    </aside>
+  </div>
+</main>
+
+<!-- FOOTER B2B -->
+<footer class="footer-b2b">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <span class="logo-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </span>
+          SomaVio
+        </div>
+        <p class="footer-tagline">Local guidance for Alberta.</p>
+        <p class="footer-copy">© 2025 SomaVio</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Visitors</div>
+        <a href="index.html">Explore</a>
+        <a href="category.html">Categories</a>
+        <a href="trip.html">Plan Your Day</a>
+        <a href="safety.html">Safety</a><a href="local-rules.html">Local Rules</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Partners</div>
+        <a href="hotels.html">For Hotels</a>
+        <a href="partners.html">For Local Businesses</a>
+        <a href="organizations.html">For Organizations</a>
+        <a href="studio.html">Partner Studio</a>
+        <p class="footer-message">SomaVio complements existing systems. It does not replace PMS, OTA or emergency procedures.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">Legal</div>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── Trip state ── */
+  let demoMode = false;
+  let savedItems = [];
+
+  function loadFromStorage() {
+    try {
+      const raw = localStorage.getItem('sv_trip');
+      if (raw) savedItems = JSON.parse(raw);
+    } catch (e) { savedItems = []; }
+    updateBadge();
+  }
+
+  function updateBadge() {
+    const total = demoMode ? 3 : savedItems.length;
+    const badge = document.getElementById('badge-text');
+    if (badge) badge.textContent = `${total} place${total !== 1 ? 's' : ''} saved`;
+  }
+
+  /* ── Demo toggle (for presentation) ── */
+  function showDemo() {
+    demoMode = true;
+    document.getElementById('trip-empty').style.display = 'none';
+    document.getElementById('demo-items').style.display = 'block';
+    updateBadge();
+  }
+
+  /* ── Period filter ── */
+  function filterPeriod(period, btn) {
+    document.querySelectorAll('.trip-filters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.trip-item').forEach(item => {
+      if (period === 'all' || item.getAttribute('data-period') === period) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  /* ── Add suggestion ── */
+  function addSuggestion(name, category) {
+    if (!savedItems.includes(name)) {
+      savedItems.push(name);
+      try { localStorage.setItem('sv_trip', JSON.stringify(savedItems)); } catch (e) {}
+    }
+    showDemo();
+    updateBadge();
+  }
+
+  /* ── Remove item ── */
+  function removeItem(btn) {
+    const item = btn.closest('.trip-item');
+    if (item) {
+      item.style.opacity = '0';
+      item.style.transition = 'opacity 0.2s';
+      setTimeout(() => {
+        item.remove();
+        updateBadge();
+        const remaining = document.querySelectorAll('#demo-items .trip-item');
+        if (remaining.length === 0) {
+          demoMode = false;
+          document.getElementById('trip-empty').style.display = 'block';
+          document.getElementById('demo-items').style.display = 'none';
+          updateBadge();
+        }
+      }, 200);
+    }
+  }
+
+  /* ── Update period ── */
+  function updatePeriod(select) {
+    const item = select.closest('.trip-item');
+    if (item) item.setAttribute('data-period', select.value);
+  }
+
+  /* ── Offline save ── */
+  function saveOffline() {
+    const btn = document.querySelector('.offline-btn');
+    if (btn) {
+      btn.textContent = '✓ Saved for offline';
+      btn.style.background = '#0D9488';
+      setTimeout(() => {
+        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Save for offline`;
+        btn.style.background = '';
+      }, 2000);
+    }
+  }
+
+  /* ── Language dropdown ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    loadFromStorage();
+
+    const langToggle = document.getElementById('lang-toggle');
+    const langDropdown = document.getElementById('lang-dropdown');
+    langToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown.classList.toggle('open');
+      langToggle.setAttribute('aria-expanded', langDropdown.classList.contains('open'));
+    });
+    document.addEventListener('click', () => {
+      langDropdown?.classList.remove('open');
+      langToggle?.setAttribute('aria-expanded', 'false');
+    });
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      btn.addEventListener('click', function() {
+        localStorage.setItem('sv_lang', this.getAttribute('data-lang'));
+        document.querySelectorAll('.lang-option').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    /* Auto-show demo if items saved from other pages */
+    if (savedItems.length > 0) showDemo();
+  });
+</script>
+
+
+<!-- DRAWER GLOBAL -->
+<style>
+.drawer-overlay{position:fixed;inset:0;z-index:500;background:rgba(44,44,42,0.55);opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:501;width:min(320px,85vw);background:#2C2C2A;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.drawer-logo{display:flex;align-items:center;gap:8px;font-family:Georgia,serif;font-size:18px;color:#fff;font-weight:700;}
+.drawer-logo-icon{width:28px;height:28px;background:#C8923A;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.drawer-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:rgba(255,255,255,0.7);}
+.drawer-nav{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.drawer-nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);padding:12px 20px 6px;}
+.drawer-nav a{display:flex;align-items:center;gap:12px;padding:12px 20px;font-size:15px;font-weight:500;color:rgba(255,255,255,0.82);transition:background 0.15s;text-decoration:none;}
+.drawer-nav a:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.drawer-nav a svg{width:17px;height:17px;color:#6B7F6E;flex-shrink:0;}
+.drawer-lang{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+.drawer-lang-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);margin-bottom:10px;}
+.drawer-lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.drawer-lang-btn{padding:9px 6px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;cursor:pointer;text-align:center;}
+.drawer-lang-btn.active{background:#6B7F6E;border-color:#6B7F6E;color:#fff;}
+.drawer-footer{margin-top:auto;padding:16px 20px;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;border-top:1px solid rgba(255,255,255,0.06);}
+</style>
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Navigation menu">
+  <div class="drawer-header">
+    <div class="drawer-logo"><div class="drawer-logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>SomaVio</div>
+    <button class="drawer-close" onclick="closeDrawer()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-nav">
+    <div class="drawer-nav-label">Navigate</div>
+    <a href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</a>
+    <a href="category.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>Explore Canmore</a>
+    <a href="trip.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Plan Your Day</a>
+    <a href="safety.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Safety</a>
+    <a href="hotel.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Guest Hub</a>
+    <a href="partners.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>For Partners</a>
+  </div>
+  <div class="drawer-lang">
+    <div class="drawer-lang-label">Language</div>
+    <div class="drawer-lang-grid">
+      <button class="drawer-lang-btn active" data-lang="en" onclick="setDrawerLang(this)">🇬🇧 EN</button>
+      <button class="drawer-lang-btn" data-lang="pt" onclick="setDrawerLang(this)">🇧🇷 PT</button>
+      <button class="drawer-lang-btn" data-lang="es" onclick="setDrawerLang(this)">🇪🇸 ES</button>
+      <button class="drawer-lang-btn" data-lang="fr" onclick="setDrawerLang(this)">🇫🇷 FR</button>
+      <button class="drawer-lang-btn" data-lang="ja" onclick="setDrawerLang(this)">🇯🇵 JA</button>
+      <button class="drawer-lang-btn" data-lang="ko" onclick="setDrawerLang(this)">🇰🇷 KO</button>
+    </div>
+  </div>
+  <div class="drawer-footer">SomaVio · Local guidance for Alberta<br>© 2025</div>
+</div>
+<script>
+function openDrawer(){document.getElementById("drawer").classList.add("open");document.getElementById("drawer-overlay").classList.add("open");document.body.style.overflow="hidden";}
+function closeDrawer(){document.getElementById("drawer").classList.remove("open");document.getElementById("drawer-overlay").classList.remove("open");document.body.style.overflow="";}
+function setDrawerLang(btn){document.querySelectorAll(".drawer-lang-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");localStorage.setItem("sv_lang",btn.getAttribute("data-lang"));closeDrawer();}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeDrawer();});
+</script>
+
+<script src="assets/js/somavio-live.js" defer></script>
+</body>
+</html>

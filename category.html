@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SomaVio | Outdoor Adventures</title>
+  <meta name="description" content="Explore outdoor adventures in Canmore and Kananaskis — trails, guided hikes and mountain experiences shown by context, not paid placement." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    :root {
+      --stone:       #2C2C2A;
+      --sage:        #6B7F6E;
+      --mist:        #F4F1EC;
+      --glacier:     #D6E4E1;
+      --amber:       #C8923A;
+      --slate:       #4A5568;
+      --white:       #FFFFFF;
+      --care-teal:   #0D9488;
+      --care-amber:  #D97706;
+      --shadow-1: 0 1px 3px rgba(44,44,42,0.08);
+      --shadow-2: 0 4px 12px rgba(44,44,42,0.12);
+      --r-card: 8px;
+      --r-btn:  6px;
+      --r-pill: 100px;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--mist);
+      color: var(--stone);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    ul { list-style: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .label-caps { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+
+    /* ── Context Bar ── */
+    .context-bar {
+      position: sticky; top: 0; z-index: 100;
+      height: 36px; background: var(--mist);
+      border-bottom: 1px solid rgba(44,44,42,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; color: var(--slate);
+      letter-spacing: 0.04em;
+    }
+    .ctx-accent { color: var(--sage); font-weight: 600; }
+
+    /* ── Header ── */
+    .site-header {
+      position: sticky; top: 36px; z-index: 99;
+      height: 64px; background: var(--stone);
+      display: flex; align-items: center;
+    }
+    .header-inner {
+      display: flex; align-items: center; width: 100%;
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 20px;
+      color: var(--white); font-weight: 700; flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 32px; height: 32px; background: var(--amber);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { color: var(--white); }
+    .main-nav {
+      display: flex; align-items: center; gap: 4px;
+      margin-left: 36px; flex: 1;
+    }
+    .main-nav a {
+      padding: 6px 11px; font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.8); border-radius: var(--r-btn);
+      transition: color 0.2s, background 0.2s;
+    }
+    .main-nav a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+    .header-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+    .lang-selector-wrap { position: relative; }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px; border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: var(--r-pill); color: var(--white);
+      font-size: 13px; font-weight: 500; background: transparent;
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .lang-toggle:hover { border-color: rgba(255,255,255,0.4); }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-2); padding: 8px; min-width: 140px;
+      display: none; flex-direction: column; gap: 2px; z-index: 200;
+    }
+    .lang-dropdown.open { display: flex; }
+    .lang-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; color: var(--slate);
+      background: none; cursor: pointer; text-align: left; width: 100%;
+      transition: background 0.15s;
+    }
+    .lang-option:hover { background: var(--mist); }
+    .lang-option.active { font-weight: 600; color: var(--stone); background: var(--glacier); }
+    .lang-flag { font-size: 16px; }
+
+    /* ── Category Header ── */
+    .cat-header {
+      background: var(--stone); padding: 48px 0 40px;
+    }
+    .cat-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: rgba(255,255,255,0.5);
+      margin-bottom: 16px;
+    }
+    .cat-breadcrumb a { color: rgba(255,255,255,0.5); transition: color 0.2s; }
+    .cat-breadcrumb a:hover { color: var(--white); }
+    .cat-breadcrumb svg { width: 12px; height: 12px; }
+    .cat-title {
+      font-family: var(--font-display); font-size: 40px;
+      color: var(--white); font-weight: 400; margin-bottom: 10px;
+    }
+    .cat-sub {
+      font-size: 15px; color: var(--glacier); max-width: 560px;
+    }
+
+    /* ── Filters ── */
+    .filters-bar {
+      background: var(--white);
+      border-bottom: 1px solid rgba(44,44,42,0.08);
+      padding: 16px 0; position: sticky; top: 100px; z-index: 50;
+    }
+    .filters-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .filter-label { font-size: 12px; font-weight: 700; color: var(--slate); margin-right: 4px; }
+    .filter-btn {
+      padding: 7px 16px; border-radius: var(--r-pill);
+      font-size: 13px; font-weight: 600; color: var(--slate);
+      border: 1.5px solid var(--glacier); background: var(--white);
+      transition: all 0.2s; cursor: pointer;
+    }
+    .filter-btn.active { background: var(--stone); color: var(--white); border-color: var(--stone); }
+    .filter-btn:hover:not(.active) { border-color: var(--sage); color: var(--sage); }
+
+    /* ── Safety reminder ── */
+    .safety-reminder {
+      background: var(--glacier); padding: 12px 0;
+    }
+    .safety-reminder-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--stone);
+    }
+    .safety-reminder-icon { color: var(--care-teal); flex-shrink: 0; }
+    .safety-reminder-icon svg { width: 15px; height: 15px; }
+    .safety-reminder-link { color: var(--sage); font-weight: 600; margin-left: 4px; }
+
+    /* ── Results header ── */
+    .results-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+    }
+    .results-count { font-size: 14px; color: var(--slate); }
+    .results-sort { font-size: 13px; color: var(--sage); font-weight: 600; cursor: pointer; }
+
+    /* ── Cards grid ── */
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+    .exp-card {
+      background: var(--white); border-radius: var(--r-card);
+      box-shadow: var(--shadow-1); overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .exp-card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+    .exp-card.is-featured { border-top: 2px solid var(--amber); }
+
+    .exp-card-img { position: relative; height: 200px; }
+    .exp-card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .exp-context-tag {
+      position: absolute; top: 12px; left: 12px;
+      background: rgba(44,44,42,0.8); color: var(--white);
+      font-size: 11px; font-weight: 600; padding: 4px 12px;
+      border-radius: var(--r-pill);
+    }
+    .exp-save-btn {
+      position: absolute; top: 10px; right: 10px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.92); display: flex;
+      align-items: center; justify-content: center;
+      cursor: pointer; border: none; transition: background 0.2s;
+    }
+    .exp-save-btn svg { width: 16px; height: 16px; color: var(--stone); }
+    .exp-save-btn:hover { background: var(--white); }
+    .exp-save-btn.saved { background: var(--sage); }
+    .exp-save-btn.saved svg { color: var(--white); }
+
+    .exp-card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+    .exp-featured-label {
+      font-size: 10px; font-weight: 700; color: var(--amber);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+
+    .exp-card-title { font-size: 16px; font-weight: 700; color: var(--stone); }
+    .exp-card-meta { font-size: 12px; color: var(--slate); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .exp-card-meta svg { width: 13px; height: 13px; }
+
+    .exp-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .exp-tag {
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: var(--r-pill); background: var(--glacier); color: var(--stone);
+    }
+    .exp-tag.green { background: rgba(13,148,136,0.12); color: var(--care-teal); }
+
+    .exp-card-desc { font-size: 13px; color: var(--slate); line-height: 1.5; flex: 1; }
+
+    .exp-card-actions { display: flex; gap: 8px; padding-top: 4px; }
+    .exp-cta {
+      display: inline-flex; align-items: center; gap: 5px;
+      border: 1.5px solid var(--sage); color: var(--sage);
+      padding: 9px 16px; border-radius: var(--r-btn);
+      font-size: 13px; font-weight: 600; background: transparent;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .exp-cta:hover { background: var(--sage); color: var(--white); }
+    .exp-cta-ghost {
+      display: inline-flex; align-items: center; gap: 5px;
+      border: 1.5px solid var(--glacier); color: var(--stone);
+      padding: 9px 14px; border-radius: var(--r-btn);
+      font-size: 13px; font-weight: 600; background: transparent;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .exp-cta-ghost:hover { background: var(--glacier); }
+
+    /* ── Category nav (other categories) ── */
+    .other-cats { display: flex; gap: 12px; flex-wrap: wrap; padding: 32px 0 0; }
+    .other-cat-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--white); border-radius: var(--r-pill);
+      box-shadow: var(--shadow-1); padding: 10px 18px;
+      font-size: 13px; font-weight: 600; color: var(--stone);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .other-cat-pill svg { width: 16px; height: 16px; color: var(--sage); }
+    .other-cat-pill:hover { background: var(--glacier); box-shadow: var(--shadow-2); }
+
+    /* ── Footer B2B ── */
+    .footer-b2b { background: var(--stone); padding: 64px 0 32px; margin-top: 64px; }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr 1.3fr 1fr; gap: 40px;
+      margin-bottom: 32px;
+    }
+    .footer-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 18px;
+      color: var(--white); font-weight: 700; margin-bottom: 12px;
+    }
+    .footer-tagline { font-size: 13px; color: var(--glacier); margin-bottom: 6px; }
+    .footer-copy { font-size: 11px; color: var(--slate); }
+    .footer-col-title { color: var(--glacier); margin-bottom: 14px; }
+    .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 9px; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-message { font-size: 11px; color: var(--slate); line-height: 1.6; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .container { padding: 0 16px; }
+      .header-inner { padding: 0 16px; }
+      .main-nav { display: none; }
+      .filters-inner { padding: 0 16px; }
+      .safety-reminder-inner { padding: 0 16px; }
+      .cat-title { font-size: 30px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- [1] CONTEXT BAR -->
+<div class="context-bar">
+  <span><span class="ctx-accent">Alberta · Explore</span></span>
+</div>
+
+<!-- [2] HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo" aria-label="SomaVio home">
+      <span class="logo-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </span>
+      SomaVio
+    </a>
+    <nav class="main-nav" aria-label="Site navigation">
+      <a href="index.html">Explore</a>
+      <a href="#">Stay</a>
+      <a href="#">Eat</a>
+      <a href="trip.html">Plan Your Day</a>
+      <a href="safety.html">Safety</a><a href="local-rules.html">Local Rules</a>
+      <a href="#">About Canmore</a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-selector-wrap">
+        <button class="lang-toggle" id="lang-toggle" aria-label="Language selector" aria-expanded="false">
+          EN
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button class="lang-option active" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
+          <button class="lang-option" data-lang="pt"><span class="lang-flag">🇧🇷</span> Português</button>
+          <button class="lang-option" data-lang="es"><span class="lang-flag">🇪🇸</span> Español</button>
+          <button class="lang-option" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
+          <button class="lang-option" data-lang="ja"><span class="lang-flag">🇯🇵</span> 日本語</button>
+          <button class="lang-option" data-lang="ko"><span class="lang-flag">🇰🇷</span> 한국어</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- CATEGORY HEADER -->
+<section class="cat-header">
+  <div class="container">
+    <div class="cat-breadcrumb">
+      <a href="index.html">Home</a>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Outdoor Adventures</span>
+    </div>
+    <h1 class="cat-title">Outdoor Adventures</h1>
+    <p class="cat-sub">Trails, lakes and guided experiences. Shown by context — weather, conditions and time of day — not paid placement.</p>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <div class="filters-inner">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-filter="all" onclick="applyFilter('all', this)">What's good today</button>
+    <button class="filter-btn" data-filter="beginner" onclick="applyFilter('beginner', this)">Beginner</button>
+    <button class="filter-btn" data-filter="family" onclick="applyFilter('family', this)">Family-friendly</button>
+    <button class="filter-btn" data-filter="guided" onclick="applyFilter('guided', this)">Guided</button>
+    <button class="filter-btn" data-filter="half-day" onclick="applyFilter('half-day', this)">Half day</button>
+    <button class="filter-btn" data-filter="full-day" onclick="applyFilter('full-day', this)">Full day</button>
+  </div>
+</div>
+
+<!-- SAFETY REMINDER -->
+<div class="safety-reminder">
+  <div class="safety-reminder-inner">
+    <span class="safety-reminder-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+    </span>
+    <span>Trail conditions today: Clear. Source: Alberta Parks</span>
+    <a href="safety.html" class="safety-reminder-link">Check official updates →</a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main>
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+
+    <div class="results-head">
+      <span class="results-count" id="results-count">6 experiences — sorted by what's good today</span>
+      <span class="results-sort">Sort: Contextual ▾</span>
+    </div>
+
+    <div class="cards-grid" id="cards-grid">
+
+      <!-- Card 1 — Featured Spot -->
+      <article class="exp-card is-featured" data-tags="beginner,half-day,family">
+        <div class="exp-card-img">
+          <img data-sv-image="outdoor" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=520&q=80&auto=format&fit=crop" alt="Grassi Lakes turquoise water and mountain backdrop" loading="lazy" />
+          <span class="exp-context-tag">Great for now</span>
+          <button class="exp-save-btn" onclick="toggleSave(this)" aria-label="Save to My Trip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+        <div class="exp-card-body">
+          <div class="exp-featured-label">Featured</div>
+          <h3 class="exp-card-title">Grassi Lakes Trail</h3>
+          <div class="exp-card-meta">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6l9-3 9 3M3 18l9 3 9-3"/></svg>
+            Easy · 5.6 km · 2–3 hrs
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag green">Open now</span>
+            <span class="exp-tag">Family</span>
+            <span class="exp-tag">Beginner</span>
+          </div>
+          <p class="exp-card-desc">Crystal clear turquoise lakes, stunning mountain views. One of Canmore's most beloved easy hikes — perfect conditions today.</p>
+          <div class="exp-card-actions">
+            <button class="exp-cta" onclick="viewDetails('grassi-lakes')">View details</button>
+            <button class="exp-cta-ghost" onclick="saveToTrip('Grassi Lakes Trail')">+ Trip</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="exp-card" data-tags="guided,half-day,beginner,family">
+        <div class="exp-card-img">
+          <img data-sv-image="guide" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=520&q=80&auto=format&fit=crop" alt="Guided mountain hiking group on trail" loading="lazy" />
+          <span class="exp-context-tag">Beginner-friendly</span>
+          <button class="exp-save-btn" onclick="toggleSave(this)" aria-label="Save to My Trip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+        <div class="exp-card-body">
+          <h3 class="exp-card-title">Peak & Valley Guided Hike</h3>
+          <div class="exp-card-meta">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            3–4 hrs · Small groups · Bear safety included
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag">Certified guide</span>
+            <span class="exp-tag">All levels</span>
+          </div>
+          <p class="exp-card-desc">First time in the Rockies? Expert guides lead small groups with real wildlife safety training included. No experience needed.</p>
+          <div class="exp-card-actions">
+            <button class="exp-cta" onclick="viewDetails('peak-valley')">View details</button>
+            <button class="exp-cta-ghost" onclick="saveToTrip('Peak & Valley Guided Hike')">+ Trip</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="exp-card" data-tags="full-day">
+        <div class="exp-card-img">
+          <img data-sv-image="outdoor" src="https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=520&q=80&auto=format&fit=crop" alt="Kananaskis Valley wide mountain vista" loading="lazy" />
+          <span class="exp-context-tag">Moderate</span>
+          <button class="exp-save-btn" onclick="toggleSave(this)" aria-label="Save to My Trip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+        <div class="exp-card-body">
+          <h3 class="exp-card-title">Kananaskis Valley Trail</h3>
+          <div class="exp-card-meta">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6l9-3 9 3M3 18l9 3 9-3"/></svg>
+            Moderate · 8.8 km · 3–4 hrs
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag green">Open now</span>
+            <span class="exp-tag">Panorama</span>
+          </div>
+          <p class="exp-card-desc">Epic single-track with panoramic valley views. Wildlife-safe route with multiple rest points. Great morning light today.</p>
+          <div class="exp-card-actions">
+            <button class="exp-cta" onclick="viewDetails('kananaskis-valley')">View details</button>
+            <button class="exp-cta-ghost" onclick="saveToTrip('Kananaskis Valley Trail')">+ Trip</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="exp-card" data-tags="beginner,half-day,family">
+        <div class="exp-card-img">
+          <img data-sv-image="outdoor" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=520&q=80&auto=format&fit=crop" alt="Kayaking on calm mountain lake" loading="lazy" />
+          <span class="exp-context-tag">Great for now</span>
+          <button class="exp-save-btn" onclick="toggleSave(this)" aria-label="Save to My Trip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+        <div class="exp-card-body">
+          <h3 class="exp-card-title">Kayak on Spray Lakes</h3>
+          <div class="exp-card-meta">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            2–3 hrs · All experience levels
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag">Rental available</span>
+            <span class="exp-tag">Family</span>
+          </div>
+          <p class="exp-card-desc">Flat water kayaking on a glacier-fed lake. Mountain reflections, calm surface. Rental gear available on-site.</p>
+          <div class="exp-card-actions">
+            <button class="exp-cta" onclick="viewDetails('spray-lakes-kayak')">View details</button>
+            <button class="exp-cta-ghost" onclick="saveToTrip('Kayak on Spray Lakes')">+ Trip</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="exp-card" data-tags="guided,full-day">
+        <div class="exp-card-img">
+          <img data-sv-image="rental" src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=520&q=80&auto=format&fit=crop" alt="Mountain bike on scenic trail" loading="lazy" />
+          <span class="exp-context-tag">Adventure</span>
+          <button class="exp-save-btn" onclick="toggleSave(this)" aria-label="Save to My Trip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+        <div class="exp-card-body">
+          <h3 class="exp-card-title">Nordic Centre Trail Network</h3>
+          <div class="exp-card-meta">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6l9-3 9 3M3 18l9 3 9-3"/></svg>
+            Multi-use · 1–5 hrs · Bike or hike
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag green">Open now</span>
+            <span class="exp-tag">E-bike friendly</span>
+          </div>
+          <p class="exp-card-desc">65+ km of maintained trails for hiking and biking. E-bike rentals available. Stunning ridgeline views in all directions.</p>
+          <div class="exp-card-actions">
+            <button class="exp-cta" onclick="viewDetails('nordic-centre')">View details</button>
+            <button class="exp-cta-ghost" onclick="saveToTrip('Nordic Centre Trail Network')">+ Trip</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="exp-card" data-tags="guided,half-day">
+        <div class="exp-card-img">
+          <img data-sv-image="indoor" src="https://images.unsplash.com/photo-1522163182402-834f871fd851?w=520&q=80&auto=format&fit=crop" alt="Rock climbing on mountain face" loading="lazy" />
+          <span class="exp-context-tag">All levels</span>
+          <button class="exp-save-btn" onclick="toggleSave(this)" aria-label="Save to My Trip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+        <div class="exp-card-body">
+          <h3 class="exp-card-title">Guided Rock Climbing</h3>
+          <div class="exp-card-meta">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Half day · All levels · Equipment provided
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag">Certified instructor</span>
+            <span class="exp-tag">Beginner ok</span>
+          </div>
+          <p class="exp-card-desc">Introduction to outdoor rock climbing with a certified guide. Equipment included. No experience needed — the cliffs of Canmore await.</p>
+          <div class="exp-card-actions">
+            <button class="exp-cta" onclick="viewDetails('guided-climbing')">View details</button>
+            <button class="exp-cta-ghost" onclick="saveToTrip('Guided Rock Climbing')">+ Trip</button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Other categories -->
+    <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(44,44,42,0.08);">
+      <p style="font-size:13px; font-weight:600; color:var(--slate); margin-bottom:16px;">Explore other categories</p>
+      <div class="other-cats">
+        <a href="category.html" class="other-cat-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+          Dining & Local Flavour
+        </a>
+        <a href="category.html" class="other-cat-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a3 3 0 0 0-3 3c0 1.6.8 2.5 2 4-1.5.5-3 1.7-3 4a4 4 0 0 0 8 0c0-2.3-1.5-3.5-3-4 1.2-1.5 2-2.4 2-4a3 3 0 0 0-3-3Z"/></svg>
+          Wellness & Recovery
+        </a>
+        <a href="category.html" class="other-cat-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+          Places to Stay
+        </a>
+        <a href="category.html" class="other-cat-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Family Friendly
+        </a>
+        <a href="category.html" class="other-cat-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z"/></svg>
+          Arts & Culture
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER B2B -->
+<footer class="footer-b2b">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <span class="logo-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </span>
+          SomaVio
+        </div>
+        <p class="footer-tagline">Local guidance for Alberta.</p>
+        <p class="footer-copy">© 2025 SomaVio</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Visitors</div>
+        <a href="index.html">Explore</a>
+        <a href="category.html">Categories</a>
+        <a href="trip.html">Plan Your Day</a>
+        <a href="safety.html">Safety</a><a href="local-rules.html">Local Rules</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">For Partners</div>
+        <a href="hotels.html">For Hotels</a>
+        <a href="partners.html">For Local Businesses</a>
+        <a href="organizations.html">For Organizations</a>
+        <a href="studio.html">Partner Studio</a>
+        <p class="footer-message">SomaVio complements existing systems. It does not replace PMS, OTA or emergency procedures.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title label-caps">Legal</div>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── Filters ── */
+  function applyFilter(tag, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('#cards-grid .exp-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      if (tag === 'all') {
+        card.style.display = '';
+        visible++;
+      } else {
+        const tags = card.getAttribute('data-tags') || '';
+        if (tags.includes(tag)) {
+          card.style.display = '';
+          visible++;
+        } else {
+          card.style.display = 'none';
+        }
+      }
+    });
+
+    document.getElementById('results-count').textContent =
+      `${visible} experience${visible !== 1 ? 's' : ''} — ${tag === 'all' ? 'sorted by what\'s good today' : `filtered by ${tag}`}`;
+  }
+
+  /* ── Save to trip ── */
+  function toggleSave(btn) {
+    btn.classList.toggle('saved');
+    const isSaved = btn.classList.contains('saved');
+    btn.setAttribute('aria-label', isSaved ? 'Saved to My Trip' : 'Save to My Trip');
+  }
+
+  function saveToTrip(name) {
+    if (typeof window !== 'undefined') {
+      const key = 'sv_trip';
+      const existing = JSON.parse(localStorage.getItem(key) || '[]');
+      if (!existing.includes(name)) {
+        existing.push(name);
+        localStorage.setItem(key, JSON.stringify(existing));
+      }
+    }
+  }
+
+  /* ── View details (modal placeholder) ── */
+  function viewDetails(id) {
+    const details = {
+      'grassi-lakes': { title: 'Grassi Lakes Trail', desc: 'Easy 5.6 km return. Allow 2–3 hours. Turquoise alpine lakes at the top. Bear spray recommended. Check trail conditions at albertaparks.ca before heading out.' },
+      'peak-valley': { title: 'Peak & Valley Guided Hike', desc: 'Small groups of 4–8. Certified guide, bear safety training included. CAD $85/person. Book through the concierge or visit peakandvalleyguides.com.' },
+      'kananaskis-valley': { title: 'Kananaskis Valley Trail', desc: 'Moderate 8.8 km loop. Allow 3–4 hours. Epic panoramic views. Start early — afternoon thunderstorms possible. Check weather.gc.ca before departing.' },
+      'spray-lakes-kayak': { title: 'Kayak on Spray Lakes', desc: 'Flat water paddling. 2–3 hrs. Rental gear available on-site. Spray Lake Sawmills Family Sport Centre, Bow Valley Trail.' },
+      'nordic-centre': { title: 'Nordic Centre Trail Network', desc: '65+ km of maintained trails. Open to hikers, bikers and skiers depending on season. E-bike rentals available. Canmore Nordic Centre Provincial Park.' },
+      'guided-climbing': { title: 'Guided Rock Climbing', desc: 'Half day with certified instructor. All levels welcome. Equipment provided. Groups of up to 6. CAD $95/person. Book at least one day in advance.' },
+    };
+
+    const d = details[id] || { title: id, desc: 'More details coming soon.' };
+    showModal(d.title, d.desc);
+  }
+
+  function showModal(title, desc) {
+    let modal = document.getElementById('sv-modal');
+    if (!modal) {
+      const s = document.createElement('style');
+      s.textContent = `.sv-modal-overlay{position:fixed;inset:0;background:rgba(44,44,42,0.6);display:flex;align-items:center;justify-content:center;z-index:300;animation:mfade 0.2s ease}@keyframes mfade{from{opacity:0}to{opacity:1}}.sv-modal{background:#fff;border-radius:12px;padding:32px;max-width:480px;width:90%;box-shadow:0 8px 32px rgba(44,44,42,0.18);animation:mslide 0.2s ease}@keyframes mslide{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}.sv-modal-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2C2C2A;margin-bottom:10px}.sv-modal-desc{font-size:14px;color:#4A5568;line-height:1.65;margin-bottom:24px}.sv-modal-actions{display:flex;gap:10px;justify-content:flex-end}.sv-btn-ghost{padding:10px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;background:#F4F1EC;color:#2C2C2A;border:1.5px solid #D6E4E1}.sv-btn-ghost:hover{background:#D6E4E1}.sv-btn-primary{padding:10px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;background:#6B7F6E;color:#fff;border:none}.sv-btn-primary:hover{background:#5a6f60}`;
+      document.head.appendChild(s);
+
+      modal = document.createElement('div');
+      modal.id = 'sv-modal';
+      modal.innerHTML = `<div class="sv-modal-overlay" onclick="closeSvModal()"><div class="sv-modal" onclick="event.stopPropagation()"><div class="sv-modal-title" id="sv-modal-title"></div><div class="sv-modal-desc" id="sv-modal-desc"></div><div class="sv-modal-actions"><button class="sv-btn-ghost" onclick="closeSvModal()">Close</button><button class="sv-btn-primary" onclick="closeSvModal()">Save to My Trip</button></div></div></div>`;
+      document.body.appendChild(modal);
+    }
+
+    document.getElementById('sv-modal-title').textContent = title;
+    document.getElementById('sv-modal-desc').textContent = desc;
+    modal.style.display = 'flex';
+  }
+
+  function closeSvModal() {
+    const m = document.getElementById('sv-modal');
+    if (m) m.style.display = 'none';
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSvModal(); });
+
+  /* ── Language dropdown ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    const langToggle = document.getElementById('lang-toggle');
+    const langDropdown = document.getElementById('lang-dropdown');
+    langToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown.classList.toggle('open');
+      langToggle.setAttribute('aria-expanded', langDropdown.classList.contains('open'));
+    });
+    document.addEventListener('click', () => {
+      langDropdown?.classList.remove('open');
+      langToggle?.setAttribute('aria-expanded', 'false');
+    });
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      btn.addEventListener('click', function() {
+        localStorage.setItem('sv_lang', this.getAttribute('data-lang'));
+        document.querySelectorAll('.lang-option').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  });
+</script>
+
+
+<!-- DRAWER GLOBAL -->
+<style>
+.drawer-overlay{position:fixed;inset:0;z-index:500;background:rgba(44,44,42,0.55);opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:501;width:min(320px,85vw);background:#2C2C2A;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.drawer-logo{display:flex;align-items:center;gap:8px;font-family:Georgia,serif;font-size:18px;color:#fff;font-weight:700;}
+.drawer-logo-icon{width:28px;height:28px;background:#C8923A;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.drawer-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:rgba(255,255,255,0.7);}
+.drawer-nav{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.drawer-nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);padding:12px 20px 6px;}
+.drawer-nav a{display:flex;align-items:center;gap:12px;padding:12px 20px;font-size:15px;font-weight:500;color:rgba(255,255,255,0.82);transition:background 0.15s;text-decoration:none;}
+.drawer-nav a:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.drawer-nav a svg{width:17px;height:17px;color:#6B7F6E;flex-shrink:0;}
+.drawer-lang{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+.drawer-lang-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.3);margin-bottom:10px;}
+.drawer-lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.drawer-lang-btn{padding:9px 6px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;cursor:pointer;text-align:center;}
+.drawer-lang-btn.active{background:#6B7F6E;border-color:#6B7F6E;color:#fff;}
+.drawer-footer{margin-top:auto;padding:16px 20px;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;border-top:1px solid rgba(255,255,255,0.06);}
+</style>
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Navigation menu">
+  <div class="drawer-header">
+    <div class="drawer-logo"><div class="drawer-logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>SomaVio</div>
+    <button class="drawer-close" onclick="closeDrawer()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-nav">
+    <div class="drawer-nav-label">Navigate</div>
+    <a href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</a>
+    <a href="category.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>Explore Canmore</a>
+    <a href="trip.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Plan Your Day</a>
+    <a href="safety.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Safety</a>
+    <a href="hotel.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Guest Hub</a>
+    <a href="partners.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>For Partners</a>
+  </div>
+  <div class="drawer-lang">
+    <div class="drawer-lang-label">Language</div>
+    <div class="drawer-lang-grid">
+      <button class="drawer-lang-btn active" data-lang="en" onclick="setDrawerLang(this)">🇬🇧 EN</button>
+      <button class="drawer-lang-btn" data-lang="pt" onclick="setDrawerLang(this)">🇧🇷 PT</button>
+      <button class="drawer-lang-btn" data-lang="es" onclick="setDrawerLang(this)">🇪🇸 ES</button>
+      <button class="drawer-lang-btn" data-lang="fr" onclick="setDrawerLang(this)">🇫🇷 FR</button>
+      <button class="drawer-lang-btn" data-lang="ja" onclick="setDrawerLang(this)">🇯🇵 JA</button>
+      <button class="drawer-lang-btn" data-lang="ko" onclick="setDrawerLang(this)">🇰🇷 KO</button>
+    </div>
+  </div>
+  <div class="drawer-footer">SomaVio · Local guidance for Alberta<br>© 2025</div>
+</div>
+<script>
+function openDrawer(){document.getElementById("drawer").classList.add("open");document.getElementById("drawer-overlay").classList.add("open");document.body.style.overflow="hidden";}
+function closeDrawer(){document.getElementById("drawer").classList.remove("open");document.getElementById("drawer-overlay").classList.remove("open");document.body.style.overflow="";}
+function setDrawerLang(btn){document.querySelectorAll(".drawer-lang-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");localStorage.setItem("sv_lang",btn.getAttribute("data-lang"));closeDrawer();}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeDrawer();});
+</script>
+
+<script src="assets/js/somavio-live.js" defer></script>
+</body>
+</html>
